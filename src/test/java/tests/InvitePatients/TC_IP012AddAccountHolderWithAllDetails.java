@@ -183,8 +183,14 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         //health profile
         patientChart.clickHealthProfileButton();
 
+        //allergy
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), patientChart.getFirstAllergyName().toLowerCase(),
-                "allergy name in patient chart does not match in Health profile of Provider Portal");
+                "First allergy name in patient chart does not match in Health profile of Provider Portal");
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyTwo().toLowerCase(), patientChart.getSecondAllergyName().toLowerCase(),
+                "second allergy name in patient chart does not match in Health profile of Provider Portal");
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyThree().toLowerCase(), patientChart.getThirdAllergyName().toLowerCase(),
+                "third allergy name in patient chart does not match in Health profile of Provider Portal");
+        //medication
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), patientChart.getFirstMedicationName().toLowerCase(),
                 "medication name in patient chart does not match in Health profile of Provider Portal");
         softAssert.assertAll();
@@ -231,7 +237,20 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
 
         //validate allergy
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), myProfilePage.getAllergyOneValue().toLowerCase(),
-                "AllergyOne name in patient portal profile does not match in Health profile of My Profile");
+                "Allergy One name in patient portal profile does not match in Health profile of My Profile");
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionOne().toLowerCase(), myProfilePage.getReactionOne().toLowerCase(),
+                "Reaction One in patient portal profile does not match in Health profile of My Profile");
+
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyTwo().toLowerCase(), myProfilePage.getAllergyTwoValue().toLowerCase(),
+                "Allergy Two name in patient portal profile does not match in Health profile of My Profile");
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionTwo().toLowerCase(), myProfilePage.getReactionTwo().toLowerCase(),
+                "Reaction Two name in patient portal profile does not match in Health profile of My Profile");
+
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyThree().toLowerCase(), myProfilePage.getAllergyThreeValue().toLowerCase(),
+                "Allergy Three name in patient portal profile does not match in Health profile of My Profile");
+        softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionThree().toLowerCase(), myProfilePage.getReactionThree().toLowerCase(),
+                "Reaction Three name in patient portal profile does not match in Health profile of My Profile");
+
         myProfilePage.clickBackButtonInHealthProfile();
 
         //validate medication

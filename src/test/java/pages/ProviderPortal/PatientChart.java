@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -45,9 +44,10 @@ public class PatientChart extends BasePage {
     private final By memberIdInSecondaryInsurance = By.xpath("//tr[contains(@ng-if,\"patientData.secondary_insurance\")]//span[3]");
     private final By memberDobInSecondaryInsurance = By.xpath("//tr[contains(@ng-if,\"patientData.secondary_insurance\")]//span[4]");
     private final By healthProfileButton = By.xpath("//a[text()='Health Profile']");
-    private final By allergyNameInOne = By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"][1]/div[1]");
-    private final By allergyNameTwo = By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"][2]/div[1]");
-    private final By allergyNameThree = By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"][3]/div[1]");
+
+    private final By allergyNameOne = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[1]");
+    private final By allergyNameTwo = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[2]");
+    private final By allergyNameThree = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[3]");
 
     private final By medicationNameOne = By.xpath("//div[@ng-repeat=\"medication in activeMeds\"][1]/div[1]");
 
@@ -264,7 +264,7 @@ public class PatientChart extends BasePage {
     // Get the first allergy name
     public String getFirstAllergyName() {
         try {
-            WebElement allergy = wait.until(ExpectedConditions.visibilityOfElementLocated(allergyNameInOne));
+            WebElement allergy = wait.until(ExpectedConditions.visibilityOfElementLocated(allergyNameOne));
             return allergy.getText().trim();
         } catch (TimeoutException e) {
             System.err.println("Timeout: First allergy name not visible.");

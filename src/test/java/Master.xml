@@ -11,14 +11,14 @@
 <!--            <class name="tests.InvitePatients.TC_IP002AddAccountHolderWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP003AddChildWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP004AddAccountHolderWithAdditionalDetails"/>-->
-            <class name="tests.InvitePatients.TC_IP005AddAccountHolderWithBothInsuranceDetails"/>
+<!--            <class name="tests.InvitePatients.TC_IP005AddAccountHolderWithBothInsuranceDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP006AddWardWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP007AddAccountHolderWithHealthProfile"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP008AddChildWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP009AddWardWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP010AddChildWithAdditionalDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP011AddWardWithAdditionalDetails"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP012AddAccountHolderWithAllDetails"/>-->
+            <class name="tests.InvitePatients.TC_IP012AddAccountHolderWithAllDetails"/>
         </classes>
     </test> <!-- Test -->
 

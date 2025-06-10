@@ -76,9 +76,9 @@ public class TestData {
         this.alleryReactionOneIndex = faker.number().numberBetween(0,alleryReaction.length);
         this.alleryReactionTwoIndex = faker.number().numberBetween(0,alleryReaction.length);
         this.alleryReactionThreeIndex = faker.number().numberBetween(0,alleryReaction.length);
-        this.allergyCategoryOneIndex = faker.number().numberBetween(0,1);
-        this.allergyCategoryTwoIndex = faker.number().numberBetween(0,1);
-        this.allergyCategoryThreeIndex = faker.number().numberBetween(0,1);
+        this.allergyCategoryOneIndex = faker.number().numberBetween(0,allergyCategory.length);
+        this.allergyCategoryTwoIndex = faker.number().numberBetween(0,allergyCategory.length);
+        this.allergyCategoryThreeIndex = faker.number().numberBetween(0,allergyCategory.length);
         this.medicationOneIndex = faker.number().numberBetween(0, medications.length);
         this.medicationTwoIndex = faker.number().numberBetween(0, medications.length);
     }

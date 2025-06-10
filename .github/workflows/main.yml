@@ -1,0 +1,44 @@
+name: Daily Morning Test Automation
+
+on:
+  schedule:
+    # Runs every day at 9:30 AM IST (4:00 AM UTC, IST is UTC+5:30)
+    - cron: '0 4 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Run Tests using Master.xml
+        run: mvn clean test -DsuiteXmlFile=Master.xml
+
+      - name: Upload TestNG Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: test-output/ExtentReport.html

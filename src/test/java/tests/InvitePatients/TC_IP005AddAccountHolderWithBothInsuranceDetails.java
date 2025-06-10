@@ -61,7 +61,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
         invitePatientPage.setMobileAs(testDataForAccountHolder.getMobileNumber());
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
-       // invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
+        invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
 
         //Primary insurance
         invitePatientPage.clickPrimaryInsuranceCheckboxForAH();
@@ -81,7 +81,6 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
 
         //add patient
         invitePatientPage.clickAddPatientButton();
-
     }
     @Test(priority = 2)
     private void validatePatientAndInsuranceInChart() throws InterruptedException {

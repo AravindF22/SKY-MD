@@ -37,6 +37,7 @@ public class BaseTest {
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("profile.default_content_setting_values.notifications", 1); // 1 = Allow, 2 block
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
         options.setExperimentalOption("prefs", prefs);
         switch(browser) {
             case "chrome" : driver= new ChromeDriver(options); break;

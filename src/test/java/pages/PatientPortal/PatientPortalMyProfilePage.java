@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.TimeoutException;
 
@@ -38,6 +39,13 @@ public class PatientPortalMyProfilePage extends BasePage {
     private final By healthProfileOfAccountHolder = By.xpath("//div[@class=\"mt-16\"][1]/div");
     private final By allergyHealthProfile = By.xpath("//p[text()='Allergies']");
     private final By allergyOne = By.xpath("//div[contains(@class,\"block pt-7\")][1]//input");
+    private final By allergyTwo = By.xpath("//div[contains(@class,\"block pt-7\")][2]//input");
+    private final By allergyThree = By.xpath("//div[contains(@class,\"block pt-7\")][3]//input");
+
+    private final By reactionOne = By.xpath("//div[contains(@class,\"block pt-7\")][1]//select");
+    private final By reactionTwo = By.xpath("//div[contains(@class,\"block pt-7\")][2]//select");
+    private final By reactionThree = By.xpath("//div[contains(@class,\"block pt-7\")][3]//select");
+
     private final By medicationHealthProfile = By.xpath("//p[text()='Medications']");
     private final By medicationOne = By.xpath("//div[@class=\"pt-7 pb-9 px-9 bg-alternativeWhite rounded-2xl mt-10\"][1]/div[1]/input");
     private final By backButtonInHealthProfile = By.xpath("//img[@alt=\"back\"]");
@@ -268,6 +276,55 @@ public class PatientPortalMyProfilePage extends BasePage {
             return null;
         }
     }
+    public String getAllergyTwoValue() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(allergyTwo)).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting Allergy One value: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getAllergyThreeValue() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(allergyThree)).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting Allergy One value: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getReactionOne() {
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(reactionOne));
+            Select select = new Select(dropdown);
+            return select.getFirstSelectedOption().getText();
+        } catch (Exception e) {
+            System.out.println("Error getting selected option in Reaction One: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getReactionTwo() {
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(reactionTwo));
+            Select select = new Select(dropdown);
+            return select.getFirstSelectedOption().getText();
+        } catch (Exception e) {
+            System.out.println("Error getting selected option in Reaction Two: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getReactionThree() {
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(reactionThree));
+            Select select = new Select(dropdown);
+            return select.getFirstSelectedOption().getText();
+        } catch (Exception e) {
+            System.out.println("Error getting selected option in Reaction Three: " + e.getMessage());
+            return null;
+        }
+    }
+
 
     public void clickBackButtonInHealthProfile(){
         try {
