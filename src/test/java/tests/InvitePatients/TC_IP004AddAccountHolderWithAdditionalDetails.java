@@ -155,7 +155,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
 //        dermatologyVisitPage.setConfirmForDeleteVisit();
           softAssert.assertAll();
     }
-  //  @AfterClass()
+    @AfterClass()
     public void cleanUp() throws InterruptedException {
 
         //navigate to my profile

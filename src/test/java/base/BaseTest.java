@@ -4,7 +4,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -27,26 +29,55 @@ public class BaseTest {
     @BeforeClass()
     @Parameters("browser")
     public void setup(String browser) throws IOException {
+        browser = browser.toLowerCase();
+        loadPropFile();
+        switch (browser) {
+            case "chrome":
+                ChromeOptions chromeOptions = new ChromeOptions();
 
-        //Allow , block notification
-        Map<String, Object> prefs = new HashMap<>();
-        prefs.put("profile.default_content_setting_values.notifications", 1); // 1 = Allow, 2 block
-        ChromeOptions options = new ChromeOptions();
-       // options.addArguments("--headless");
-        options.addArguments("--window-size=1920,1080");
-        options.setExperimentalOption("prefs", prefs);
-        switch(browser) {
-            case "chrome" : driver= new ChromeDriver(options); break;
-            case "edge"   : driver= new EdgeDriver(); break;
-            case "firefox": driver = new FirefoxDriver();break;
-            default : System.out.println("Invalid browser"); return;
+                // Notification preferences
+                Map<String, Object> chromePrefs = new HashMap<>();
+                chromePrefs.put("profile.default_content_setting_values.notifications", 1);
+                chromeOptions.setExperimentalOption("prefs", chromePrefs);
+
+                // Headless mode setup
+               if(property.getProperty("headless").equals("true")){
+                   chromeOptions.addArguments("--headless=new"); // For Chrome 109+
+                   chromeOptions.addArguments("window-size=1920,1080");
+               }
+                driver = new ChromeDriver(chromeOptions);
+                break;
+
+            case "edge":
+                EdgeOptions edgeOptions = new EdgeOptions();
+                if(property.getProperty("headless").equals("true")) {
+                    edgeOptions.addArguments("--headless=new");
+                    edgeOptions.addArguments("window-size=1920,1080");
+                }
+                driver = new EdgeDriver(edgeOptions);
+                break;
+
+            case "firefox":
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                if(property.getProperty("headless").equals("true")) {
+                    firefoxOptions.addArguments("--headless");
+                    firefoxOptions.addArguments("--width=1920");
+                    firefoxOptions.addArguments("--height=1080");
+                }
+                driver = new FirefoxDriver(firefoxOptions);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
         driver.manage().deleteAllCookies();
-        driver.manage().window().maximize();
+        if (property.getProperty("headless").equals("false")) {
+            driver.manage().window().maximize();
+        }
     }
     @AfterClass()
     public void tearDown() {
-      // driver.quit();
+       driver.quit();
     }
     //for loading config file
     public void loadPropFile() throws IOException {

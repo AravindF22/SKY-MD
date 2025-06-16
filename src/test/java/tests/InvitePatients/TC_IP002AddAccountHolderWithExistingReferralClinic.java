@@ -76,7 +76,7 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),"Clinic name in the referral section of AH is mismatching");
         softAssert.assertAll();
     }
-   // @AfterClass()
+   @AfterClass()
     public void cleanUp(){
         patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();

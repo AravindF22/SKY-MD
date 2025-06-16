@@ -2,7 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
-import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -120,7 +120,7 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
                 "Mobile Number of the Account Holder is mismatching in My profile");
         softAssert.assertAll();
     }
-    //@AfterClass()
+    @AfterClass()
     public void cleanUp() throws InterruptedException {
         myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();

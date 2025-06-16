@@ -181,7 +181,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
 
     }
 
-    //@AfterClass
+    @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         // Navigate to myProfile and logout
         homePagePatPortal = new PatientPortalHomePage(driver);

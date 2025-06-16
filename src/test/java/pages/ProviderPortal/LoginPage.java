@@ -23,28 +23,43 @@ public class LoginPage extends BasePage {
     private By loginButton = By.xpath("//button[@type='submit']");
 
     public void setEmailAs(String email) {
-        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(emailTextField));
-        emailField.clear();
-        emailField.sendKeys(email);
+        try {
+            WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(emailTextField));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", emailField);
+            emailField.clear();
+            emailField.sendKeys(email);
+        } catch (Exception e) {
+            System.err.println("Error setting email: " + e.getMessage());
+        }
     }
 
     public void setPasswordAs(String password) {
-        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordTextField));
-        passwordField.clear();
-        passwordField.sendKeys(password);
-    }
-    public void clickLoginButton() {
-
         try {
-            // First try regular click
-            WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-            btn.click();
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(passwordTextField));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", passwordField);
+            passwordField.clear();
+            passwordField.sendKeys(password);
         } catch (Exception e) {
-            // Fallback to JavaScript click
-            WebElement btn = driver.findElement(loginButton);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
-
-            System.err.println("Unexpected error while clicking login button: " + e.getMessage());
+            System.err.println("Error setting password: " + e.getMessage());
         }
     }
+
+    public void clickLoginButton() {
+        try {
+            WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", btn);
+            btn.click();
+        } catch (Exception e) {
+            try {
+                // Fallback to JavaScript click
+                WebElement btn = wait.until(ExpectedConditions.presenceOfElementLocated(loginButton));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true); arguments[0].click();", btn);
+            } catch (Exception ex) {
+                System.err.println("Failed to click login button even with JS: " + ex.getMessage());
+
+            }
+            System.err.println("Fallback click used due to: " + e.getMessage());
+        }
+    }
+
 }

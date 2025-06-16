@@ -3,6 +3,7 @@ package tests.InvitePatients;
 import Utils.TestData;
 import base.BaseTest;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -102,5 +103,13 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
         softAssert.assertAll();
+    }
+    @AfterClass()
+    public void cleanUp() throws InterruptedException {
+
+        switchToTab("SkyMD Provider Portal");
+        patientChart = new PatientChart(driver);
+        patientChart.clickProfileIcon();
+        patientChart.clickLogoutButton();
     }
 }

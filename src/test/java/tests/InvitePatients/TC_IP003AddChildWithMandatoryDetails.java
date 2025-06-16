@@ -135,7 +135,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
         softAssert.assertAll();
     }
-    //@AfterClass()
+    @AfterClass()
     public void cleanUp() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 

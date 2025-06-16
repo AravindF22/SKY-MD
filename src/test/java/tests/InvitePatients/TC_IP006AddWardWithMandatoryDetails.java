@@ -129,7 +129,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
                 "Dependent's type is not 'Ward' as expected.");
         softAssert.assertAll();
     }
-    //@AfterClass
+    @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         myProfilePage = new PatientPortalMyProfilePage(driver);

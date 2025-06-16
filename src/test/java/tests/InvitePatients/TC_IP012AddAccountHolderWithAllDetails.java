@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -261,7 +262,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         myProfilePage.clickBackButtonInHealthProfile();
         softAssert.assertAll();
     }
-    //@AfterClass
+    @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         // Navigate to myProfile and logout
 //        homePagePatPortal = new PatientPortalHomePage(driver);

@@ -152,7 +152,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
         softAssert.assertAll();
     }
 
-   // @AfterClass()
+    @AfterClass()
     public void cleanUp() throws InterruptedException {
         myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
