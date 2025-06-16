@@ -1,9 +1,6 @@
 package base;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WindowType;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -13,11 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
-import org.testng.asserts.SoftAssert;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -37,7 +32,8 @@ public class BaseTest {
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("profile.default_content_setting_values.notifications", 1); // 1 = Allow, 2 block
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+       // options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
         options.setExperimentalOption("prefs", prefs);
         switch(browser) {
             case "chrome" : driver= new ChromeDriver(options); break;
@@ -50,7 +46,7 @@ public class BaseTest {
     }
     @AfterClass()
     public void tearDown() {
-       // driver.quit();
+      // driver.quit();
     }
     //for loading config file
     public void loadPropFile() throws IOException {
@@ -59,10 +55,24 @@ public class BaseTest {
         property.load(file);
     }
     public void switchToTab( int tab) throws InterruptedException {
-        Thread.sleep(2000);
-        Set<String> ids = driver.getWindowHandles();
-        ArrayList<String> idlist = new ArrayList<>(ids);
-        driver.switchTo().window(idlist.get(tab));
+        try {
+            // Wait until the desired number of tabs are open
+            new WebDriverWait(driver, Duration.ofSeconds(20))
+                    .until(driver -> driver.getWindowHandles().size() > tab);
+
+            Set<String> ids = driver.getWindowHandles();
+            ArrayList<String> idList = new ArrayList<>(ids);
+
+            if (tab < idList.size()) {
+                driver.switchTo().window(idList.get(tab));
+            } else {
+                throw new IllegalStateException("Requested tab index " + tab +
+                        " but only " + idList.size() + " tabs are open.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error while switching to tab " + tab + ": " + e.getMessage());
+        }
     }
     public void switchToTab(String title) throws InterruptedException {
         Thread.sleep(2000);
@@ -76,7 +86,7 @@ public class BaseTest {
     public void newTab(){
         driver.switchTo().newWindow(WindowType.TAB);
     }
-    public void newTabandLaunchYopmail(){
+    public void newTabAndLaunchYopMail(){
         driver.switchTo().newWindow(WindowType.TAB);
         driver.navigate().to("https://yopmail.com/en/");
     }

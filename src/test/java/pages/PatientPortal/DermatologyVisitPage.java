@@ -70,7 +70,7 @@ public class DermatologyVisitPage extends BasePage {
     //medication
     private final By yesBtnInMedication = By.xpath("//p[text()='Yes']/parent::div/parent::div");
     private final By searchMedication = By.xpath("//p[text()='Search Medication']/parent::div");
-    private final By enterMedication = By.xpath("//input[@id=\"react-select-2-input\"]");
+    private final By enterMedication = By.xpath("//div[@class=\" css-s1z5xt\"]");
     private final By addMedicationBtn = By.xpath("//button[text()='Add Medication']");
     private final By dosage = By.cssSelector("input#dose");
     private final By form  = By.cssSelector("select#form");
@@ -78,7 +78,7 @@ public class DermatologyVisitPage extends BasePage {
     private final By per = By.cssSelector("select#per");
 
     //skin care
-    private final By yesBtnInSkinCareProduct = By.xpath("//textarea[@id='skin_care_products']");
+    private final By yesBtnInSkinCareProduct = By.xpath("//p[text()='Yes']");
     private final By skinCareTextArea = By.xpath("//textarea[@id='skin_care_products']");
 
     private final By noBtnInAllergy = By.xpath("//p[text()='No']");
@@ -526,7 +526,6 @@ public class DermatologyVisitPage extends BasePage {
             WebElement input = wait.until(ExpectedConditions.presenceOfElementLocated(id));
             input.sendKeys(filePath);
 
-            System.out.println("Picture uploaded successfully: " + filePath);
         } catch (Exception e) {
             System.out.println("Error uploading picture: " + e.getMessage());
         }
@@ -683,6 +682,7 @@ public class DermatologyVisitPage extends BasePage {
             System.out.println("Error clicking 'Add Pharmacy': " + e.getMessage());
         }
         try {
+            Thread.sleep(2500);
             WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(switchToListView));
             element.click();
         } catch (Exception e) {
@@ -763,7 +763,6 @@ public class DermatologyVisitPage extends BasePage {
 
             //Click done
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//p[text()='Done']"))).click();
-            System.out.println("Allergy added successfully: " + allergyName + ", Reaction: " + reactionType);
         } catch (Exception e) {
             System.out.println("Error adding allergy: " + e.getMessage());
         }
@@ -794,11 +793,19 @@ public class DermatologyVisitPage extends BasePage {
         }
         // Step 4: Target the actual input and enter medication name
         try {
-            WebElement realInput = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='react-select-2-input']")));
+            WebElement realInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@id,'react')]")));
             realInput.sendKeys(medicationName);
+            Thread.sleep(1000);
             // Wait for hidden options to appear
             wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@class=\" css-26l3qy-menu\"]")));
-            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div#react-select-2-option-0"))).click();
+            Thread.sleep(1000);
+//            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='react-select-2-option-0']"))).click();
+            WebElement firstOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[@id='react-select-2-option-0']")));
+
+            // Step 4: Scroll into view and click with JavaScript if regular click fails
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", firstOption);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstOption);
         } catch (Exception e) {
             System.out.println("Error entering/selecting medication name: " + e.getMessage());
         }
@@ -827,9 +834,7 @@ public class DermatologyVisitPage extends BasePage {
         // Step 8: Select per
         try {
             WebElement perElement = wait.until(ExpectedConditions.visibilityOfElementLocated(per));
-            // Scroll the element into view
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addMedicationBtn);
-            new Select(perElement).selectByVisibleText(perValue);
+            perElement.sendKeys(perValue);
         } catch (Exception e) {
             System.out.println("Error selecting 'per': " + e.getMessage());
         }
@@ -850,7 +855,7 @@ public class DermatologyVisitPage extends BasePage {
     // Clicks the "Yes" button in the Skin Care Product section
     public void clickYesBtnInSkinCareProduct() {
         try {
-            WebElement yesBtn = wait.until(ExpectedConditions.elementToBeClickable(yesBtnInSkinCareProduct));
+            WebElement yesBtn = wait.until(ExpectedConditions.presenceOfElementLocated(yesBtnInSkinCareProduct));
             yesBtn.click();
         } catch (Exception e) {
             System.out.println("Error clicking 'Yes' button in Skin Care Product section: " + e.getMessage());
@@ -868,6 +873,7 @@ public class DermatologyVisitPage extends BasePage {
     }
     public void paymentByCard(String number, String expiryValue, String cvvValue) {
         try {
+            Thread.sleep(2000);
             // Wait for Payment Method Section to be visible
             WebElement paymentSection = wait.until(ExpectedConditions.presenceOfElementLocated(PaymentMethodSection));
 

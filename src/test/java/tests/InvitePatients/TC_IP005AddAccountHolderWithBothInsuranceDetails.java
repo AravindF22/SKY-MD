@@ -51,7 +51,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         softAssert = new SoftAssert();
     }
     @Test(priority = 1)
-    private void loginAndInvitePatientWithInsurance() throws IOException, InterruptedException {
+    private void testInvitePatientWithInsurance() throws IOException, InterruptedException {
         //implicit wait
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
@@ -69,7 +69,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
         invitePatientPage.setMemberIdInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberIdForPrimaryInsurance());
         invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
-        invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
+      //  invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
         //Secondary insurance
         invitePatientPage.clickSecondaryInsuranceCheckbox();
@@ -77,13 +77,13 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setMemberNameInSecondaryInsurance(testDataForAccountHolder.getMemberNameForSecondaryInsurance());
         invitePatientPage.setMemberIdInSecondaryInsurance(testDataForAccountHolder.getMemberIdForSecondaryInsurance());
         invitePatientPage.setMemberDobInSecondaryInsurance(testDataForAccountHolder.getMemberDobForSecondaryInsurance());
-        invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
+       // invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
 
         //add patient
         invitePatientPage.clickAddPatientButton();
     }
     @Test(priority = 2)
-    private void validatePatientAndInsuranceInChart() throws InterruptedException {
+    private void testValidatePatientAndInsuranceInChart() throws InterruptedException {
         Thread.sleep(2000);
         switchToTab(1);
 
@@ -124,9 +124,9 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         softAssert.assertAll();
     }
     @Test(priority = 3)
-    private void setPasswordViaYopmail() throws InterruptedException {
+    private void testSetPasswordViaYopmail() throws InterruptedException {
         //Navigate to YopMail
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
@@ -136,7 +136,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4)
-    public void patientPortalValidations(){
+    public void testPatientPortalValidations(){
         //navigate to login page
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");

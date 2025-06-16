@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -44,10 +45,10 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
     @Test(priority = 1)
     public void testFillAccountHolderMandatoryDetails(){
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         //Navigate to Invite Patient
         dashBoardPage = new DashBoardPage(driver);
@@ -63,8 +64,10 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
     }
     @Test(priority = 2)
     public void testAddChildAndFillInvitePatientFormWithReferralClinic() throws IOException {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // Add child fields
+        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         invitePatientPage.selectPatientTypeForPatientOne("Child");
         invitePatientPage.setFirstNameForPatientOne(testDataForChild.getFname());
@@ -83,16 +86,17 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
 
     @Test(priority = 2)
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        Thread.sleep(2000);
-        switchToTab(1);
+        // Wait BEFORE calling switchToTab
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(driver -> driver.getWindowHandles().size() > 1);        switchToTab(1);
 
         //Page navigate to Patient chart
         patientChart = new PatientChart(driver);
 
         //search for patient
         patientChart.searchPatient(testDataForChild.getFullName());
-
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),

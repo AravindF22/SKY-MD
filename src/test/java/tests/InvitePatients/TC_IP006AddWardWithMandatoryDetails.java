@@ -66,7 +66,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
 
         // Add ward fields
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
-        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+)");
+        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
@@ -102,7 +102,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     public void testSetPasswordViaYopmail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(2000);
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 

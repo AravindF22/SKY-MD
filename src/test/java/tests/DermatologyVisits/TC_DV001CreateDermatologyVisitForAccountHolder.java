@@ -23,7 +23,7 @@ public class TC_DV001CreateDermatologyVisitForAccountHolder extends BaseTest {
         driver.get(property.getProperty("PatientPortalLoginUrl"));
         testDataForAccountHolder = new TestData();
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
-        patientPortalLoginPage.login("antonerippin01@yopmail.com", "Welcome@123");
+        patientPortalLoginPage.login("elbertwuckert01@yopmail.com", "Welcome@123");
     }
     @Test
     public void createDermatologyVisitForAccountHolder() throws InterruptedException {
@@ -88,10 +88,11 @@ public class TC_DV001CreateDermatologyVisitForAccountHolder extends BaseTest {
                 "Oil", "PRN", "PRN");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
+        dermatologyVisitPage.clickYesBtnInSkinCareProduct();
+        dermatologyVisitPage.enterSkinCareProduct("test");
         dermatologyVisitPage.clickContinueButton();
 
         dermatologyVisitPage.clickAddPharmacyAndSwitchToListView();
-        //dermatologyVisitPage.clickSwitchToListView();
         dermatologyVisitPage.clickFirstPharmacy();
         dermatologyVisitPage.clickContinueButton();
 
@@ -100,5 +101,8 @@ public class TC_DV001CreateDermatologyVisitForAccountHolder extends BaseTest {
 
         dermatologyVisitPage.clickNextButtonForTAndC();
         dermatologyVisitPage.clickAllAcceptTerms();
+
+        dermatologyVisitPage.paymentByCard("4111111111111111", "09/27","111");
+        dermatologyVisitPage.clickSubmitForEvaluation();
     }
 }

@@ -20,16 +20,16 @@ public class TCTest extends BaseTest {
         driver.navigate().to("https://patient.skymdstaging.com/login");
         // Login to Patient Portal
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
-        loginPagePatientPortal.login("feleciacasper01@yopmail.com", "Welcome@123");
+        loginPagePatientPortal.login("saulkovacek01@yopmail.com", "Welcome@123");
         driver.findElement(By.xpath("//button[text()='Proceed with Consultation']")).click();
         //driver.findElement(By.xpath("//h3[text()='Patient Bio']/parent::div")).click();
-       driver.findElement(By.xpath("//h3[text()='Medications']/parent::div")).click();
+        driver.findElement(By.xpath("//h3[text()='Medications']/parent::div")).click();
 
         dermatologyVisitPage = new DermatologyVisitPage(driver);
         dermatologyVisitPage.addMedication("zerigo Health Kit","test",
-                "Oil", "PRN", "Day");
+                "Oil", "PRN", "Hour");
         dermatologyVisitPage.clickContinueButton();
-        Thread.sleep(1000);
+        Thread.sleep(2500);
 
         dermatologyVisitPage.clickYesBtnInSkinCareProduct();
         dermatologyVisitPage.enterSkinCareProduct("test");

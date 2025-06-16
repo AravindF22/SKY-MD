@@ -102,7 +102,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
 
     @Test(priority = 3, dependsOnMethods = "testValidatePatientChartHealthProfile")
     public void testSetPasswordAndLoginToPortal() throws InterruptedException {
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 

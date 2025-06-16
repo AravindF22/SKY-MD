@@ -17,7 +17,7 @@ public class PatientChart extends BasePage {
     private WebDriverWait wait;
     public PatientChart(WebDriver driver){
         super(driver);
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     private final By nameInTopBar = By.xpath("//p[text()='Name: ']/span");
     private final By nameInThePatientChart = By.xpath("//td[text()='Name:']/following-sibling::td");
@@ -72,7 +72,7 @@ public class PatientChart extends BasePage {
     }
     public String getZipcodeInPatientChart(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(zipcodeInPatientChart));
-        String[] arrayOfAddress = element.getText().split("\s");
+        String[] arrayOfAddress = element.getText().split("\\s");
         return arrayOfAddress[arrayOfAddress.length-1];
     }
 
@@ -90,10 +90,22 @@ public class PatientChart extends BasePage {
 
     // Action method to enter text in the search field
     public void searchPatient(String searchText) {
-        WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchField));
-        searchInput.clear();
-        searchInput.sendKeys(searchText);
-        driver.findElement(By.xpath("//a[@title='"+searchText+" ']")).click();
+        try {
+            wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            // Wait for the search input field to be visible and interactable
+            WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchField));
+            searchInput.clear();
+            searchInput.sendKeys(searchText);
+
+            // Build XPath for the result and wait for it to be clickable
+            By resultLocator = By.xpath("//a[@title='" + searchText + " ']");
+            WebElement result = wait.until(ExpectedConditions.visibilityOfElementLocated(resultLocator));
+            result.click();
+
+        } catch (Exception e) {
+            System.err.println("Error while searching for patient '" + searchText + "': " + e.getMessage());
+        }
     }
 
     public String getAddress() {

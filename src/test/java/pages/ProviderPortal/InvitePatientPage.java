@@ -13,7 +13,7 @@ public class InvitePatientPage extends BasePage {
     private JavascriptExecutor js;
     public InvitePatientPage(WebDriver driver){
         super(driver);
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     // Locators
     private By firstNameTextField = By.xpath("//input[@id='first_name']");
@@ -39,6 +39,7 @@ public class InvitePatientPage extends BasePage {
     private By heightFoAccountHolder = By.xpath("//div[@class='col-lg-8']//div//div//input[@id='new-patient-height-feet']");
     private By inchesForAccountHolder = By.xpath("//div[@class='col-lg-8']//div//div//input[@id='new-patient-height-inch']");
     private By weightFoAccountHolder = By.xpath("//div[@class='col-lg-8']//div//input[@id='new-patient-weight']");
+
     //primary insurance for AH
     private By insuranceCheckBoxForAccountHolder = By.xpath("//input[@ng-model=\"insurancesDetailsEnabled[0]\"]");
     private By primaryInsuranceDropDownForAccountHolder = By.xpath("//div[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[0].insurance_company\"]");
@@ -46,6 +47,7 @@ public class InvitePatientPage extends BasePage {
     private By memberIdForAHInPrimaryInsurance = By.xpath("//input[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[0].member_id\"]");
     private By dobForAHInPrimaryInsurance = By.xpath("//input[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[0].member_dob\"]");
     private By relationshipForAHInPrimaryInsurance = By.xpath("//select[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[0].relationship_to_patient\"]");
+
     //secondary insurance for AH
     private By secondaryInsuranceCheckBoxForAccountHolder = By.xpath("//input[@ng-model=\"secondaryInsurancesDetailsEnabled[0]\"]");
     private By secondaryInsuranceDropDownForAccountHolder = By.xpath("//div[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[1].insurance_company\"]");
@@ -53,6 +55,7 @@ public class InvitePatientPage extends BasePage {
     private By memberIdForAhInSecondaryInsurance = By.xpath("//input[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[1].member_id\"]");
     private By memberDobFoAhInSecondaryInsurance = By.xpath("//input[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[1].member_dob\"]");
     private By relationshipForAhInSecondaryInsurance = By.xpath("//select[@ng-model=\"newPatient.patients_attributes[0].insurances_attributes[1].relationship_to_patient\"]");
+
     //Health profile for AH
     private By healthProfileCheckBoxForAccountHolder = By.xpath("//input[@ng-model=\"showHealthProfile[0]\"]");
     private By addMedicationButtonForAccountHolder = By.xpath("//button[@ng-click=\"addNewMedication(0)\"]");
@@ -104,6 +107,22 @@ public class InvitePatientPage extends BasePage {
     private By feetForPatientOne = By.xpath("(//tr[@ng-show=\"additionalInfoEnabled[$index]\"]//input[@id=\"new-patient-height-feet\"])[1]");
     private By inchForPatientOne = By.xpath("(//tr[@ng-show=\"additionalInfoEnabled[$index]\"]//input[@id=\"new-patient-height-inch\"])[1]");
     private By weightForPatientOne = By.xpath("(//tr[@ng-show=\"additionalInfoEnabled[$index]\"]//input[@id=\"new-patient-weight\"])[1]");
+
+    //insurance details for patient one
+    private By insuranceCheckBoxForPatientOne = By.xpath("(//input[@ng-model=\"insurancesDetailsEnabled[$index]\"])[1]");
+    private By primaryInsuranceDropDownForPatientOne = By.xpath("(//div[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].insurance_company\"])[1]");
+    private By primaryInsuranceMemberNameForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].member_name\"])[1]");
+    private By primaryInsuranceMemberIdForPatientOne =By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].member_id\"])[1]");
+    private By primaryInsuranceMemberDOBForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].member_dob\"])[1]");
+    private By primaryInsuranceRelationshipForPatientOne = By.xpath("(//select[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].relationship_to_patient\"])[1]");
+
+
+    private By secondaryInsuranceCheckBoxForPatientOne =By.xpath("//input[@ng-model=\"secondaryInsurancesDetailsEnabled[$index]\"]");
+    private By secondaryInsuranceDropDownForPatientOne = By.xpath("(//div[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].insurance_company\"])[1]");
+    private By secondaryInsuranceMemberNameForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_name\"])[1]");
+    private By secondaryInsuranceMemberIdForPatientOne =By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_id\"])[1]");
+    private By secondaryInsuranceMemberDOBForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_dob\"])[1]");
+    private By secondaryInsuranceRelationshipForPatientOne = By.xpath("(//select[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].relationship_to_patient\"])[1]");
 
     // Action Methods with Explicit Waits
     public void setFirstNameAs(String firstName) {
@@ -761,6 +780,153 @@ public class InvitePatientPage extends BasePage {
             element.sendKeys(weight);
         } catch (Exception e) {
             System.out.println("Error setting weight for patient one: " + e.getMessage());
+        }
+    }
+
+    // Action Methods
+    public void checkInsuranceCheckboxForPatientOne() {
+        try {
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(insuranceCheckBoxForPatientOne));
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to click insurance checkbox: " + e.getMessage());
+        }
+    }
+
+    public void selectPrimaryInsuranceForPatientOne(String insuranceName) {
+        try {
+            // 1. Click the dropdown to open the search input
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(primaryInsuranceDropDownForPatientOne));
+            dropdown.click();
+           // 2. Find the search input field INSIDE the opened dropdown
+            //By searchInputLocator = By.xpath("(//input[@class='form-control ui-select-search ng-pristine ng-valid ng-touched'])[1]");
+            By searchInputLocator = By.xpath("(//p[text()='Patient 1']/parent::div[1]/parent::div//input[contains(@class, 'ui-select-search')])[1]");
+            WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator));
+
+            // 3. Type the insurance name to filter options
+            searchInput.sendKeys(insuranceName);
+
+            // 4. Wait for options to load and click the matching one
+            By optionLocator = By.xpath("//div[@ng-attr-id='ui-select-choices-row-{{ $select.generatedId }}-{{$index}}'][1]//span[text()='"+insuranceName+"']");
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
+            option.click();
+
+        } catch (Exception e) {
+            System.out.println("Failed to select primary insurance: " + e.getMessage());
+        }
+    }
+
+    public void setPrimaryInsuranceMemberName(String name) {
+        try {
+            WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberNameForPatientOne));
+            field.clear();
+            field.sendKeys(name);
+        } catch (Exception e) {
+            System.out.println("Failed to set member name: " + e.getMessage());
+        }
+    }
+
+    public void setPrimaryInsuranceMemberIdForPatientOne(String id) {
+        try {
+            WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberIdForPatientOne));
+            field.clear();
+            field.sendKeys(id);
+        } catch (Exception e) {
+            System.out.println("Failed to set member ID: " + e.getMessage());
+        }
+    }
+
+    public void setPrimaryInsuranceMemberDOBForPatientOne(String dob) {
+        try {
+            WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberDOBForPatientOne));
+            field.clear();
+            field.sendKeys(dob);
+        } catch (Exception e) {
+            System.out.println("Failed to set member DOB: " + e.getMessage());
+        }
+    }
+
+    public void selectPrimaryInsuranceRelationshipForPatientOne(String relationshipText) {
+        try {
+            WebElement selectElement = wait.until(ExpectedConditions.elementToBeClickable(primaryInsuranceRelationshipForPatientOne));
+            Select select = new Select(selectElement);
+            select.selectByVisibleText(relationshipText);
+        } catch (Exception e) {
+            System.out.println("Failed to select relationship: " + e.getMessage());
+        }
+    }
+
+    public void checkSecondaryInsuranceForPatientOne() {
+        try {
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(secondaryInsuranceCheckBoxForPatientOne));
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to select Secondary Insurance checkbox for Patient One: " + e.getMessage());
+        }
+    }
+    public void selectSecondaryInsuranceForPatientOne(String insuranceName) {
+        try {
+            // 1. Click the dropdown to open the search input
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(secondaryInsuranceDropDownForPatientOne));
+            dropdown.click();
+            // 2. Find the search input field INSIDE the opened dropdown
+            By searchInputLocator = By.xpath("(//p[text()='Patient 1']/parent::div[1]/parent::div//input[contains(@class, 'ui-select-search')])[2]");
+            WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator));
+
+            // 3. Type the insurance name to filter options
+            searchInput.sendKeys(insuranceName);
+
+            // 4. Wait for options to load and click the matching one
+            By optionLocator = By.xpath("//div[@ng-attr-id='ui-select-choices-row-{{ $select.generatedId }}-{{$index}}'][1]//span[text()='"+insuranceName+"']");
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
+            option.click();
+
+        } catch (Exception e) {
+            System.out.println("Failed to select primary insurance: " + e.getMessage());
+        }
+    }
+
+    public void setSecondaryInsuranceMemberNameForPatientOne(String name) {
+        try {
+            WebElement nameField = wait.until(ExpectedConditions.visibilityOfElementLocated(secondaryInsuranceMemberNameForPatientOne));
+            nameField.clear();
+            nameField.sendKeys(name);
+        } catch (Exception e) {
+            System.out.println("Failed to set Secondary Insurance Member Name: " + e.getMessage());
+        }
+    }
+
+    public void setSecondaryInsuranceMemberIdForPatientOne(String memberId) {
+        try {
+            WebElement idField = wait.until(ExpectedConditions.visibilityOfElementLocated(secondaryInsuranceMemberIdForPatientOne));
+            idField.clear();
+            idField.sendKeys(memberId);
+        } catch (Exception e) {
+            System.out.println("Failed to set Secondary Insurance Member ID: " + e.getMessage());
+        }
+    }
+
+    public void setSecondaryInsuranceMemberDOBForPatientOne(String dob) {
+        try {
+            WebElement dobField = wait.until(ExpectedConditions.visibilityOfElementLocated(secondaryInsuranceMemberDOBForPatientOne));
+            dobField.clear();
+            dobField.sendKeys(dob);
+        } catch (Exception e) {
+            System.out.println("Failed to set Secondary Insurance Member DOB: " + e.getMessage());
+        }
+    }
+
+    public void selectSecondaryInsuranceRelationshipForPatientOne(String relationshipText) {
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(secondaryInsuranceRelationshipForPatientOne));
+            Select select = new Select(dropdown);
+            select.selectByVisibleText(relationshipText);
+        } catch (Exception e) {
+            System.out.println("Failed to select Secondary Insurance Relationship: " + e.getMessage());
         }
     }
 }

@@ -96,7 +96,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
     @Test(priority = 3, dependsOnMethods = "testPatientChartValidations")
     public void testSetPasswordViaYopmail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 

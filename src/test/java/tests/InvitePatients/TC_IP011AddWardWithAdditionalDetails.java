@@ -2,7 +2,6 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -69,7 +68,7 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
 
         // Add Ward fields
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
-        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+)");
+        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
@@ -119,7 +118,7 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
@@ -254,7 +253,7 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
         primaryCareVisitPage.clickBackArrowToHomePage();
         softAssert.assertAll();
     }
-    @AfterClass()
+    //@AfterClass()
     public void cleanUp() throws InterruptedException {
 
         //navigate to my profile

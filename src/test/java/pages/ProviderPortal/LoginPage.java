@@ -2,6 +2,7 @@ package pages.ProviderPortal;
 
 import base.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,9 +33,18 @@ public class LoginPage extends BasePage {
         passwordField.clear();
         passwordField.sendKeys(password);
     }
-
     public void clickLoginButton() {
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-        btn.click();
+
+        try {
+            // First try regular click
+            WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+            btn.click();
+        } catch (Exception e) {
+            // Fallback to JavaScript click
+            WebElement btn = driver.findElement(loginButton);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+
+            System.err.println("Unexpected error while clicking login button: " + e.getMessage());
+        }
     }
 }

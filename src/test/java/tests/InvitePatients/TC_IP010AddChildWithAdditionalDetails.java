@@ -2,7 +2,6 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -120,7 +119,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
@@ -257,7 +256,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         primaryCareVisitPage.clickBackArrowToHomePage();
         softAssert.assertAll();
     }
-    @AfterClass()
+    // @AfterClass()
     public void cleanUp() throws InterruptedException {
 
         //navigate to my profile

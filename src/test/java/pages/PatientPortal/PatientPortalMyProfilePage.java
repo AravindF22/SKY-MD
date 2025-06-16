@@ -96,7 +96,7 @@ public class PatientPortalMyProfilePage extends BasePage {
     public String getZipCodeOfAccountHolderInLineOne(){
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressLineOne));
-            String [] address =  element.getText().trim().split("\s");
+            String [] address =  element.getText().trim().split("\\s");
             return address[address.length-1];
         } catch (TimeoutException e) {
             System.err.println("Timeout: City and Zip Code element not found.");
@@ -108,11 +108,11 @@ public class PatientPortalMyProfilePage extends BasePage {
     public String getZipCodeOfAccountHolder() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressLineTwo));
-            String [] address =  element.getText().trim().split("\s");
+            String [] address =  element.getText().trim().split(" ");
             String zipcode = address[address.length-1];
             if(zipcode==null){
                 WebElement ele = wait.until(ExpectedConditions.visibilityOfElementLocated(addressLineOne));
-                String [] add =  element.getText().trim().split("\s");
+                String [] add =  element.getText().trim().split(" ");
                 return add[add.length-1];
             }
             return address[address.length-1];

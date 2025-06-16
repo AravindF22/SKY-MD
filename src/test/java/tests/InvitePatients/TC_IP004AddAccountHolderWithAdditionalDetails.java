@@ -97,7 +97,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopmail() throws InterruptedException {
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 

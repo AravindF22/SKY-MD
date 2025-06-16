@@ -34,8 +34,8 @@ jobs:
           sudo apt update
           sudo apt install -y google-chrome-stable
 
-      - name: Run Tests using Master.xml
-        run: mvn clean test -DsuiteXmlFile=Master.xml
+      - name: Run Tests using testng.xml
+        run: mvn clean test -DsuiteXmlFile=testng.xml
 
       - name: Upload TestNG Report
         uses: actions/upload-artifact@v4

@@ -67,7 +67,7 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
 
         // Add child fields
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
-        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+)");
+        invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
@@ -98,7 +98,7 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
                 "Clinic name in the referral section of AH is mismatching");
         softAssert.assertAll();
     }
-    @AfterClass()
+    //@AfterClass()
     public void cleanUp() throws InterruptedException {
 
         switchToTab("SkyMD Provider Portal");

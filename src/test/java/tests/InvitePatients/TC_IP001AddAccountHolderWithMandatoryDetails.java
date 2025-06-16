@@ -2,20 +2,19 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.PatientPortalMyProfilePage;
-import pages.PatientPortal.SetPasswordPage;
+import pages.PatientPortal.*;
 import pages.ProviderPortal.DashBoardPage;
 import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -28,12 +27,14 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
     public PatientPortalLoginPage loginPagePatientPortal;
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
-
+    public PatientPortalHomePage patientPortalHomePage;
+    public DermatologyVisitPage dermatologyVisitPage;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
 
     @BeforeClass
     public void setUp() throws IOException {
+
         //Loading config File
         loadPropFile();
         driver.get(property.getProperty("ProviderPortalUrl"));
@@ -44,7 +45,6 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
         loginPage.setEmailAs(property.getProperty("MA_Email"));
         loginPage.setPasswordAs(property.getProperty("MA_Password"));
         loginPage.clickLoginButton();
-
         // Navigate to Invite Patient
         dashBoardPage = new DashBoardPage(driver);
         dashBoardPage.clickInvitePatientLink();
@@ -66,7 +66,7 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
         invitePatientPage.setMobileAs(testDataForAccountHolder.getMobileNumber());
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
-        //invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
+        invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
         invitePatientPage.clickAddPatientButton();
     }
     @Test(priority = 2, dependsOnMethods = "testInvitePatientWithMandatoryDetails")
@@ -87,7 +87,7 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Navigate to Yop mail and set password
-        newTabandLaunchYopmail();
+        newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
