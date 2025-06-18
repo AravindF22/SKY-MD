@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 public class PatientChart extends BasePage {
     private WebDriverWait wait;
@@ -45,11 +46,8 @@ public class PatientChart extends BasePage {
     private final By memberDobInSecondaryInsurance = By.xpath("//tr[contains(@ng-if,\"patientData.secondary_insurance\")]//span[4]");
     private final By healthProfileButton = By.xpath("//a[text()='Health Profile']");
 
-    private final By allergyNameOne = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[1]");
-    private final By allergyNameTwo = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[2]");
-    private final By allergyNameThree = By.xpath("(//h3[text()='Allergies']/parent::div/following-sibling::div//div[contains(@class,'detailsTable')]/div[1])[3]");
-
     private final By medicationNameOne = By.xpath("//div[@ng-repeat=\"medication in activeMeds\"][1]/div[1]");
+    private final By guardian = By.xpath("//td[text()='Guardian:']/following-sibling::td");
 
     private final By profileIcon = By.xpath("//a[@class=\"dropdown-toggle clear\"]/span[1]");
     private final By logoutButton = By.xpath("//a[text()='Logout']");
@@ -125,7 +123,7 @@ public class PatientChart extends BasePage {
 
     public String getWeight() {
         WebElement weightElement = wait.until(ExpectedConditions.visibilityOfElementLocated(weight));
-        return weightElement.getText().replaceAll(".0 pound\\(s\\)","").trim();
+        return weightElement.getText().replaceAll("\\.0 pound\\(s\\)","").trim();
     }
 
     public String getDOB() {
@@ -273,11 +271,10 @@ public class PatientChart extends BasePage {
         }
     }
 
-    // Get the first allergy name
-    public String getFirstAllergyName() {
+    public String getFirstDrugAllergyName() {
         try {
-            WebElement allergy = wait.until(ExpectedConditions.visibilityOfElementLocated(allergyNameOne));
-            return allergy.getText().trim();
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"]/div[1]"));
+            return allergies.get(allergies.size()-1).getText().trim();
         } catch (TimeoutException e) {
             System.err.println("Timeout: First allergy name not visible.");
         } catch (Exception e) {
@@ -285,27 +282,83 @@ public class PatientChart extends BasePage {
         }
         return null;
     }
-    // Get the first allergy name
-    public String getSecondAllergyName() {
+
+    public String getSecondDrugAllergyName() {
         try {
-            WebElement allergy = wait.until(ExpectedConditions.visibilityOfElementLocated(allergyNameTwo));
-            return allergy.getText().trim();
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeOtherAllergies\"]/div[1]"));
+            return allergies.get(allergies.size()-2).getText().trim();
         } catch (TimeoutException e) {
-            System.err.println("Timeout: Second allergy name not visible.");
+            System.err.println("Timeout: First allergy name not visible.");
         } catch (Exception e) {
-            System.err.println("Error getting Second allergy name: " + e.getMessage());
+            System.err.println("Error getting first allergy name: " + e.getMessage());
         }
         return null;
     }
-    // Get the first allergy name
-    public String getThirdAllergyName() {
+    public String getFirstDrugReactionName(){
         try {
-            WebElement allergy = wait.until(ExpectedConditions.visibilityOfElementLocated(allergyNameThree));
-            return allergy.getText().trim();
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"]/div[2]"));
+            return allergies.get(allergies.size()-1).getText().trim();
         } catch (TimeoutException e) {
-            System.err.println("Timeout: Third allergy name not visible.");
+            System.err.println("Timeout: First Reaction name not visible.");
         } catch (Exception e) {
-            System.err.println("Error getting Third allergy name: " + e.getMessage());
+            System.err.println("Error getting Reaction allergy name: " + e.getMessage());
+        }
+        return null;
+    }
+    public String getSecondDrugReactionName(){
+        try {
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeDrugAllergies\"]/div[2]"));
+            return allergies.get(allergies.size()-1).getText().trim();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: SECOND Reaction name not visible.");
+        } catch (Exception e) {
+            System.err.println("Error getting SECOND Reaction name: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public String getFirstEnvironmentDrugAllergyName() {
+        try {
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeOtherAllergies\"]/div[1]"));
+            return allergies.get(allergies.size()-1).getText().trim();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: First allergy name not visible.");
+        } catch (Exception e) {
+            System.err.println("Error getting first allergy name: " + e.getMessage());
+        }
+        return null;
+    }
+    public String getSecondEnvironmentDrugAllergyName() {
+        try {
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeOtherAllergies\"]/div[1]"));
+            return allergies.get(allergies.size()-2).getText().trim();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: First allergy name not visible.");
+        } catch (Exception e) {
+            System.err.println("Error getting first allergy name: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public String getFirstEnvironmentReactionName(){
+        try {
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeOtherAllergies\"]/div[2]"));
+            return allergies.get(allergies.size()-1).getText().trim();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: First Reaction name not visible.");
+        } catch (Exception e) {
+            System.err.println("Error getting first Reaction name: " + e.getMessage());
+        }
+        return null;
+    }
+    public String getSecondEnvironmentReactionName(){
+        try {
+            List<WebElement> allergies = driver.findElements(By.xpath("//div[@ng-repeat=\"allergy in activeOtherAllergies\"]/div[2]"));
+            return allergies.get(allergies.size()-2).getText().trim();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Second Reaction name not visible.");
+        } catch (Exception e) {
+            System.err.println("Error getting Second Reaction name: " + e.getMessage());
         }
         return null;
     }
@@ -321,6 +374,14 @@ public class PatientChart extends BasePage {
             System.err.println("Error getting first medication name: " + e.getMessage());
         }
         return null;
+    }
+    public String getGuardianName(){
+        try{
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(guardian)).getText();
+        }catch (Exception e){
+            System.err.println("Error getting guardian name: " + e.getMessage());
+            return null;
+        }
     }
     // Click the profile icon
     public void clickProfileIcon() {

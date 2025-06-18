@@ -15,6 +15,7 @@ public class PatientPortalLoginPage extends BasePage {
     private By emailTextField = By.id("email");
     private By passwordTextField = By.id("password");
     private By loginButton = By.xpath("//button[text()='Login']");
+    private By signInLink = By.xpath("//a[text()='Sign up']");
     private  WebDriverWait wait;
 
     public void login(String email, String password){
@@ -51,6 +52,19 @@ public class PatientPortalLoginPage extends BasePage {
         } catch (Exception e) {
             System.err.println("Unexpected error during login: " + e.getMessage());
             throw new RuntimeException("Login failed due to unexpected error", e);
+        }
+    }
+    public void clickSignUpLink() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(signInLink));
+            element.click();
+        } catch (TimeoutException e) {
+            System.out.println("Timeout: 'Sign up' link was not clickable within the wait time.");
+        } catch (NoSuchElementException e) {
+            System.out.println("Error: 'Sign up' link was not found on the page.");
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred while clicking 'Sign up': " + e.getMessage());
         }
     }
 }

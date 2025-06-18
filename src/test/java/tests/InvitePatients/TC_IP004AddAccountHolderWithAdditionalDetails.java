@@ -96,7 +96,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
         softAssert.assertAll();
     }
     @Test(priority = 3)
-    public void testSetPasswordViaYopmail() throws InterruptedException {
+    public void testSetPasswordViaYopMail() throws InterruptedException {
         newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());

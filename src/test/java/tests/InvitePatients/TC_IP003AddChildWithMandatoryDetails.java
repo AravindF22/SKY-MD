@@ -91,10 +91,12 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
                 "Child name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForChild.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Child zip code mismatch in Patient Chart");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getGuardianName(),
+                "Guardian name mismatch in Patient Chart");
         softAssert.assertAll();
     }
-    @Test(priority = 3, dependsOnMethods = "testPatientChartValidations")
-    public void testSetPasswordViaYopmail() throws InterruptedException {
+    @Test(priority = 3)
+    public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
@@ -104,7 +106,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
-    @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopmail"})
+    @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
     public void testPatientPortalDependentAndVisitFlow() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
@@ -142,8 +144,10 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         dermatologyVisitPage = new DermatologyVisitPage(driver);
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForHomePage();
+
         homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
+
         myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();

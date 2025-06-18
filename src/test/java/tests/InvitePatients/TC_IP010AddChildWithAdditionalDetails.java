@@ -79,8 +79,8 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         invitePatientPage.setStreetAddressTwoForPatientOne(testDataForChild.getStreetAddressTwo());
         invitePatientPage.setDobForPatientOne(testDataForChild.getDobForMinor());
         invitePatientPage.selectGenderForPatientOne(testDataForChild.getGender());
-//        invitePatientPage.setFeetForPatientOne(testDataForChild.getFeet());
-//        invitePatientPage.setInchForPatientOne(testDataForChild.getInch());
+        invitePatientPage.setFeetForPatientOne(testDataForChild.getFeet());
+        invitePatientPage.setInchForPatientOne(testDataForChild.getInch());
         invitePatientPage.setWeightForPatientOne(testDataForChild.getWeight());
         invitePatientPage.clickAddPatientButton();
     }

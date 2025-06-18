@@ -98,7 +98,7 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
                 "Clinic name in the referral section of AH is mismatching");
         softAssert.assertAll();
     }
-    @AfterClass()
+    //@AfterClass()
     public void cleanUp() throws InterruptedException {
 
         switchToTab("SkyMD Provider Portal");

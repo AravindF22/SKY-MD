@@ -69,7 +69,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
         invitePatientPage.setMemberIdInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberIdForPrimaryInsurance());
         invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
-      //  invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
+        invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
         //Secondary insurance
         invitePatientPage.clickSecondaryInsuranceCheckbox();
@@ -77,7 +77,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setMemberNameInSecondaryInsurance(testDataForAccountHolder.getMemberNameForSecondaryInsurance());
         invitePatientPage.setMemberIdInSecondaryInsurance(testDataForAccountHolder.getMemberIdForSecondaryInsurance());
         invitePatientPage.setMemberDobInSecondaryInsurance(testDataForAccountHolder.getMemberDobForSecondaryInsurance());
-       // invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
+        invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
 
         //add patient
         invitePatientPage.clickAddPatientButton();
@@ -124,7 +124,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         softAssert.assertAll();
     }
     @Test(priority = 3)
-    private void testSetPasswordViaYopmail() throws InterruptedException {
+    private void testSetPasswordViaYopMail() throws InterruptedException {
         //Navigate to YopMail
         newTabAndLaunchYopMail();
         YopMail yopMail = new YopMail(driver);
@@ -178,7 +178,6 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         dermatologyVisitPage.clickBackArrowForHomePage();
 //        dermatologyVisitPage.clickDeleteVisitButton();
 //        dermatologyVisitPage.setConfirmForDeleteVisit();
-
     }
 
     @AfterClass

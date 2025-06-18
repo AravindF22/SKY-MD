@@ -95,11 +95,13 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
                 "Ward name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForWard.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Ward zip code mismatch in Patient Chart");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getGuardianName(),
+                "Guardian name mismatch in Patient Chart");
         softAssert.assertAll();
     }
 
-    @Test(priority = 3, dependsOnMethods = "testPatientChartValidations")
-    public void testSetPasswordViaYopmail() throws InterruptedException {
+    @Test(priority = 3)
+    public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(2000);
         newTabAndLaunchYopMail();
@@ -111,7 +113,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
         setPasswordPage.setPassword("Welcome@123");
     }
 
-    @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopmail")
+    @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalDependentValidation() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 

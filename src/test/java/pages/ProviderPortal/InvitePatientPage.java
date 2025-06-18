@@ -226,9 +226,19 @@ public class InvitePatientPage extends BasePage {
 
     // Set Height (feet)
     public void setHeightFeet(String feet) {
-        WebElement heightFeetField = wait.until(ExpectedConditions.visibilityOfElementLocated(heightFoAccountHolder));
-        heightFeetField.clear();
-        heightFeetField.sendKeys(feet);
+        try{
+            WebElement heightFeetField = wait.until(ExpectedConditions.visibilityOfElementLocated(heightFoAccountHolder));
+//        heightFeetField.clear();
+//        heightFeetField.sendKeys(feet);
+            int feetValue = Integer.parseInt(feet);
+            while(feetValue>=1){
+                // Increase value (Arrow Up)
+                heightFeetField.sendKeys(Keys.ARROW_UP);
+                feetValue--;
+            }
+        }catch (Exception e){
+            System.err.println("Error in setPrimaryInsuranceDropdownForAH: " + e.getMessage());
+        }
     }
 
     // Set Height (inches)
@@ -580,8 +590,8 @@ public class InvitePatientPage extends BasePage {
             System.err.println("Error selecting allergy category: " + e.getMessage());
         }
     }
-    // Set allergy name for account holder
-    public void selectAllergyForAccountHolder(String allergyName) {
+    public void setDrugAllergySetOne(String allergyName, String reaction, String category){
+        //Allergy
         try {
             // 1. Click the allergy dropdown to activate it
             WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAlleryNameOneForAccountHolder));
@@ -593,45 +603,63 @@ public class InvitePatientPage extends BasePage {
             input.sendKeys(allergyName);
 
             // 3. Wait for the matching option and select it
-            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(selectAllergyOptionOneForAccountHolder));
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-3-0\"]//span[text()='"+allergyName+"']")));
             option.click();
-        } catch (TimeoutException e) {
-            System.err.println("Timeout: Could not find or interact with allergy dropdown or option.");
         } catch (Exception e) {
             System.err.println("Error selecting allergy for account holder: " + e.getMessage());
         }
-    }
-
-    // Select allergy reaction for account holder
-    public void selectAllergyReactionForAccountHolder(String reaction) {
+        //Reaction
         try {
             WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionOneForAccountHolder));
             Select select = new Select(dropdown);
             select.selectByVisibleText(reaction);
-        } catch (NoSuchElementException e) {
-            System.err.println("Allergy reaction option '" + reaction + "' not found.");
-        } catch (TimeoutException e) {
-            System.err.println("Timeout: Allergy reaction dropdown not visible.");
-        } catch (Exception e) {
+        }  catch (Exception e) {
             System.err.println("Error selecting allergy reaction: " + e.getMessage());
         }
-    }
-
-    // Select allergy category for account holder
-    public void selectAllergyCategoryForAccountHolder(String category) {
+        //Category
         try {
             WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryOneForAccountHolder));
             Select select = new Select(dropdown);
             select.selectByVisibleText(category);
-        } catch (NoSuchElementException e) {
-            System.err.println("Allergy category option '" + category + "' not found.");
-        } catch (TimeoutException e) {
-            System.err.println("Timeout: Allergy category dropdown not visible.");
-        } catch (Exception e) {
+        }  catch (Exception e) {
             System.err.println("Error selecting allergy category: " + e.getMessage());
         }
     }
+    public void setEnvironmentAllergySetOne(String allergyName, String reaction, String category){
+        //Allergy
+        try {
+            // 1. Click the allergy dropdown to activate it
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAlleryNameTwoForAccountHolder));
+            dropdown.click();
 
+            // 2. Wait for the input to appear and type the allergy name
+            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameTwoForAccountHolder));
+            input.clear();
+            input.sendKeys(allergyName);
+
+            // 3. Wait for the matching option and select it
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-4-0\"]//span[text()='"+allergyName+"']")));
+            option.click();
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy for account holder: " + e.getMessage());
+        }
+        //Reaction
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionTwoForAccountHolder));
+            Select select = new Select(dropdown);
+            select.selectByVisibleText(reaction);
+        }  catch (Exception e) {
+            System.err.println("Error selecting allergy reaction: " + e.getMessage());
+        }
+        //Category
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryTwoForAccountHolder));
+            Select select = new Select(dropdown);
+            select.selectByVisibleText(category);
+        }  catch (Exception e) {
+            System.err.println("Error selecting allergy category: " + e.getMessage());
+        }
+    }
     public void clickAddPatientButton() {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(addPatientButton));
         element.click();
@@ -756,8 +784,15 @@ public class InvitePatientPage extends BasePage {
     public void setFeetForPatientOne(String feet) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(feetForPatientOne));
-            element.clear();
-            element.sendKeys(feet);
+//            element.clear();
+//            element.sendKeys(feet);
+            //element.click();
+            int feetValue = Integer.parseInt(feet);
+            while(feetValue>=1){
+                // Increase value (Arrow Up)
+                element.sendKeys(Keys.ARROW_UP);
+                feetValue--;
+            }
         } catch (Exception e) {
             System.out.println("Error setting feet for patient one: " + e.getMessage());
         }

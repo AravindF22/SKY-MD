@@ -1,10 +1,7 @@
 package pages.PatientPortal;
 
 import base.BasePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -43,5 +40,16 @@ public class PatientPortalHomePage extends BasePage {
         } catch (Exception e) {
             System.err.println("Error clicking Primary Care Visit: " + e.getMessage());
         }
+    }
+    public boolean isHomePage(){
+        System.out.println(driver.getCurrentUrl());
+        // Wait for page to fully load
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
+
+        if (driver.getCurrentUrl().equals("https://patient.skymdstaging.com/home"))
+            return true;
+
+        return false;
     }
 }

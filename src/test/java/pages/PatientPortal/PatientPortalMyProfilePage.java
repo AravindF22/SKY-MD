@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.TimeoutException;
 
 import java.time.Duration;
+import java.util.List;
 
 public class PatientPortalMyProfilePage extends BasePage {
     private WebDriverWait wait;
@@ -38,6 +39,7 @@ public class PatientPortalMyProfilePage extends BasePage {
     private final By healthProfileLink = By.xpath("//h3[text()='Health Profile']");
     private final By healthProfileOfAccountHolder = By.xpath("//div[@class=\"mt-16\"][1]/div");
     private final By allergyHealthProfile = By.xpath("//p[text()='Allergies']");
+
     private final By allergyOne = By.xpath("//div[contains(@class,\"block pt-7\")][1]//input");
     private final By allergyTwo = By.xpath("//div[contains(@class,\"block pt-7\")][2]//input");
     private final By allergyThree = By.xpath("//div[contains(@class,\"block pt-7\")][3]//input");
@@ -324,8 +326,82 @@ public class PatientPortalMyProfilePage extends BasePage {
             return null;
         }
     }
+    public String getDrugAllergyOneValue() {
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//input[contains(@id,'drug_medication_allergies')]"));
+            return element.get(element.size()-1).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for drugAllergyOne: " + e.getMessage());
+            return null;
+        }
+    }
 
+    public String getDrugAllergyTwoValue() {
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//input[contains(@id,'drug_medication_allergies')]"));
+            return element.get(element.size()-2).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for drugAllergyTwo: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getDrugReactionOneValue(){
+        try {
+            List<WebElement> element = driver.findElements(By.xpath(" //select[contains(@name,'drug_medication_allergies')]"));
+            return element.get(element.size()-1).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for drugReactionOne: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getDrugReactionTwoValue(){
+        try {
+            List<WebElement> element = driver.findElements(By.xpath(" //select[contains(@name,'drug_medication_allergies')]"));
+            return element.get(element.size()-2).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for drugReactionOne: " + e.getMessage());
+            return null;
+        }
+    }
 
+    public String getEnvironmentAllergyOneValue() {
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//input[contains(@id,'environmental_food_allergies')]"));
+            return element.get(element.size()-1).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for environmentAllergyOne: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getEnvironmentAllergyTwoValue() {
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//input[contains(@id,'environmental_food_allergies')]"));
+            return element.get(element.size()-2).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for environmentAllergyTwo: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getEnvironmentReactionOneValue(){
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//select[contains(@id,'environmental_food_allergies')]"));
+            return element.get(element.size()-1).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for environmentAllergyTwo: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getEnvironmentReactionTwoValue(){
+        try {
+            List<WebElement> element = driver.findElements(By.xpath("//select[contains(@id,'environmental_food_allergies')]"));
+            return element.get(element.size()-2).getAttribute("value");
+        } catch (Exception e) {
+            System.out.println("Error getting value for environmentAllergyTwo: " + e.getMessage());
+            return null;
+        }
+    }
     public void clickBackButtonInHealthProfile(){
         try {
             wait.until(ExpectedConditions.elementToBeClickable(backButtonInHealthProfile)).click();

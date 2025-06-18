@@ -59,9 +59,9 @@ public class TestData {
         this.dobForMajor = faker.date().birthday(19, 70);
         this.dobForMinor = faker.date().birthday(1,18);
         this.feet = String.valueOf(faker.number().numberBetween(4, 10));
-        this.feetForMinor = String.valueOf(faker.number().numberBetween(2, 8));
+        this.feetForMinor = String.valueOf(faker.number().numberBetween(2, 10));
         this.inch = String.valueOf(faker.number().numberBetween(0, 11));
-        this.weight = String.valueOf(faker.number().numberBetween(40, 250));
+        this.weight = String.valueOf(faker.number().numberBetween(40, 99));
         this.memberIdForPrimaryInsurance = faker.regexify("[A-Z0-9]{10}");
         this.relationShipForPrimaryInsuranceIndex = faker.number().numberBetween(0,relationship.length);
         this.primaryInsuranceIndex = faker.number().numberBetween(0, insurances.length);
@@ -199,8 +199,7 @@ public class TestData {
     public String getMedicationOne(){
         return medications[medicationOneIndex];
     }
-    public String getAllergyOne(){
-        return allergies[allergyOneIndex];
+    public String getAllergyOne(){return allergies[allergyOneIndex];
     }
     public String getAllergyTwo(){
         return allergies[allergyTwoIndex];
@@ -225,6 +224,12 @@ public class TestData {
     }
     public String getAllergyCategoryThree(){
         return allergyCategory[allergyCategoryThreeIndex];
+    }
+    public String getDrugAllergyCategory(){
+        return allergyCategory[0];
+    }
+    public String getEnvironmentAllergyCategory(){
+        return allergyCategory[1];
     }
 }
 
