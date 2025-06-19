@@ -37,8 +37,9 @@ jobs:
       - name: Run Tests using testng.xml
         run: mvn clean test -DsuiteXmlFile=testng.xml
 
-      - name: Upload TestNG Report
+      - name: Upload Extent Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: extent-report
-          path: test-output/ExtentReport.html
+          path: reports/
