@@ -28,15 +28,15 @@ public class ExtentReportManager implements ITestListener{
         reportName = "test_Report"+timeStamp+".html";
 
         esr = new ExtentSparkReporter(".\\reports\\"+reportName);
-        esr.config().setDocumentTitle("Opencart Report");
+        esr.config().setDocumentTitle("SKY MD Report");
         esr.config().setReportName(context.getName());
         esr.config().setTheme(Theme.DARK);
 
         report = new ExtentReports();
         report.attachReporter(esr);
-        report.setSystemInfo("Application", "Opencart");
+        report.setSystemInfo("Application", "SKY MD");
         report.setSystemInfo("Tester Name", "Aravind");
-        report.setSystemInfo("Environment", "QA");
+        report.setSystemInfo("Environment", "Staging");
         report.setSystemInfo("Browser", context.getCurrentXmlTest().getParameter("browser"));
         report.setSystemInfo("OS", context.getCurrentXmlTest().getParameter("os"));
         List<String> groups = context.getCurrentXmlTest().getIncludedGroups();
