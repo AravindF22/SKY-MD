@@ -1,87 +1,113 @@
 package Utils;
-import java.awt.Desktop;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import base.BaseTest;
+import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import com.aventstack.extentreports.reporter.configuration.Theme;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
+public class ExtentReportManager implements ITestListener {
 
-public class ExtentReportManager implements ITestListener{
-    public ExtentSparkReporter esr;
-    public ExtentReports report;
-    public ExtentTest test;
-    public String reportName;
+    private static ExtentReports report;
+    private static ExtentSparkReporter sparkReporter;
+    private static final ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+    private static final Map<String, ExtentTest> classLevelTests = new ConcurrentHashMap<>();
+    private static String reportName;
+
+    @Override
     public void onStart(ITestContext context) {
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm").format(new Date());
+        String suiteName = context.getSuite().getName();
+        reportName = suiteName + "_test_Report_" + timeStamp + ".html" ;
 
-        String timeStamp  = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-        reportName = "test_Report"+timeStamp+".html";
-
-        esr = new ExtentSparkReporter(".\\reports\\"+reportName);
-        esr.config().setDocumentTitle("SKY MD Report");
-        esr.config().setReportName(context.getName());
-        esr.config().setTheme(Theme.DARK);
+        sparkReporter = new ExtentSparkReporter("reports/" + reportName);
+        sparkReporter.config().setDocumentTitle("SKY MD Report");
+        sparkReporter.config().setReportName(context.getName());
+        sparkReporter.config().setTheme(Theme.DARK);
+        sparkReporter.config().setTimelineEnabled(true);
 
         report = new ExtentReports();
-        report.attachReporter(esr);
+        report.attachReporter(sparkReporter);
         report.setSystemInfo("Application", "SKY MD");
         report.setSystemInfo("Tester Name", "Aravind");
         report.setSystemInfo("Environment", "Staging");
+
         report.setSystemInfo("Browser", context.getCurrentXmlTest().getParameter("browser"));
-        report.setSystemInfo("OS", context.getCurrentXmlTest().getParameter("os"));
+       // report.setSystemInfo("OS", context.getCurrentXmlTest().getParameter("os"));
+
         List<String> groups = context.getCurrentXmlTest().getIncludedGroups();
-        for(String group:groups) {
-            //if we didn't mention any group name this if condition will fail
-            if(!group.isEmpty())
-                report.setSystemInfo("Groups", group.toString());
+        if (groups != null && !groups.isEmpty()) {
+            report.setSystemInfo("Groups", String.join(", ", groups));
         }
-
     }
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        // Create a class-level node (parent) and method-level node (child)
+        String className = result.getTestClass().getRealClass().getSimpleName(); // get class name only
+        ExtentTest parent = classLevelTests.computeIfAbsent(className, k -> report.createTest(className)); // create class node only once
+        ExtentTest child = parent.createNode(result.getMethod().getMethodName()); // create test method node under class
+        extentTest.set(child); // set thread-safe child node
+    }
+
+    @Override
     public void onTestSuccess(ITestResult result) {
-        test = report.createTest(result.getClass().getName());
+        ExtentTest test = extentTest.get();
         test.assignCategory(result.getMethod().getGroups());
-        test.log(Status.PASS, result.getName()+"is passed");
-    }
-    public void onTestFailure(ITestResult result) {
-        test = report.createTest(result.getName());
-        test.assignCategory(result.getMethod().getGroups());
-        test.log(Status.FAIL, result.getName()+"is failed");
-        test.log(Status.INFO, result.getThrowable().getMessage());
-        try {
-            String imgPath = new BaseTest().captureScreenshot(result.getName());
-            test.addScreenCaptureFromPath(imgPath);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void onTestSkipped(ITestResult result) {
-        test = report.createTest(result.getName());
-        test.assignCategory(result.getMethod().getGroups());
-        test.log(Status.SKIP, result.getName()+"is skipped");
-        test.log(Status.INFO, result.getThrowable().getMessage());
+        test.log(Status.PASS, result.getName() + " has passed");
     }
 
+    @Override
+    public void onTestFailure(ITestResult result) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        ExtentTest test = extentTest.get();
+        test.assignCategory(result.getMethod().getGroups());
+        test.log(Status.FAIL, result.getName() + " has failed");
+        test.log(Status.INFO, result.getThrowable().getMessage());
+
+        String className = result.getTestClass().getRealClass().getSimpleName().substring(0,8);
+        String methodName = result.getMethod().getMethodName();
+        String screenshotName = "Fail" + "_" + className + "_" + methodName;
+
+        try {
+            String imgPath = BaseTest.captureScreenshot(screenshotName);
+            test.addScreenCaptureFromPath(imgPath);
+        } catch (Exception e) {
+            test.warning("Screenshot could not be attached: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        ExtentTest test = extentTest.get();
+        test.assignCategory(result.getMethod().getGroups());
+        test.log(Status.SKIP, result.getName() + " was skipped");
+        if (result.getThrowable() != null) {
+            test.log(Status.INFO, result.getThrowable().getMessage());
+        } else {
+            test.log(Status.INFO, "Test was skipped without a specific reason.");
+        }
+    }
+
+    @Override
     public void onFinish(ITestContext context) {
         report.flush();
+    }
 
-        // this will automatically opens the extent report after test execution completion
-        String PathOfextentreport = ".\\reports\\"+reportName;
-        File file = new File(PathOfextentreport);
-        try {
-            Desktop.getDesktop().browse(file.toURI());
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
+    // Access ExtentTest object in your test classes
+    public static ExtentTest getTest() {
+        return extentTest.get();
     }
 }

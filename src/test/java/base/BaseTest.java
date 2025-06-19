@@ -25,8 +25,8 @@ import java.util.*;
 
 
 public class BaseTest {
-
-    public WebDriver driver;
+    // there is only one driver instance
+    protected static WebDriver driver;
     public Properties property;
 
     @BeforeClass()
@@ -124,16 +124,24 @@ public class BaseTest {
         driver.switchTo().newWindow(WindowType.TAB);
         driver.navigate().to("https://yopmail.com/en/");
     }
-    public String captureScreenshot(String screenshotName) {
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String formattedDate = formatter.format(date);
+    public static String captureScreenshot(String screenshotName) {
+        try{
+            if (driver == null) {
+                System.out.println("Driver is null. Cannot take screenshot.");
+                return null;
+            }
+            String timestamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File sourceFile = ts.getScreenshotAs(OutputType.FILE);
+            String targetFileLocation = "screenshots/" + screenshotName + "_" + timestamp + ".png";
+            File targetFile = new File(targetFileLocation);
+            sourceFile.renameTo(targetFile);
 
-        TakesScreenshot ts = (TakesScreenshot)driver;
-        File sourceFile = ts.getScreenshotAs(OutputType.FILE);
-        String targetFileLocation = ".\\screenshots\\"+screenshotName+"_"+formattedDate+".png";
-        File targetFile = new File(targetFileLocation);
-        sourceFile.renameTo(targetFile);
-        return targetFileLocation;
+            String relativePath = "../screenshots/" + screenshotName + "_" + timestamp + ".png";
+            return relativePath;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

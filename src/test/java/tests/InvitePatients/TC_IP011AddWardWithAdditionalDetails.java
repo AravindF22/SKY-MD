@@ -127,7 +127,7 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
         setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
-    @Test(priority = 4)
+    @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalDependentValidation() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Login to Patient Portal
