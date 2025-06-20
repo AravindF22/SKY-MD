@@ -42,14 +42,12 @@ public class PatientPortalHomePage extends BasePage {
         }
     }
     public boolean isHomePage(){
-        System.out.println(driver.getCurrentUrl());
-        // Wait for page to fully load
-        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
-                .executeScript("return document.readyState").equals("complete"));
-
-        if (driver.getCurrentUrl().equals("https://patient.skymdstaging.com/home"))
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[text()='Welcome to SkyMD']")));
             return true;
-
-        return false;
+        }catch (Exception e){
+            System.out.println("Welcome to SkyMD is not visible "+ e.getMessage());
+            return false;
+        }
     }
 }

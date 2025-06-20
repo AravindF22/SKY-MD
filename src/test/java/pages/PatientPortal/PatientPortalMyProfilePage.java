@@ -428,7 +428,7 @@ public class PatientPortalMyProfilePage extends BasePage {
     }
     public void clickSettingsLink() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(SettingsLink));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(SettingsLink));
             element.click();
         } catch (TimeoutException e) {
             System.err.println("Timeout: Settings link not clickable.");

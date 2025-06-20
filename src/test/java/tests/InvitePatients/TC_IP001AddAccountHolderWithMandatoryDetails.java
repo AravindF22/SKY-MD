@@ -1,20 +1,15 @@
 package tests.InvitePatients;
 
+import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import com.aventstack.extentreports.Status;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.*;
-import pages.ProviderPortal.DashBoardPage;
-import pages.ProviderPortal.InvitePatientPage;
-import pages.ProviderPortal.LoginPage;
-import pages.ProviderPortal.PatientChart;
+import pages.ProviderPortal.*;
 import pages.YopMail;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.time.Duration;
 
@@ -27,109 +22,116 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
     public PatientPortalLoginPage loginPagePatientPortal;
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
-    public PatientPortalHomePage patientPortalHomePage;
-    public DermatologyVisitPage dermatologyVisitPage;
+    public YopMail yopMail;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
 
     @BeforeClass
     public void setUp() throws IOException {
-
-        //Loading config File
         loadPropFile();
         driver.get(property.getProperty("ProviderPortalUrl"));
-        //Test data for account holder
         testDataForAccountHolder = new TestData();
-        // Login as MA
+
         loginPage = new LoginPage(driver);
         loginPage.setEmailAs(property.getProperty("MA_Email"));
         loginPage.setPasswordAs(property.getProperty("MA_Password"));
         loginPage.clickLoginButton();
-        // Navigate to Invite Patient
+
         dashBoardPage = new DashBoardPage(driver);
         dashBoardPage.clickInvitePatientLink();
-
     }
+
     @BeforeMethod
-    public void initializeAsset() throws IOException {
+    public void initializeAsset() {
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        yopMail = new YopMail(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
         softAssert = new SoftAssert();
     }
 
     @Test(priority = 1)
-    public void testInvitePatientWithMandatoryDetails() throws InterruptedException {
+    public void testInvitePatientWithMandatoryDetails() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        ExtentReportManager.getTest().log(Status.INFO, "Filling mandatory details in Invite Patient form");
 
-        // Fill and submit invite form
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
         invitePatientPage.setMobileAs(testDataForAccountHolder.getMobileNumber());
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
+
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting invite form for account holder");
         invitePatientPage.clickAddPatientButton();
     }
-    @Test(priority = 2, dependsOnMethods = "testInvitePatientWithMandatoryDetails")
+
+    @Test(priority = 2)
     public void testPatientChartDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         switchToTab(1);
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
 
-        patientChart = new PatientChart(driver);
-
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Name didn't match in the Patient chart");
-        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), patientChart.getEmailInThePatientChart().toLowerCase(), "Email didn't match");
-        softAssert.assertEquals(testDataForAccountHolder.getFullName().toUpperCase(), patientChart.getNameInTopBar(), "Name in the Top Bar is mismatching");
-        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), patientChart.getMobileInPatientChart(), "Mobile Number didn't match in the Patient chart");
-        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(), "Zip Code mismatch in Patient Chart.");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Patient name mismatch in chart");
+        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), patientChart.getEmailInThePatientChart().toLowerCase(), "Email mismatch");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName().toUpperCase(), patientChart.getNameInTopBar(), "Top bar name mismatch");
+        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), patientChart.getMobileInPatientChart(), "Mobile number mismatch");
+        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(), "Zip code mismatch");
         softAssert.assertAll();
+
+        ExtentReportManager.getTest().log(Status.PASS, "Patient chart validated successfully");
     }
-    @Test(priority = 3, dependsOnMethods = "testInvitePatientWithMandatoryDetails")
+
+    @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        // Navigate to Yop mail and set password
+        ExtentReportManager.getTest().log(Status.INFO, "Switching to YopMail to set password");
+
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         switchToTab(3);
         Thread.sleep(1000);
         setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
+
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully from YopMail");
     }
 
     @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
     public void testPatientPortalProfileDetails() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        // Login to Patient Portal
-        loginPagePatientPortal = new PatientPortalLoginPage(driver);
-        loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Logging into Patient Portal");
 
-        // Navigate to homepage and profile
+        loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
         homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
 
-        myProfilePage = new PatientPortalMyProfilePage(driver);
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying My Profile information");
 
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(),
-                "Name of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(),
-                "Email of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolderInLineOne(),
-                "Zipcode of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(),
-                "Mobile Number of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Mismatch in name");
+        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(), "Mismatch in email");
+        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolderInLineOne(), "Mismatch in zip code");
+        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(), "Mismatch in mobile number");
+
+        ExtentReportManager.getTest().log(Status.INFO, "Profile details successfully verified");
         softAssert.assertAll();
     }
-    @AfterClass()
+
+    @AfterClass
     public void cleanUp() throws InterruptedException {
-        myProfilePage = new PatientPortalMyProfilePage(driver);
+        Thread.sleep(3000);
+        ExtentReportManager.getTest().log(Status.INFO, "Logging out from Patient and Provider Portals");
+
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
 
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
+
+        ExtentReportManager.getTest().log(Status.INFO, "Cleanup completed successfully");
     }
 }

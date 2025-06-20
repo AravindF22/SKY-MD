@@ -23,4 +23,15 @@
             <class name="tests.InvitePatients.TC_IP014AddWardWithInsuranceDetails"/>
         </classes>
     </test> <!-- Test -->
+
+    <test name="Basic Flow">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.SignIn.TC_SI001_SignInAsNewPatient"/>
+            <class name="tests.SignIn.TC_SI002_SignInAsExistingCustomer"/>
+            <class name="tests.Login.TC_LO001_LoginAsValidUser"/>
+            <class name="tests.Login.TC_LO002_LoginWithNonRegisteredEmail"/>
+            <class name="tests.Login.TC_LO003_VerifyLoginPageErrorMessages"/>
+        </classes>
+    </test>
 </suite> <!-- Suite -->

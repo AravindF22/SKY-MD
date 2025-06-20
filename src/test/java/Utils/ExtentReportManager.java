@@ -25,13 +25,13 @@ public class ExtentReportManager implements ITestListener {
     @Override
     public void onStart(ITestContext context) {
         String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm").format(new Date());
-        String suiteName = context.getSuite().getName();
-        reportName = suiteName + "_test_Report_" + timeStamp + ".html" ;
+        String testName = context.getName();
+        reportName = testName + "_test_Report_" + timeStamp + ".html" ;
 
         sparkReporter = new ExtentSparkReporter("reports/" + reportName);
         sparkReporter.config().setDocumentTitle("SKY MD Report");
         sparkReporter.config().setReportName(context.getName());
-        sparkReporter.config().setTheme(Theme.DARK);
+        sparkReporter.config().setTheme(Theme.STANDARD);
         sparkReporter.config().setTimelineEnabled(true);
 
         report = new ExtentReports();

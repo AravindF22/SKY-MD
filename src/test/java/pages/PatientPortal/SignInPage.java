@@ -25,6 +25,7 @@ public class SignInPage extends BasePage {
     private By mobileField = By.xpath("//input[@class='form-control ']");
     private By zipcodeField = By.cssSelector("input#zip_code");
     private By signInBtn = By.cssSelector("button#GTM_portal_signup");
+    private By emailErrorToast = By.xpath("//div[text()='Email already exists']");
 
     public void enterEmail(String email) {
         try {
@@ -119,6 +120,15 @@ public class SignInPage extends BasePage {
             element.click();
         } catch (Exception e) {
             System.out.println("Error clicking Sign In button: " + e.getMessage());
+        }
+    }
+    public boolean isEmailAlreadyExistsToastPresent(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(emailErrorToast));
+            return true;
+        }catch (Exception e){
+            System.out.println("Error in Toast message " + e.getMessage());
+            return false;
         }
     }
 }
