@@ -17,6 +17,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP007
+ * Description: Invite an account holder with health profile details (medications, allergies),
+ *              and verify that all health profile information is correctly displayed in the patient chart and patient portal profile.
+ */
 public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -26,6 +31,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public PatientPortalLoginPage loginPagePatientPortal;
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
+    public YopMail yopMail;
 
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
@@ -53,11 +59,19 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public void initializeAsset() {
         softAssert = new SoftAssert();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        yopMail = new YopMail(driver);
     }
 
     @Test(priority = 1)
     public void testInviteAccountHolderWithHealthProfile() throws InterruptedException {
-        invitePatientPage = new InvitePatientPage(driver);
 
         // Fill basic information
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
@@ -86,7 +100,6 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
 
         switchToTab(1);
-        patientChart = new PatientChart(driver);
         patientChart.clickHealthProfileButton();
 
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), patientChart.getFirstDrugAllergyName().toLowerCase(),
@@ -106,23 +119,16 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     @Test(priority = 3)
     public void testSetPasswordAndLoginToPortal() throws InterruptedException {
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
-
-        loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
     }
 
     @Test(priority = 4, dependsOnMethods = "testSetPasswordAndLoginToPortal")
     public void testPatientPortalHealthProfileValidations() {
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
 
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickHealthProfileLink();
 
         myProfilePage.clickHealthProfileOfAccountHolder();
@@ -151,13 +157,10 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     }
     @AfterClass()
     public void cleanUp() throws InterruptedException {
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
-
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

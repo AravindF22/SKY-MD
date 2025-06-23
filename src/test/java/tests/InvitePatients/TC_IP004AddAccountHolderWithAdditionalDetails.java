@@ -14,6 +14,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP004
+ * Description: Invite an account holder with additional details (address, gender, height, weight, DOB)
+ *              and verify that all additional information is correctly displayed in the patient chart and patient portal profile.
+ */
 public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -24,7 +29,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
     public DermatologyVisitPage dermatologyVisitPage;
-
+    public YopMail yopMail;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
     @BeforeClass
@@ -48,12 +53,20 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     public void initializeAsset() throws IOException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         softAssert = new SoftAssert();
+        //page objects initialization
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        dermatologyVisitPage = new DermatologyVisitPage(driver);
+        yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
     public void testInvitePatientWithAdditionalDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // filling account holder details
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -76,8 +89,6 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     @Test(priority = 2)
     public void testValidatePatientChartDetails() throws InterruptedException {
         switchToTab(1);
-        patientChart = new PatientChart(driver);
-
         // Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Name didn't match in the Patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), patientChart.getEmailInThePatientChart().toLowerCase(), "Email didn't match");
@@ -98,23 +109,16 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
 
     @Test(priority = 4)
     public void testPatientPortalProfileAndVisitFlow() throws InterruptedException {
-        loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
-
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
 
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         // Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Name of the Account Holder is mismatching in My profile");
         softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(), "Email of the Account Holder is mismatching in My profile");
@@ -128,7 +132,6 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
         // Visit flow
         myProfilePage.clickHomePageLink();
         homePagePatPortal.selectDermatologyVisit();
-        dermatologyVisitPage = new DermatologyVisitPage(driver);
         dermatologyVisitPage.clickSelectPatient();
         dermatologyVisitPage.clickSelectPatientAsMySelf();
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
@@ -157,18 +160,12 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     }
     @AfterClass()
     public void cleanUp() throws InterruptedException {
-
         //navigate to my profile
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
-
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
-
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

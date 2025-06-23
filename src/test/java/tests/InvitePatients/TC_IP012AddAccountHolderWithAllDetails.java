@@ -20,6 +20,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP012
+ * Description: Invite an account holder with all possible details (referral, additional info, insurance, health profile),
+ *              and verify that all information is correctly displayed in the patient chart and patient portal profile.
+ */
 public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -29,6 +34,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public PatientPortalLoginPage loginPagePatientPortal;
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
+    public YopMail yopMail;
 
     public TestData testDataForAccountHolder;
     public TestData testDataForProvider;
@@ -56,6 +62,15 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
     public void testInvitePatientWithAllDetails() throws InterruptedException {
@@ -121,7 +136,6 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     @Test(priority = 2)
     public void testValidatePatientChart() throws InterruptedException {
         switchToTab(1);
-        patientChart = new PatientChart(driver);
         //Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Name didn't match in the Patient chart");
@@ -198,25 +212,20 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
     public void testPatientPortalProfileDetails() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // Login to Patient Portal
-        loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
         // Navigate to homepage and profile
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
 
-        myProfilePage = new PatientPortalMyProfilePage(driver);
 
         //mandatory details validation in My profile
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Name of the Account Holder is mismatching in My profile");
@@ -259,15 +268,12 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         // Navigate to myProfile and logout
-//        homePagePatPortal = new PatientPortalHomePage(driver);
 //        homePagePatPortal.clickMyProfile();
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
 
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

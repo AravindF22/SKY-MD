@@ -11,18 +11,25 @@ import pages.ProviderPortal.DashBoardPage;
 import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
+import pages.ProviderPortal.YopMail;
 
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP009
+ * Description: Invite an account holder and add a ward (legal guardian of 18+ years) with an existing referral clinic,
+ *              then verify that the referral section in the patient chart displays the correct provider and clinic details for the ward.
+ */
 public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
+    public InvitePatientPage invitePatientPage;
+    public PatientChart patientChart;
+    public YopMail yopMail;
     public TestData testDataForAccountHolder;
     public TestData testDataForWard;
     public TestData testDataForProvider;
-    public InvitePatientPage invitePatientPage;
-    public PatientChart patientChart;
     public SoftAssert softAssert;
 
     @BeforeClass
@@ -45,17 +52,20 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        yopMail = new YopMail(driver);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
     @Test(priority = 1)
     public void testFillAccountHolderMandatoryDetails(){
 
         //Navigate to Invite Patient
-        dashBoardPage = new DashBoardPage(driver);
         dashBoardPage.clickInvitePatientLink();
 
         //Mandatory Fields
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -87,8 +97,6 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
         switchToTab(1);
 
         //Page navigate to Patient chart
-        patientChart = new PatientChart(driver);
-
         //search for patient
         patientChart.searchPatient(testDataForWard.getFullName());
 
@@ -100,9 +108,7 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
     }
     //@AfterClass()
     public void cleanUp() throws InterruptedException {
-
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

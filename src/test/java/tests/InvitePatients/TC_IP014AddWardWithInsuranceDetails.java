@@ -16,6 +16,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP014
+ * Description: Invite an account holder and add a ward (legal guardian of 18+ years) with insurance details,
+ *              then verify that all insurance information is correctly displayed in the patient chart and patient portal profile for the ward.
+ */
 public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -26,6 +31,7 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
     public DermatologyVisitPage dermatologyVisitPage;
+    public YopMail yopMail;
 
     public TestData testDataForAccountHolder;
     public TestData testDataForWard;
@@ -53,6 +59,16 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        dermatologyVisitPage = new DermatologyVisitPage(driver);
+        yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
     private void testAddChildAndInsuranceDetails() throws IOException, InterruptedException {
@@ -91,8 +107,6 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
         switchToTab(1);
 
         //Page navigate to Patient chart
-        patientChart = new PatientChart(driver);
-
         //search for patient
         patientChart.searchPatient(testDataForWard.getFullName());
 
@@ -112,11 +126,9 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4)
@@ -127,9 +139,7 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.selectDermatologyVisit();
-        dermatologyVisitPage = new DermatologyVisitPage(driver);
         dermatologyVisitPage.clickSelectPatient();
         Thread.sleep(1000);
         dermatologyVisitPage.selectPatientAsWard();

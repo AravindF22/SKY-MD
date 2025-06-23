@@ -116,9 +116,7 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
      */
     @AfterClass()
     public void cleanUp(){
-        ExtentReportManager.getTest().log(Status.INFO, "Logging out and cleaning up");
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
-        ExtentReportManager.getTest().log(Status.INFO, "Logged out successfully");
     }
 }
