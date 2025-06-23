@@ -4,7 +4,7 @@
     <listeners>
         <listener class-name="Utils.ExtentReportManager"/>
     </listeners>
-    <test thread-count="5" name="InvitePatientTest">
+    <test name="InvitePatientTest">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="tests.InvitePatients.TC_IP001AddAccountHolderWithMandatoryDetails"/>
