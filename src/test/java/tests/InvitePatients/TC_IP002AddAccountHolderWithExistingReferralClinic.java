@@ -32,7 +32,6 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
      */
     @BeforeClass
     public void setUp() throws IOException {
-        ExtentReportManager.getTest().log(Status.INFO, "Loading config file and navigating to Provider Portal");
         loadPropFile();
         driver.get(property.getProperty("ProviderPortalUrl"));
 
@@ -45,7 +44,6 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
         loginPage.setEmailAs(property.getProperty("MA_Email"));
         loginPage.setPasswordAs(property.getProperty("MA_Password"));
         loginPage.clickLoginButton();
-        ExtentReportManager.getTest().log(Status.INFO, "Logged in as MA");
     }
 
     /**
@@ -88,7 +86,7 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
 
         // Submit the Invite Patient form
         invitePatientPage.clickAddPatientButton();
-        ExtentReportManager.getTest().log(Status.PASS, "Invite Patient form submitted successfully");
+        ExtentReportManager.getTest().log(Status.INFO, "Invite Patient form submitted successfully");
     }
 
     /**
@@ -100,7 +98,6 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
         switchToTab(1);
 
         // Navigate to Patient Chart and verify referral details
-        patientChart.clickPatientChartLink();
         String expectedProviderName = testDataForProvider.getFullName();
         String actualProviderName = patientChart.getProviderNameFromReferralSection();
         softAssert.assertEquals(expectedProviderName, actualProviderName,"Provider name in the referral section of AH is mismatching");
@@ -111,7 +108,7 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
 
         // Assert all soft assertions
         softAssert.assertAll();
-        ExtentReportManager.getTest().log(Status.PASS, "Referral section in Patient Chart verified successfully");
+        ExtentReportManager.getTest().log(Status.INFO, "Referral section in Patient Chart verified successfully");
     }
 
     /**
