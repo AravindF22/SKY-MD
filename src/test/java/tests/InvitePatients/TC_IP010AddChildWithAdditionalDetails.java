@@ -17,6 +17,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP010
+ * Description: Invite an account holder and add a child with additional details (address, gender, height, weight, DOB),
+ *              then verify that all additional information is correctly displayed in the patient chart and patient portal profile for the child.
+ */
 public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -28,6 +33,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     public PatientPortalMyProfilePage myProfilePage;
     public DermatologyVisitPage dermatologyVisitPage;
     public PrimaryCareVisitPage primaryCareVisitPage;
+    public YopMail yopMail;
 
     public TestData testDataForAccountHolder;
     public TestData testDataForChild;
@@ -52,14 +58,22 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        dermatologyVisitPage = new DermatologyVisitPage(driver);
+        primaryCareVisitPage = new PrimaryCareVisitPage(driver);
+        yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
     public void testAddChildAndAdditionalDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        dashBoardPage = new DashBoardPage(driver);
         dashBoardPage.clickInvitePatientLink();
-
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -88,7 +102,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     public void testPatientChartValidations() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         switchToTab(1);
-        patientChart = new PatientChart(driver);
+        // patientChart already initialized in @BeforeMethod
         // Account Holder validations
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Account Holder name mismatch in Patient Chart");
@@ -121,25 +135,18 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalDependentAndVisitFlow() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // Login to Patient Portal
-        loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
         // Navigate to homepage and profile
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
-
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickDependents();
         softAssert.assertEquals(testDataForChild.getFullName(), myProfilePage.getDependentOneName(),
                 "Dependent's name does not match the expected full name for Child in my profile.");
@@ -160,11 +167,9 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     @Test(priority = 5)
     public void testDermatologyVisitValidation() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        homePagePatPortal = new PatientPortalHomePage(driver);
         //select dermatology visit
         homePagePatPortal.selectDermatologyVisit();
         //dermatology Visit Page
-        dermatologyVisitPage = new DermatologyVisitPage(driver);
         dermatologyVisitPage.clickSelectPatient();
         Thread.sleep(1000);
         dermatologyVisitPage.selectPatientAsMyChild();
@@ -205,7 +210,6 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     //@Test(priority = 6)
     public void testPrimaryCareVisitValidation() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.selectPrimaryCareVisit();
 
         primaryCareVisitPage = new PrimaryCareVisitPage(driver);
@@ -261,16 +265,11 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     public void cleanUp() throws InterruptedException {
 
         //navigate to my profile
-        homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.clickMyProfile();
-
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
-
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

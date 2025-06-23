@@ -17,6 +17,11 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
+/**
+ * Test Case: TC_IP006
+ * Description: Invite an account holder and add a ward (legal guardian of 18+ years) with mandatory details,
+ *              then verify that all information is correctly displayed in the patient chart and patient portal profile.
+ */
 public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
@@ -27,9 +32,9 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
-
     public TestData testDataForWard;
-    public  SoftAssert softAssert;
+    public SoftAssert softAssert;
+    public YopMail yopMail;
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -51,12 +56,20 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     @BeforeMethod
     public void initializeAssert(){
         softAssert = new SoftAssert();
+        loginPage = new LoginPage(driver);
+        dashBoardPage = new DashBoardPage(driver);
+        invitePatientPage = new InvitePatientPage(driver);
+        patientChart = new PatientChart(driver);
+        setPasswordPage = new SetPasswordPage(driver);
+        loginPagePatientPortal = new PatientPortalLoginPage(driver);
+        homePagePatPortal = new PatientPortalHomePage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
     public void testInviteAccountHolderAndWard() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -105,11 +118,8 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(2000);
         newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
-        setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
     }
 
@@ -134,13 +144,10 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
-
         switchToTab("SkyMD Provider Portal");
-        patientChart = new PatientChart(driver);
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }
