@@ -16,6 +16,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -74,9 +75,10 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     }
     @Test(priority = 1)
     public void testInvitePatientWithAllDetails() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Patient With All Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-
-        // Fill and submit invite form
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Mandatory fields");
+        // Mandatory fields
         invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
@@ -85,6 +87,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Referral section");
         //Referral section
         invitePatientPage.clickReferralClinicCheckBoxForAccountHolder();
         invitePatientPage.setProviderFirstName(testDataForProvider.getFname());
@@ -92,6 +95,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.selectClinicStateForAccountHolder(testDataForProvider.getReferralClinicState());
         invitePatientPage.selectClinicForAccountHolder(testDataForProvider.getReferralClinic());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Additional information");
         // Additional information
         invitePatientPage.clickAdditionalInformationCheckboxForAccountHolder();
         invitePatientPage.setStreetAddressOne(testDataForAccountHolder.getStreetAddressOne());
@@ -102,6 +106,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setWeight(testDataForAccountHolder.getWeight());
         invitePatientPage.setDOB(testDataForAccountHolder.getDobForMajor());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Primary insurance");
         //Primary insurance
         invitePatientPage.clickPrimaryInsuranceCheckboxForAH();
         invitePatientPage.setPrimaryInsuranceDropdownForAH(testDataForAccountHolder.getPrimaryInsurance());
@@ -110,6 +115,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
         invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Secondary insurance");
         //Secondary insurance
         invitePatientPage.clickSecondaryInsuranceCheckbox();
         invitePatientPage.setSecondaryInsuranceDropdownForAH(testDataForAccountHolder.getSecondaryInsurance());
@@ -118,24 +124,31 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setMemberDobInSecondaryInsurance(testDataForAccountHolder.getMemberDobForSecondaryInsurance());
         invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Add health profile details");
         // Add health profile details
+        ExtentReportManager.getTest().log(Status.INFO, "Adding MEDICATION");
         //ADD MEDICATION
         invitePatientPage.clickHealthProfileCheckBoxForAccountHolder();
         invitePatientPage.clickAddMedicationButtonForAccountHolder();
         Thread.sleep(1000);
         invitePatientPage.selectMedicationForAccountHolder(testDataForAccountHolder.getMedicationOne());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Adding Allergy");
         //ADD ALLERGY
         invitePatientPage.clickAddAllergyButtonForAccountHolder();
         invitePatientPage.setDrugAllergySetOne(testDataForAccountHolder.getAllergyOne(), testDataForAccountHolder.getAllergyReactionOne(), testDataForAccountHolder.getDrugAllergyCategory());
         invitePatientPage.clickAddAllergyButtonForAccountHolder();
         invitePatientPage.setEnvironmentAllergySetOne(testDataForAccountHolder.getAllergyTwo(), testDataForAccountHolder.getAllergyReactionTwo(), testDataForAccountHolder.getEnvironmentAllergyCategory());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting invite patient form");
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
     }
     @Test(priority = 2)
     public void testValidatePatientChart() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         switchToTab(1);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Mandatory details in Patient Chart");
         //Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Name didn't match in the Patient chart");
@@ -148,12 +161,14 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Zip Code mismatch in Patient Chart.");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Referral details in Patient Chart");
         //referral details
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Additional details in Patient Chart");
         // Additional details
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForAccountHolder.getStreetAddressOne()),
                 "Account Holder's address one from test data is not found in the Patient Chart address");
@@ -170,6 +185,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), patientChart.getDOB(),
                 "DOB is mismatch for Account Holder in Patient Chart");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Primary insurance in Patient Chart");
         //validating primary insurance
         softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), patientChart.getPrimaryInsurance().toLowerCase(),
                 "Primary Insurance mismatch in Patient Chart.");
@@ -180,6 +196,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Secondary insurance in Patient Chart");
         //validate secondary insurance
         softAssert.assertEquals(testDataForAccountHolder.getSecondaryInsurance().toLowerCase(), patientChart.getSecondaryInsurance().toLowerCase(),
                 "Secondary Insurance mismatch in Patient Chart.");
@@ -190,9 +207,11 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getMemberDobForSecondaryInsurance(), patientChart.getMemberDobInSecondaryInsurance(),
                 "Member DOB for Secondary Insurance mismatch in Patient Chart.");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Health profile in Patient Chart");
         //health profile
         patientChart.clickHealthProfileButton();
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Allergy section in Health profile");
         //Allergy
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), patientChart.getFirstDrugAllergyName().toLowerCase(),
                 "First allergy name in patient chart does not match in Health profile of Provider Portal");
@@ -203,44 +222,55 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionTwo(), patientChart.getFirstEnvironmentReactionName(),
                 "First environmental allergy reaction in patient chart does not match the value in the Health Profile of the Provider Portal");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Medication section in Health profile");
         //medication
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), patientChart.getFirstMedicationName().toLowerCase(),
                 "medication name in patient chart does not match in Health profile of Provider Portal");
+        ExtentReportManager.getTest().log(Status.INFO, "Patient chart details validated successfully");
         softAssert.assertAll();
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Setting password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
+        ExtentReportManager.getTest().log(Status.INFO, "Clicked set password mail in YopMail");
 
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
     public void testPatientPortalProfileDetails() {
+        ExtentReportManager.getTest().log(Status.INFO, "Validating patient portal profile details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        ExtentReportManager.getTest().log(Status.INFO, "Logging into Patient Portal");
         // Login to Patient Portal
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
-
+        ExtentReportManager.getTest().log(Status.INFO, "Logged into Patient Portal");
         // Navigate to homepage and profile
+        ExtentReportManager.getTest().log(Status.INFO, "Navigating to My Profile page");
         homePagePatPortal.clickMyProfile();
 
-
+        ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in My Profile");
         //mandatory details validation in My profile
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Name of the Account Holder is mismatching in My profile");
         softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(), "Email of the Account Holder is mismatching in My profile");
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolder(), "Zipcode of the Account Holder is mismatching in My profile");
         softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(), "Mobile Number of the Account Holder is mismatching in My profile");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating additional details in My Profile");
         //additional details validation in My profile
         softAssert.assertEquals(testDataForAccountHolder.getGender(), myProfilePage.getGender(), "Gender mismatch in My Profile page.");
         softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), myProfilePage.getAddressLineOne(), "Street Address Line One mismatch in My Profile page.");
         softAssert.assertTrue(myProfilePage.getAddressLineTwo().contains(testDataForAccountHolder.getStreetAddressTwo()), "Street Address Line Two from test data is not found in My Profile page.");
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Health profile in My Profile");
         //Validate health profile in my profile
         myProfilePage.clickHealthProfileLink();
         myProfilePage.clickHealthProfileOfAccountHolder();
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Allergy section in Health profile");
         myProfilePage.clickAllergyHealthProfile();
 
         //validate allergy
@@ -256,6 +286,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
 
         myProfilePage.clickBackButtonInHealthProfile();
 
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Medication section in Health profile");
         //validate medication
         myProfilePage.clickMedicationHealthProfile();
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), myProfilePage.getMedicationOneValue().toLowerCase(),
@@ -263,10 +294,12 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         myProfilePage.clickBackButtonInHealthProfile();
         myProfilePage.clickBackButtonInHealthProfile();
         myProfilePage.clickBackButtonInHealthProfile();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal profile details validated successfully");
         softAssert.assertAll();
     }
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Logging out from Patient and Provider Portals");
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
@@ -274,5 +307,6 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         switchToTab("SkyMD Provider Portal");
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logout completed successfully");
     }
 }
