@@ -11,7 +11,7 @@ import pages.ProviderPortal.DashBoardPage;
 import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
-import pages.ProviderPortal.YopMail;
+import pages.YopMail;
 
 import java.io.IOException;
 import java.time.Duration;

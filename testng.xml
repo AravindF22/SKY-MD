@@ -22,7 +22,7 @@
             <class name="tests.InvitePatients.TC_IP013AddChildWithInsuranceDetails"/>
             <class name="tests.InvitePatients.TC_IP014AddWardWithInsuranceDetails"/>
         </classes>
-    </test> <!-- Test -->
+    </test>
 
     <test name="Basic Flow">
         <parameter name="browser" value="chrome"/>
