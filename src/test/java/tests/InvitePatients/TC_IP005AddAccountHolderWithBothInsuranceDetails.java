@@ -144,7 +144,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
     }
-    @Test(priority = 4)
+    @Test(priority = 4 , dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalValidations(){
         //navigate to login page
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");

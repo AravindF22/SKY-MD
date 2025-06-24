@@ -228,8 +228,6 @@ public class InvitePatientPage extends BasePage {
     public void setHeightFeet(String feet) {
         try{
             WebElement heightFeetField = wait.until(ExpectedConditions.visibilityOfElementLocated(heightFoAccountHolder));
-//        heightFeetField.clear();
-//        heightFeetField.sendKeys(feet);
             int feetValue = Integer.parseInt(feet);
             while(feetValue>=1){
                 // Increase value (Arrow Up)
@@ -237,22 +235,34 @@ public class InvitePatientPage extends BasePage {
                 feetValue--;
             }
         }catch (Exception e){
-            System.err.println("Error in setPrimaryInsuranceDropdownForAH: " + e.getMessage());
+            System.err.println("Failed to set height in Feet: "  + e.getMessage());
         }
     }
 
     // Set Height (inches)
     public void setHeightInches(String inches) {
-        WebElement heightInchesField = wait.until(ExpectedConditions.visibilityOfElementLocated(inchesForAccountHolder));
-        heightInchesField.clear();
-        heightInchesField.sendKeys(inches);
+        try {
+            WebElement heightInchesField = wait.until(ExpectedConditions.visibilityOfElementLocated(inchesForAccountHolder));
+            heightInchesField.clear();
+            heightInchesField.sendKeys(inches);
+        } catch (Exception e) {
+            System.out.println("Failed to set height in inches: " + e.getMessage());
+        }
     }
 
     // Set Weight
     public void setWeight(String weight) {
-        WebElement weightField = wait.until(ExpectedConditions.visibilityOfElementLocated(weightFoAccountHolder));
-        weightField.clear();
-        weightField.sendKeys(weight);
+        try {
+            WebElement weightField = wait.until(ExpectedConditions.visibilityOfElementLocated(weightFoAccountHolder));
+            int weightValue = Integer.parseInt(weight);
+            while (weightValue >= 1) {
+                // Increase value (Arrow Up)
+                weightField.sendKeys(Keys.ARROW_UP);
+                weightValue--;
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to set weight: " + e.getMessage());
+        }
     }
 
     // Toggle Primary insurance checkbox for Account Holder

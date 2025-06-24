@@ -34,4 +34,4 @@
             <class name="tests.Login.TC_LO003_VerifyLoginPageErrorMessages"/>
         </classes>
     </test>
-</suite> <!-- Suite -->
+</suite>

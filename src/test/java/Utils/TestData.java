@@ -61,7 +61,7 @@ public class TestData {
         this.feet = String.valueOf(faker.number().numberBetween(4, 10));
         this.feetForMinor = String.valueOf(faker.number().numberBetween(2, 10));
         this.inch = String.valueOf(faker.number().numberBetween(0, 11));
-        this.weight = String.valueOf(faker.number().numberBetween(40, 99));
+        this.weight = String.valueOf(faker.number().numberBetween(20, 50));
         this.memberIdForPrimaryInsurance = faker.regexify("[A-Z0-9]{10}");
         this.relationShipForPrimaryInsuranceIndex = faker.number().numberBetween(0,relationship.length);
         this.primaryInsuranceIndex = faker.number().numberBetween(0, insurances.length);

@@ -267,8 +267,6 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     }
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
-        // Navigate to myProfile and logout
-//        homePagePatPortal.clickMyProfile();
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
