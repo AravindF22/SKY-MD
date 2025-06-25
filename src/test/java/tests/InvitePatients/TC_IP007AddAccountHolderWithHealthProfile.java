@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.PatientPortalHomePage;
@@ -88,7 +89,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Adding medication to health profile");
         invitePatientPage.clickHealthProfileCheckBoxForAccountHolder();
         invitePatientPage.clickAddMedicationButtonForAccountHolder();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         invitePatientPage.selectMedicationForAccountHolder(testDataForAccountHolder.getMedicationOne());
 
         // ADD ALLERGY
@@ -107,6 +108,10 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate Patient Chart Health Profile");
         switchToTab(1);
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         patientChart.clickHealthProfileButton();
 
         // Validate allergy and medication details in patient chart
@@ -130,7 +135,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
     public void testSetPasswordAndLoginToPortal() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set Password and Login to Patient Portal");
         // Open YopMail and set password for invited patient
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         ExtentReportManager.getTest().log(Status.INFO, "Accessing YopMail to set password");
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);

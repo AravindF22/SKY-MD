@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -108,24 +109,30 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         switchToTab(1);
-        // patientChart already initialized in @BeforeMethod
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Account Holder validations
+        ExtentReportManager.getTest().log(Status.INFO, "Validating AH details in Patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Account Holder name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getEmail(), patientChart.getEmailInThePatientChart(),
                 "Account Holder email mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Account Holder zip code mismatch in Patient Chart");
+        ExtentReportManager.getTest().log(Status.INFO, "Search for child");
         // Search for child and validate
         patientChart.searchPatient(testDataForChild.getFullName());
         //validation for child mandatory details
         Thread.sleep(2000);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating child's mandatory details in Patient chart");
         softAssert.assertEquals(testDataForChild.getFullName(), patientChart.getNameInThePatientChart(),
                 "Child name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForChild.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Child zip code mismatch in Patient Chart");
         // Additional details
-        ExtentReportManager.getTest().log(Status.INFO, "Validating child mandatory and additional details in patient chart");
+        ExtentReportManager.getTest().log(Status.INFO, "Validating child's additional details in patient chart");
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForChild.getStreetAddressOne()), "Account Holder's address one from test data is not found in the Patient Chart address");
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForChild.getStreetAddressTwo()), "Account Holder's address two from test data is not found in the Patient Chart address");
         softAssert.assertEquals(testDataForChild.getGender().toLowerCase(), patientChart.getGender().toLowerCase(), "Gender mismatch for Account Holder in Patient Chart");
@@ -133,14 +140,14 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getWholeHeight(), patientChart.getHeight(), "Height mismatch for Account Holder in Patient Chart");
         softAssert.assertEquals(testDataForChild.getWeight(), patientChart.getWeight(), "Weight mismatch for Account Holder in Patient Chart");
         softAssert.assertEquals(testDataForChild.getDobForMinor(), patientChart.getDOB(), "DOB is mismatch for Account Holder in Patient Chart");
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.INFO, "Patient chart details validated successfully");
+        softAssert.assertAll();
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Setting password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        newTabAndLaunchYopMail();
+       // newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
@@ -155,6 +162,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         // Navigate to homepage and profile
         homePagePatPortal.clickMyProfile();
         myProfilePage.clickDependents();
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Child's detail in My profile");
         softAssert.assertEquals(testDataForChild.getFullName(), myProfilePage.getDependentOneName(),
                 "Dependent's name does not match the expected full name for Child in my profile.");
         softAssert.assertEquals("Child", myProfilePage.getDependentOneType(),
@@ -165,10 +173,10 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
                 "Child's weight in the profile does not match in my profile");
         softAssert.assertEquals(testDataForChild.getWholeHeight(), myProfilePage.getDependentOneHeight(),
                 "Child's height in the profile does not match in my profile");
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal dependent profile validated successfully");
         // Navigate to home page and Dermatology Visit
         myProfilePage.clickHomePageLink();
         softAssert.assertAll();
-        ExtentReportManager.getTest().log(Status.INFO, "Patient portal dependent profile validated successfully");
     }
     @Test(priority = 5)
     public void testDermatologyVisitValidation() throws InterruptedException {
@@ -183,12 +191,15 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Child's Name in Dermatology visit");
         //validate child name
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
+        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild(),
+                "Child name doesn't match");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterInsurance();
         Thread.sleep(1000);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Child's Address in Dermatology visit");
         // Validate address and zipcode on Dermatology Visit page
         softAssert.assertEquals(testDataForChild.getStreetAddressOne(), dermatologyVisitPage.getAddressLineOneValue(),
                 "Street Address Line One mismatch on Dermatology Visit page.");
@@ -199,6 +210,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Child's Height, weight and DOB in Dermatology visit");
         // Validate Height, Weight, DOB
         softAssert.assertEquals(testDataForChild.getDobForMinor(), dermatologyVisitPage.getDOBValue(),
                 "Date of Birth mismatch on Dermatology Visit page.");
@@ -270,7 +282,6 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
     }
     @AfterClass()
     public void cleanUp() throws InterruptedException {
-
         //navigate to my profile
         homePagePatPortal.clickMyProfile();
         myProfilePage.clickSettingsLink();

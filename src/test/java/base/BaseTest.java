@@ -38,6 +38,7 @@ public class BaseTest {
                 Map<String, Object> chromePrefs = new HashMap<>();
                 chromePrefs.put("profile.default_content_setting_values.notifications", 1);
                 chromeOptions.setExperimentalOption("prefs", chromePrefs);
+               // chromeOptions.addArguments("--auto-open-devtools-for-tabs");
 
                 // Headless mode setup
                if(property.getProperty("headless").equals("true")){

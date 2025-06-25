@@ -4,6 +4,7 @@ import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -161,7 +162,10 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         // Switch to the patient chart tab
         ExtentReportManager.getTest().log(Status.INFO, "Switching to Patient Chart tab");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Validate account holder details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Validating account holder details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
@@ -243,7 +247,6 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
 
         softAssert.assertEquals(testDataForChild.getMedicationOne().toLowerCase(), patientChart.getFirstMedicationName().toLowerCase(),
                 "medication name in patient chart does not match in Health profile of Provider Portal");
-
         softAssert.assertAll();
     }
     @Test(priority = 3)
@@ -252,9 +255,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Open YopMail and set password
         ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail and setting password");
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
     }

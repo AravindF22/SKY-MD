@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.*;
@@ -97,6 +98,10 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     public void testValidatePatientChartDetails() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         switchToTab(1);
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Mandatory details
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Name didn't match in the Patient chart");
@@ -120,7 +125,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Setting password for invited account holder via YopMail");
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
@@ -135,15 +140,22 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
 
         // Mandatory details
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in My Profile page");
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Name of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(), "Email of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolder(), "Zipcode of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(), "Mobile Number of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(),
+                "Name of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(),
+                "Email of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolder(),
+                "Zipcode of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(),
+                "Mobile Number of the Account Holder is mismatching in My profile");
         // Additional details
         ExtentReportManager.getTest().log(Status.INFO, "Validating additional details in My Profile page");
-        softAssert.assertEquals(testDataForAccountHolder.getGender(), myProfilePage.getGender(), "Gender mismatch in My Profile page.");
-        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), myProfilePage.getAddressLineOne(), "Street Address Line One mismatch in My Profile page.");
-        softAssert.assertTrue(myProfilePage.getAddressLineTwo().contains(testDataForAccountHolder.getStreetAddressTwo()), "Street Address Line Two from test data is not found in My Profile page.");
+        softAssert.assertEquals(testDataForAccountHolder.getGender(), myProfilePage.getGender(),
+                "Gender mismatch in My Profile page.");
+        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), myProfilePage.getAddressLineOne(),
+                "Street Address Line One mismatch in My Profile page.");
+        softAssert.assertTrue(myProfilePage.getAddressLineTwo().contains(testDataForAccountHolder.getStreetAddressTwo()),
+                "Street Address Line Two from test data is not found in My Profile page.");
 
         // Visit flow
         ExtentReportManager.getTest().log(Status.INFO, "Starting Dermatology Visit flow");
@@ -172,8 +184,6 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForHomePage();
 
-//        dermatologyVisitPage.clickDeleteVisitButton();
-//        dermatologyVisitPage.setConfirmForDeleteVisit();
         ExtentReportManager.getTest().log(Status.INFO, "Patient portal profile and visit flow validated successfully");
         softAssert.assertAll();
     }

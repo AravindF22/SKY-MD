@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.*;
@@ -31,7 +32,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
     public DermatologyVisitPage dermatologyVisitPage;
-
+    public YopMail yopMail;
     public TestData testDataForAccountHolder;
     public TestData testDataForChild;
     public SoftAssert softAssert;
@@ -68,6 +69,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         homePagePatPortal = new PatientPortalHomePage(driver);
         myProfilePage = new PatientPortalMyProfilePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
+        yopMail = new YopMail(driver);
     }
     /**
      * Invite an account holder and add a child with only mandatory details.
@@ -111,7 +113,10 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         // Switch to the patient chart tab
         ExtentReportManager.getTest().log(Status.INFO, "Switching to Patient Chart tab");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Validate account holder details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Validating account holder details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
@@ -143,8 +148,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Open YopMail in a new tab and set password for the account holder
         ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail and setting password for account holder");
-        newTabAndLaunchYopMail();
-        YopMail yopMail = new YopMail(driver);
+        //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         // Switch to the set password tab
@@ -187,7 +191,10 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         Thread.sleep(1000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying child name in Dermatology Visit");
         softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
-        ExtentReportManager.getTest().log(Status.PASS, "Patient Portal dependent and Dermatology Visit flow completed successfully");
+        ExtentReportManager.getTest().log(Status.INFO, "Patient Portal dependent and Dermatology Visit flow completed successfully");
+        // Navigate back from Dermatology Visit and home page
+        dermatologyVisitPage.clickBackArrowForVisitForm();
+        dermatologyVisitPage.clickBackArrowForHomePage();
         softAssert.assertAll();
     }
     /**
@@ -195,19 +202,12 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
      */
     @AfterClass()
     public void cleanUp() throws InterruptedException {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-
-        // Navigate back from Dermatology Visit and home page
-        dermatologyVisitPage.clickBackArrowForVisitForm();
-        dermatologyVisitPage.clickBackArrowForHomePage();
-
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         // Log out from Patient Portal
         homePagePatPortal.clickMyProfile();
-
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();
-
         // Switch back to Provider Portal and log out
         switchToTab("SkyMD Provider Portal");
         patientChart.clickProfileIcon();

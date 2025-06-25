@@ -3,15 +3,13 @@ package tests.InvitePatients;
 import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.PatientPortalMyProfilePage;
-import pages.PatientPortal.SetPasswordPage;
+import pages.PatientPortal.*;
 import pages.ProviderPortal.DashBoardPage;
 import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
@@ -36,6 +34,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public PatientPortalLoginPage loginPagePatientPortal;
     public PatientPortalHomePage homePagePatPortal;
     public PatientPortalMyProfilePage myProfilePage;
+    public DermatologyVisitPage dermatologyVisitPage;
     public YopMail yopMail;
 
     public TestData testDataForAccountHolder;
@@ -71,6 +70,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         setPasswordPage = new SetPasswordPage(driver);
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
         homePagePatPortal = new PatientPortalHomePage(driver);
+        dermatologyVisitPage = new DermatologyVisitPage(driver);
         myProfilePage = new PatientPortalMyProfilePage(driver);
         yopMail = new YopMail(driver);
     }
@@ -149,6 +149,10 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public void testValidatePatientChart() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         switchToTab(1);
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         ExtentReportManager.getTest().log(Status.INFO, "Validating Mandatory details in Patient Chart");
         //Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
@@ -234,7 +238,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
     public void testSetPasswordViaYopMail() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Setting password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         ExtentReportManager.getTest().log(Status.INFO, "Clicked set password mail in YopMail");
 
@@ -292,15 +296,80 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
         myProfilePage.clickMedicationHealthProfile();
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), myProfilePage.getMedicationOneValue().toLowerCase(),
                 "MedicationOne name in patient portal profile does not match in Health profile of My Profile");
-        myProfilePage.clickBackButtonInHealthProfile();
-        myProfilePage.clickBackButtonInHealthProfile();
-        myProfilePage.clickBackButtonInHealthProfile();
+        myProfilePage.clickHomePageLink();
         ExtentReportManager.getTest().log(Status.INFO, "Patient portal profile details validated successfully");
+        softAssert.assertAll();
+    }
+    @Test(priority = 5, dependsOnMethods = "testSetPasswordViaYopMail")
+    public void testDermatologyVisitValidation() throws InterruptedException {
+        // Visit flow
+        ExtentReportManager.getTest().log(Status.INFO, "Starting Dermatology Visit flow");
+        homePagePatPortal.selectDermatologyVisit();
+        dermatologyVisitPage.clickSelectPatient();
+        dermatologyVisitPage.clickSelectPatientAsMySelf();
+        ExtentReportManager.getTest().log(Status.INFO, "Selected patient as self for visit");
+
+        // Validate primary insurance details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in Dermatology Visit page");
+        softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), dermatologyVisitPage.getPrimaryInsuranceName().toLowerCase(),
+                "Primary Insurance name mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),
+                "Member Name for Primary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),
+                "Member ID for Primary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
+                "Member DOB for Primary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),
+                "Relationship for Primary Insurance mismatch in Dermatology Visit page.");
+
+        //secondary insurance validation
+        ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance details in Dermatology Visit page");
+        softAssert.assertEquals(testDataForAccountHolder.getSecondaryInsurance().toLowerCase(), dermatologyVisitPage.getSecondaryInsuranceName().toLowerCase(),
+                "Secondary Insurance name mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberNameForSecondaryInsurance(), dermatologyVisitPage.getMemberNameInSecondaryInsurance(),
+                "Member Name for Secondary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberIdForSecondaryInsurance(), dermatologyVisitPage.getMemberIDInSecondaryInsurance(),
+                "Member ID for Secondary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForSecondaryInsurance(), dermatologyVisitPage.getMemberDobInSecondaryInsurance(),
+                "Member DOB for Secondary Insurance mismatch in Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getRelationshipForSecondaryInsurance(), dermatologyVisitPage.getRelationshipInSecondaryInsurance(),
+                "Relationship for Secondary Insurance mismatch in Dermatology Visit page.");
+
+        dermatologyVisitPage.selectSelfPay();
+        dermatologyVisitPage.clickContinueButtonAfterInsurance();
+
+        // Validate address and zipcode on Dermatology Visit page
+        ExtentReportManager.getTest().log(Status.INFO, "Validating address and zipcode on Dermatology Visit page");
+        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), dermatologyVisitPage.getAddressLineOneValue(),
+                "Street Address Line One mismatch on Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressTwo(), dermatologyVisitPage.getAddressLineTwoValue(),
+                "Street Address Line Two mismatch on Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), dermatologyVisitPage.getZipCodeValue(),
+                "Zip Code mismatch on Dermatology Visit page.");
+        Thread.sleep(500);
+        dermatologyVisitPage.clickContinueButton();
+        Thread.sleep(500);
+        // Validate Height, Weight, DOB
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Height, Weight, and DOB on Dermatology Visit page");
+        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), dermatologyVisitPage.getDOBValue(),
+                "Date of Birth mismatch on Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getFeet(), dermatologyVisitPage.getFeetValue(),
+                "Height (Feet) mismatch on Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getInch(), dermatologyVisitPage.getInchesValue(),
+                "Height (Inches) mismatch on Dermatology Visit page.");
+        softAssert.assertEquals(testDataForAccountHolder.getWeight(), dermatologyVisitPage.getWeightValue(),
+                "Weight mismatch on Dermatology Visit page.");
+
+        dermatologyVisitPage.clickBackArrowForVisitForm();
+        dermatologyVisitPage.clickBackArrowForHomePage();
+
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal profile and visit flow validated successfully");
         softAssert.assertAll();
     }
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Logging out from Patient and Provider Portals");
+        homePagePatPortal.clickMyProfile();
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();
         myProfilePage.clickConfirmLogoutButton();

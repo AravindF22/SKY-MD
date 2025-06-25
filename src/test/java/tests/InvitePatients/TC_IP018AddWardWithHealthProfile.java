@@ -4,6 +4,7 @@ import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -131,6 +132,10 @@ public class TC_IP018AddWardWithHealthProfile extends BaseTest {
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Switching to patient chart tab");
         switchToTab(1);
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         //Page navigate to Patient chart
         //search for patient
         ExtentReportManager.getTest().log(Status.INFO, "Searching for Ward in patient chart");
@@ -166,16 +171,16 @@ public class TC_IP018AddWardWithHealthProfile extends BaseTest {
      */
     @Test(priority = 3)
     public void testSetPasswordAndLoginToPortal() throws InterruptedException {
-        ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail in new tab");
-        newTabAndLaunchYopMail(); // Open YopMail in a new tab
-        ExtentReportManager.getTest().log(Status.INFO, "Clicking set password mail in YopMail");
-        yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail()); // Click set password mail
-        ExtentReportManager.getTest().log(Status.INFO, "Switching to set password tab");
-        switchToTab(3); // Switch to set password tab
-        ExtentReportManager.getTest().log(Status.INFO, "Setting new password for account holder");
-        setPasswordPage.setPassword("Welcome@123"); // Set new password
-        ExtentReportManager.getTest().log(Status.INFO, "Logging in to Patient Portal with new credentials");
-        loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123"); // Login to Patient Portal
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        ExtentReportManager.getTest().log(Status.INFO, "Switching to YopMail to set password");
+        String email = testDataForAccountHolder.getEmail();
+        // newTabAndLaunchYopMail();
+        yopMail.clickSetPasswordMail(email);
+        switchToTab(3);
+        Thread.sleep(1000);
+        setPasswordPage = new SetPasswordPage(driver);
+        setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully from YopMail");
     }
     /*
      * Test: Validate health profile details in Patient Portal for the Ward.

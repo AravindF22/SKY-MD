@@ -4,6 +4,7 @@ import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -148,8 +149,9 @@ public class TC_IP016AddWardWithAllDetails extends BaseTest {
         invitePatientPage.clickAddAllergyButtonForPatientOne();
         invitePatientPage.setAllergySetTwoForPatientOne(testDataForWard.getAllergyTwo(), testDataForWard.getAllergyReactionTwo(), testDataForWard.getEnvironmentAllergyCategory());
         // Submit the invitation
-        ExtentReportManager.getTest().log(Status.INFO, "Submitting the invitation for account holder and Ward");
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "The invitation for account holder and Ward Submitted successfully");
+
     }
     @Test(priority = 2)
     public void testPatientChartValidations() throws InterruptedException {
@@ -157,7 +159,10 @@ public class TC_IP016AddWardWithAllDetails extends BaseTest {
         // Switch to the patient chart tab
         ExtentReportManager.getTest().log(Status.INFO, "Switching to Patient Chart tab");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Search and validate Ward details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Searching and validating ward details in patient chart");
         patientChart.searchPatient(testDataForWard.getFullName());
@@ -237,16 +242,15 @@ public class TC_IP016AddWardWithAllDetails extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Open YopMail and set password
         ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail and setting password");
-        newTabAndLaunchYopMail();
+       //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
     public void testPatientPortalMyProfile() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal My Profile Verification");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 
         // Login to Patient Portal as account holder
         ExtentReportManager.getTest().log(Status.INFO, "Logging in to Patient Portal as account holder");
@@ -312,7 +316,8 @@ public class TC_IP016AddWardWithAllDetails extends BaseTest {
 
         // Validate selected patient
         ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
-        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard());
+        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
+                "Name is matched with the selected ward ");
         dermatologyVisitPage.clickContinueButton();
 
         // Validate Primary Insurance

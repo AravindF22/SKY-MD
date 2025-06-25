@@ -2,6 +2,8 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -100,9 +102,9 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Adding primary and secondary insurance details for child");
         invitePatientPage.checkInsuranceCheckboxForPatientOne();
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForChild.getPrimaryInsurance());
-        invitePatientPage.setPrimaryInsuranceMemberName(testDataForChild.getFullName());
+        invitePatientPage.setPrimaryInsuranceMemberName(testDataForAccountHolder.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForPrimaryInsurance());
-        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForChild.getDobForMinor());
+        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForAccountHolder.getDobForMajor());
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
         invitePatientPage.checkSecondaryInsuranceForPatientOne();
@@ -113,7 +115,6 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
 
         // Submit patient invitation
-        ExtentReportManager.getTest().log(Status.INFO, "Submitting patient invitation");
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Patient invitation submitted successfully");
     }
@@ -124,7 +125,10 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify insurance details in patient chart");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Navigate to Patient chart and search for patient
         ExtentReportManager.getTest().log(Status.INFO, "Searching for child in patient chart");
         patientChart.searchPatient(testDataForChild.getFullName());
@@ -133,11 +137,11 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in patient chart");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance().toLowerCase(), patientChart.getPrimaryInsurance().toLowerCase(),
                 "Primary Insurance mismatch in Patient Chart.");
-        softAssert.assertEquals(testDataForChild.getMemberNameForPrimaryInsurance(), patientChart.getMemberNameInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), patientChart.getMemberNameInPrimaryInsurance(),
                 "Member Name for Primary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForChild.getMemberIdForPrimaryInsurance(), patientChart.getMemberIdInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Patient Chart.");
-        softAssert.assertEquals(testDataForChild.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
 
         // Validate secondary insurance
@@ -159,9 +163,8 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         // Set implicit wait for element loading
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set password via YopMail");
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
-
         // Switch to set password tab and set password
         ExtentReportManager.getTest().log(Status.INFO, "Switching to set password tab and setting password");
         switchToTab(3);
@@ -193,9 +196,9 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         // Validate primary insurance in portal
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in patient portal");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),"Primary insurance name is mismatched");
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),"Member name is mismatched In Primary insurance");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),"Member name is mismatched In Primary insurance");
         softAssert.assertEquals(testDataForChild.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),"Member ID is mismatched In Primary insurance");
-        softAssert.assertEquals(testDataForChild.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),"Member DOB is mismatched In Primary insurance");
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),"Member DOB is mismatched In Primary insurance");
         softAssert.assertEquals(testDataForChild.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),"Relationship to patient is mismatched In Primary insurance");
 
         // Validate secondary insurance in portal
@@ -205,8 +208,22 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getMemberIdForSecondaryInsurance(), dermatologyVisitPage.getMemberIDInSecondaryInsurance(),"Member ID is mismatched In Secondary insurance");
         softAssert.assertEquals(testDataForChild.getMemberDobForSecondaryInsurance(), dermatologyVisitPage.getMemberDobInSecondaryInsurance(),"Member DOB is mismatched In Secondary insurance");
         softAssert.assertEquals(testDataForChild.getRelationshipForSecondaryInsurance(), dermatologyVisitPage.getRelationshipInSecondaryInsurance(),"Relationship to patient is mismatched In Secondary insurance");
-
+        //Navigate to Home page
+        dermatologyVisitPage.clickBackArrowForVisitForm();
+        dermatologyVisitPage.clickBackArrowForVisitForm();
+        dermatologyVisitPage.clickBackArrowForHomePage();
         ExtentReportManager.getTest().log(Status.INFO, "Patient portal insurance details validated successfully");
         softAssert.assertAll();
+    }
+    @AfterClass()
+    public void cleanUp() throws InterruptedException {
+        // Logout from Patient Portal and Provider Portal after tests
+        homePagePatPortal.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        switchToTab("SkyMD Provider Portal");
+        patientChart.clickProfileIcon();
+        patientChart.clickLogoutButton();
     }
 }

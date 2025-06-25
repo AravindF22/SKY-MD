@@ -3,6 +3,7 @@ package tests.InvitePatients;
 import Utils.TestData;
 import base.BaseTest;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -79,15 +80,14 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
         // Log the start of the test section
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Child and Fill Invite Patient Form With Referral Clinic");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
+        ExtentReportManager.getTest().log(Status.INFO, "Adding child mandatory details");
         // Add child fields
-        invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         invitePatientPage.selectPatientTypeForPatientOne("Child");
         invitePatientPage.setFirstNameForPatientOne(testDataForChild.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForChild.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForChild.getZipCode());
-
+        ExtentReportManager.getTest().log(Status.INFO, "Adding child referral details");
         // Fill referral clinic section for child
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
@@ -96,31 +96,30 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
         invitePatientPage.selectClinicInPatientOneReferralClinic(testDataForProvider.getReferralClinic());
 
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "child added successfully with referral deatils");
     }
-
     @Test(priority = 2)
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
         // Log the start of the test section
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        // Wait for new tab and switch
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(driver -> driver.getWindowHandles().size() > 1);
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Search for patient and verify referral section
         patientChart.searchPatient(testDataForChild.getFullName());
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.PASS, "Referral section in patient chart validated successfully");
+        softAssert.assertAll();
     }
     @AfterClass()
     public void cleanUp() throws InterruptedException {
-        switchToTab("SkyMD Provider Portal");
+        //switchToTab("SkyMD Provider Portal");
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

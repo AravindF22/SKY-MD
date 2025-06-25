@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.ProviderPortal.DashBoardPage;
@@ -96,7 +97,11 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying Referral details in Provider Portal");
         // Navigate to Patient Chart and verify referral details
         String expectedProviderName = testDataForProvider.getFullName();
         String actualProviderName = patientChart.getProviderNameFromReferralSection();
@@ -107,8 +112,8 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
         softAssert.assertEquals(expectedClinicName, actualClinicName,"Clinic name in the referral section of AH is mismatching");
 
         // Assert all soft assertions
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.INFO, "Referral section in Patient Chart verified successfully");
+        softAssert.assertAll();
     }
 
     /**

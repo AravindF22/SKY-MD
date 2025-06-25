@@ -62,7 +62,7 @@ public class InvitePatientPage extends BasePage {
     private By addAllergyButtonForAccountHolder = By.xpath("//button[@ng-click=\"addNewAllergy(0)\"]");
 
     private By clickMedicationNameForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-model=\"med.drug_name\"])[1]");
-    private By setMedicationNameForAccountHolder = By.xpath("(//div[@class=\"ui-select-container ui-select-bootstrap dropdown ng-valid ng-touched\"]//input[@ng-model=\"$select.search\"])[1]");
+    private By setMedicationNameForAccountHolder = By.xpath("(//input[@placeholder=\"Select medicine...\"])[1]");
     private By selectOptionInMedicationForAccountHolder = By.xpath("//div[@class=\"ui-select-choices-row ng-scope active\"]");
 
     //allery
@@ -490,14 +490,16 @@ public class InvitePatientPage extends BasePage {
     //select medication name
     public void selectMedicationForAccountHolder(String medicationName) {
         try {
+            Thread.sleep(500);
             // 1. Click the dropdown to activate it
            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickMedicationNameForAccountHolder));
-           dropdown.click();
-
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});", dropdown);
+            dropdown.click();
+            Thread.sleep(500);
             // 2. Wait for the search input to appear and type the medication name
             WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(setMedicationNameForAccountHolder));
             searchInput.sendKeys(medicationName);
-
+            Thread.sleep(500);
             // 3. Wait for the matching option to become clickable and select it
             WebElement option = wait.until(ExpectedConditions.elementToBeClickable(selectOptionInMedicationForAccountHolder));
             option.click();

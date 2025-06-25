@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.*;
@@ -108,9 +109,12 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
     private void testValidatePatientAndInsuranceInChart() throws InterruptedException {
         // Test: Validate patient and insurance details in Provider Portal's patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate patient and insurance details in Provider Portal's patient chart");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         //validating mandatory details
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory patient details in chart");
         softAssert.assertEquals((testDataForAccountHolder.getFullName()), patientChart.getNameInThePatientChart(),
@@ -145,15 +149,15 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
                 "Member ID for Secondary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberDobForSecondaryInsurance(), patientChart.getMemberDobInSecondaryInsurance(),
                 "Member DOB for Secondary Insurance mismatch in Patient Chart.");
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.INFO, "Patient and insurance details validated successfully in Provider Portal's patient chart");
+        softAssert.assertAll();
     }
     @Test(priority = 3)
     private void testSetPasswordViaYopMail() throws InterruptedException {
         // Test: Set password for invited patient via YopMail
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set password for invited patient via YopMail");
         //Navigate to YopMail
-        newTabAndLaunchYopMail();
+        //newTabAndLaunchYopMail();
         ExtentReportManager.getTest().log(Status.INFO, "Accessing YopMail and clicking set password mail");
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
@@ -202,16 +206,13 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
                 "Member DOB for Secondary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getRelationshipForSecondaryInsurance(), dermatologyVisitPage.getRelationshipInSecondaryInsurance(),
                 "Relationship for Secondary Insurance mismatch in Dermatology Visit page.");
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.INFO, "Patient portal insurance details validated successfully");
-
         //Navigate to Home page
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForHomePage();
-
+        softAssert.assertAll();
     }
-
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
         // Navigate to myProfile and logout

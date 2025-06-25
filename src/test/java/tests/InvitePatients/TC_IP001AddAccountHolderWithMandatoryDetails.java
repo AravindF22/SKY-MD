@@ -4,6 +4,7 @@ import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.PatientPortal.*;
@@ -71,6 +72,10 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
     public void testPatientChartDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         switchToTab(1);
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
 
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Patient name mismatch in chart");
@@ -78,24 +83,22 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getFullName().toUpperCase(), patientChart.getNameInTopBar(), "Top bar name mismatch");
         softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), patientChart.getMobileInPatientChart(), "Mobile number mismatch");
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(), "Zip code mismatch");
+        ExtentReportManager.getTest().log(Status.INFO, "Patient chart validated successfully");
         softAssert.assertAll();
-
-        ExtentReportManager.getTest().log(Status.PASS, "Patient chart validated successfully");
     }
 
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Switching to YopMail to set password");
-
-        newTabAndLaunchYopMail();
-        yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
+        String email = testDataForAccountHolder.getEmail();
+       // newTabAndLaunchYopMail();
+        yopMail.clickSetPasswordMail(email);
 
         switchToTab(3);
         Thread.sleep(1000);
         setPasswordPage = new SetPasswordPage(driver);
         setPasswordPage.setPassword("Welcome@123");
-
         ExtentReportManager.getTest().log(Status.INFO, "Password set successfully from YopMail");
     }
 

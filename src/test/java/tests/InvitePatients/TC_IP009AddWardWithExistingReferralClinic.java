@@ -2,6 +2,7 @@ package tests.InvitePatients;
 
 import Utils.TestData;
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -68,60 +69,49 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
 
         // Navigate to Invite Patient page
         dashBoardPage.clickInvitePatientLink();
-        ExtentReportManager.getTest().log(Status.INFO, "Navigated to Invite Patient page");
-
+        ExtentReportManager.getTest().log(Status.INFO, "Entering AH mandatory details");
         // Fill mandatory fields for account holder
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered first name: " + testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered last name: " + testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered email: " + testDataForAccountHolder.getEmail());
         invitePatientPage.setMobileAs(testDataForAccountHolder.getMobileNumber());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered mobile number: " + testDataForAccountHolder.getMobileNumber());
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered zipcode: " + testDataForAccountHolder.getZipCode());
     }
     @Test(priority = 2)
     public void testAddChildAndFillInvitePatientFormWithReferralClinic() throws IOException {
         // Log the start of the test
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Ward and Fill Invite Patient Form With Referral Clinic");
-
         // Add ward fields
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked to add additional patient (Ward)");
         invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         ExtentReportManager.getTest().log(Status.INFO, "Selected patient type: Ward (legal guardian of 18+ years)");
+        ExtentReportManager.getTest().log(Status.INFO, "Entering Ward mandatory details");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered ward first name: " + testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered ward last name: " + testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered ward zipcode: " + testDataForWard.getZipCode());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Entering Ward Referral details");
         // Fill referral section for ward
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
-        ExtentReportManager.getTest().log(Status.INFO, "Checked referral clinic for ward");
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered provider first name in referral clinic: " + testDataForProvider.getFname());
         invitePatientPage.setProviderLastNameInPatientOneReferralClinic(testDataForProvider.getLname());
-        ExtentReportManager.getTest().log(Status.INFO, "Entered provider last name in referral clinic: " + testDataForProvider.getLname());
         invitePatientPage.selectClinicStateInPatientOneReferralClinic(testDataForProvider.getReferralClinicState());
-        ExtentReportManager.getTest().log(Status.INFO, "Selected clinic state in referral clinic: " + testDataForProvider.getReferralClinicState());
         invitePatientPage.selectClinicInPatientOneReferralClinic(testDataForProvider.getReferralClinic());
-        ExtentReportManager.getTest().log(Status.INFO, "Selected clinic in referral clinic: " + testDataForProvider.getReferralClinic());
 
         // Submit the form for ward
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked Add Patient button for ward");
     }
-
     @Test(priority = 2)
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
         // Log the start of the test
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         switchToTab(1);
-
+        if(!patientChart.isPatientChart()){
+            ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
+            Assert.fail("Patient chart page not loaded.");
+        }
         // Page navigate to Patient chart and search for patient
         patientChart.searchPatient(testDataForWard.getFullName());
         ExtentReportManager.getTest().log(Status.INFO, "Searched for ward in patient chart: " + testDataForWard.getFullName());
@@ -135,12 +125,12 @@ public class TC_IP009AddWardWithExistingReferralClinic extends BaseTest {
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
         ExtentReportManager.getTest().log(Status.INFO, "Verified clinic name in referral section");
+        ExtentReportManager.getTest().log(Status.INFO, "Referral section in patient chart validated successfully");
         softAssert.assertAll();
-        ExtentReportManager.getTest().log(Status.PASS, "Referral section in patient chart validated successfully");
     }
     //@AfterClass()
     public void cleanUp() throws InterruptedException {
-        switchToTab("SkyMD Provider Portal");
+       // switchToTab("SkyMD Provider Portal");
         patientChart.clickProfileIcon();
         patientChart.clickLogoutButton();
     }

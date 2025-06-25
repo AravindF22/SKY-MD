@@ -20,6 +20,7 @@ public class PatientChart extends BasePage {
         super(driver);
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
+    private final By isPatientChart = By.xpath("//h1[@class=\"m-n font-thin h3 text-center ng-binding\"]");
     private final By nameInTopBar = By.xpath("//p[text()='Name: ']/span");
     private final By nameInThePatientChart = By.xpath("//td[text()='Name:']/following-sibling::td");
     private final By emailInThePatientChart = By.xpath("//table[@class=\"table borderless\"]//tr[2]//td[2]/span");
@@ -51,7 +52,15 @@ public class PatientChart extends BasePage {
 
     private final By profileIcon = By.xpath("//a[@class=\"dropdown-toggle clear\"]/span[1]");
     private final By logoutButton = By.xpath("//a[text()='Logout']");
-
+    public boolean isPatientChart() {
+        try {
+            String text = wait.until(ExpectedConditions.visibilityOfElementLocated(isPatientChart)).getText();
+            return text.contains("PATIENT CHART");
+        } catch (Exception e) {
+            System.out.println("Error: this is not Patient chart: " + e.getMessage());
+            return false;
+        }
+    }
     public String getNameInTopBar(){
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(nameInTopBar));
         return element.getText();
