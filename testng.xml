@@ -21,6 +21,10 @@
             <class name="tests.InvitePatients.TC_IP012AddAccountHolderWithAllDetails"/>
             <class name="tests.InvitePatients.TC_IP013AddChildWithInsuranceDetails"/>
             <class name="tests.InvitePatients.TC_IP014AddWardWithInsuranceDetails"/>
+            <class name="tests.InvitePatients.TC_IP015AddChildWithAllDetails"/>
+            <class name="tests.InvitePatients.TC_IP016AddWardWithAllDetails"/>
+            <class name="tests.InvitePatients.TC_IP017AddChildWithHealthProfile"/>
+            <class name="tests.InvitePatients.TC_IP018AddWardWithHealthProfile"/>
         </classes>
     </test>
 
