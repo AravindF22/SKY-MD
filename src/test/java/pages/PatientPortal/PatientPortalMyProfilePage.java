@@ -38,6 +38,8 @@ public class PatientPortalMyProfilePage extends BasePage {
     private final By dependentOneWeight = By.xpath("(//div[@class=\"px-10 pb-8\"]//h3[text()='Weight']/following-sibling::p)[1]");
     private final By healthProfileLink = By.xpath("//h3[text()='Health Profile']");
     private final By healthProfileOfAccountHolder = By.xpath("//div[@class=\"mt-16\"][1]/div");
+    private final By healthProfileOfChild = By.xpath("//div[@class=\"mt-16\"][2]/div");
+    private final By healthProfileOfWard = By.xpath("//div[@class=\"mt-16\"][2]/div");
     private final By allergyHealthProfile = By.xpath("//p[text()='Allergies']");
 
     private final By allergyOne = By.xpath("//div[contains(@class,\"block pt-7\")][1]//input");
@@ -51,6 +53,8 @@ public class PatientPortalMyProfilePage extends BasePage {
     private final By medicationHealthProfile = By.xpath("//p[text()='Medications']");
     private final By medicationOne = By.xpath("//div[@class=\"pt-7 pb-9 px-9 bg-alternativeWhite rounded-2xl mt-10\"][1]/div[1]/input");
     private final By backButtonInHealthProfile = By.xpath("//img[@alt=\"back\"]");
+     private final By myProfileLink = By.xpath("//p[text()='My Profile']/ancestor::div[contains(@class,'flex items-center')]");
+
     public void clickHomePageLink() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(home)).click();
@@ -263,6 +267,20 @@ public class PatientPortalMyProfilePage extends BasePage {
             System.out.println("Error getting Health Profile of Account Holder text: " + e.getMessage());
         }
     }
+    public void clickHealthProfileOfChild() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(healthProfileOfChild)).click();
+        } catch (Exception e) {
+            System.out.println("Error getting Health Profile of Account Holder text: " + e.getMessage());
+        }
+    }
+    public void clickHealthProfileOfWard() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(healthProfileOfWard)).click();
+        } catch (Exception e) {
+            System.out.println("Error getting Health Profile of Account Holder text: " + e.getMessage());
+        }
+    }
     public void clickAllergyHealthProfile() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(allergyHealthProfile)).click();
@@ -408,6 +426,14 @@ public class PatientPortalMyProfilePage extends BasePage {
         }
         catch (Exception e){
             System.out.println("Error while clicking Back button to health profile: " + e.getMessage());
+        }
+    }
+    public void clickMyProfileLink(){
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(myProfileLink)).click();
+        }
+        catch (Exception e){
+            System.out.println("Error while clicking My profile link: " + e.getMessage());
         }
     }
     public void clickMedicationHealthProfile() {

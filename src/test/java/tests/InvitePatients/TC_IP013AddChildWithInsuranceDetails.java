@@ -114,7 +114,6 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         switchToTab(1);
 
         //Page navigate to Patient chart
-
         //search for patient
         patientChart.searchPatient(testDataForChild.getFullName());
 

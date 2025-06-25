@@ -161,7 +161,6 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
 
         // Navigate to home page and Dermatology Visit
         myProfilePage.clickHomePageLink();
-
         softAssert.assertAll();
     }
     @Test(priority = 5)
@@ -205,7 +204,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
         dermatologyVisitPage.clickBackArrowForVisitForm();
         Thread.sleep(1000);
         dermatologyVisitPage.clickBackArrowForHomePage();
-
+        softAssert.assertAll();
     }
     //@Test(priority = 6)
     public void testPrimaryCareVisitValidation() throws InterruptedException {

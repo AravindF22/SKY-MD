@@ -96,7 +96,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
         invitePatientPage.clickAddPatientButton();
     }
 
-    @Test(priority = 2, dependsOnMethods = "testInviteAccountHolderWithHealthProfile")
+    @Test(priority = 2)
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
 
         switchToTab(1);

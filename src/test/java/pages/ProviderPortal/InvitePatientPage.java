@@ -62,28 +62,24 @@ public class InvitePatientPage extends BasePage {
     private By addAllergyButtonForAccountHolder = By.xpath("//button[@ng-click=\"addNewAllergy(0)\"]");
 
     private By clickMedicationNameForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-model=\"med.drug_name\"])[1]");
-    private By setMedicationNameForAccountHolder = By.xpath("//div[@class=\"ui-select-container ui-select-bootstrap dropdown ng-valid open\"]//input[1]");
+    private By setMedicationNameForAccountHolder = By.xpath("(//div[@class=\"ui-select-container ui-select-bootstrap dropdown ng-valid ng-touched\"]//input[@ng-model=\"$select.search\"])[1]");
     private By selectOptionInMedicationForAccountHolder = By.xpath("//div[@class=\"ui-select-choices-row ng-scope active\"]");
 
     //allery
     private By clickAlleryNameOneForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-model=\"allergy.name\"])[1]");
     private By setAllergyNameOneForAccountHolder = By.xpath("(//form[@name='hpForm']//input[@placeholder='Search allergy...'])[1]");
-    private By selectAllergyOptionOneForAccountHolder = By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-3-0\"]");
     private By selectAllergyReactionOneForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][1]//div//select)[1]");
     private By selectAllergyCategoryOneForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][1]//div//select)[2]");
 
     private By clickAlleryNameTwoForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-model=\"allergy.name\"])[2]");
     private By setAllergyNameTwoForAccountHolder = By.xpath("(//form[@name='hpForm']//input[@placeholder='Search allergy...'])[2]");
-    private By selectAllergyOptionTwoForAccountHolder = By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-4-0\"]");
     private By selectAllergyReactionTwoForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][2]//div//select)[1]");
     private By selectAllergyCategoryTwoForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][2]//div//select)[2]");
 
     private By clickAlleryNameThreeForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-model=\"allergy.name\"])[3]");
     private By setAllergyNameThreeForAccountHolder = By.xpath("(//form[@name='hpForm']//input[@placeholder='Search allergy...'])[3]");
-    private By selectAllergyOptionThreeForAccountHolder = By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-5-0\"]");
     private By selectAllergyReactionThreeForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][3]//div//select)[1]");
     private By selectAllergyCategoryThreeForAccountHolder = By.xpath("(//form[@name=\"hpForm\"]//div[@ng-repeat=\"allergy in newPatient.health_profiles[0].health_profile_allergies_attributes track by $index\"][3]//div//select)[2]");
-
 
     //additional patient one
     private By addAdditionalPatientBtnforPatientOne = By.xpath("//button[text()='Add Additional Patient']");
@@ -116,13 +112,31 @@ public class InvitePatientPage extends BasePage {
     private By primaryInsuranceMemberDOBForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].member_dob\"])[1]");
     private By primaryInsuranceRelationshipForPatientOne = By.xpath("(//select[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[0].relationship_to_patient\"])[1]");
 
-
     private By secondaryInsuranceCheckBoxForPatientOne =By.xpath("//input[@ng-model=\"secondaryInsurancesDetailsEnabled[$index]\"]");
     private By secondaryInsuranceDropDownForPatientOne = By.xpath("(//div[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].insurance_company\"])[1]");
     private By secondaryInsuranceMemberNameForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_name\"])[1]");
     private By secondaryInsuranceMemberIdForPatientOne =By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_id\"])[1]");
     private By secondaryInsuranceMemberDOBForPatientOne = By.xpath("(//input[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].member_dob\"])[1]");
     private By secondaryInsuranceRelationshipForPatientOne = By.xpath("(//select[@ng-model=\"newPatient.patients_attributes[$index].insurances_attributes[1].relationship_to_patient\"])[1]");
+
+    private By healthProfileCheckBoxForPatientOne = By.xpath("(//input[@ng-model=\"showHealthProfile[$index]\"])[1]");
+    private By addMedicationBtnForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//button[text()='Add Medication'])[1]");
+    private By addAllergyBtnForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//button[text()='Add Allergy'])[1]");
+
+    private By clickMedicationNameForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//div[@ng-model=\"med.drug_name\"])[1]");
+    private By setMedicationNameForPatientOne =By.xpath("(//input[contains(@class, 'ui-select-search')])[5]");
+    private By selectOptionInMedicationForPatientOne = By.xpath("//div[@ng-attr-id=\"ui-select-choices-row-{{ $select.generatedId }}-{{$index}}\"][1]");
+
+    private By clickAllergyNameOneForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//div[@ng-model=\"allergy.name\"])[1]");
+    private By setAllergyNameOneForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//input[@placeholder='Search allergy...'])[1]");
+    private By selectAllergyReactionOneForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//select[@ng-model=\"allergy.reaction\"])[1]");
+    private By selectAllergyCategoryOneForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//select[@ng-model=\"allergy.category\"])[1]");
+
+    private By clickAllergyNameTwoForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//div[@ng-model=\"allergy.name\"])[2]");
+    private By setAllergyNameTwoPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//input[@placeholder='Search allergy...'])[2]");
+    private By selectAllergyReactionTwoForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//select[@ng-model=\"allergy.reaction\"])[2]");
+    private By selectAllergyCategoryTwoForPatientOne = By.xpath("(//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//select[@ng-model=\"allergy.category\"])[2]");
+
 
     // Action Methods with Explicit Waits
     public void setFirstNameAs(String firstName) {
@@ -492,112 +506,6 @@ public class InvitePatientPage extends BasePage {
             System.err.println("Timeout: Medication dropdown or option not available. " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Error selecting medication for account holder: " + e.getMessage());
-        }
-    }
-    public void setAllergySetOne(String allergyName, String reaction, String category){
-        //Allergy
-        try {
-            // 1. Click the allergy dropdown to activate it
-            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAlleryNameOneForAccountHolder));
-            dropdown.click();
-
-            // 2. Wait for the input to appear and type the allergy name
-            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameOneForAccountHolder));
-            input.clear();
-            input.sendKeys(allergyName);
-
-            // 3. Wait for the matching option and select it
-            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-3-0\"]//span[text()='"+allergyName+"']")));
-            option.click();
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy for account holder: " + e.getMessage());
-        }
-        //Reaction
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionOneForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(reaction);
-        }  catch (Exception e) {
-            System.err.println("Error selecting allergy reaction: " + e.getMessage());
-        }
-        //Category
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryOneForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(category);
-        }  catch (Exception e) {
-            System.err.println("Error selecting allergy category: " + e.getMessage());
-        }
-    }
-    public void setAllergySetTwo(String allergyName, String reaction, String category){
-        //Allergy
-        try {
-            // 1. Click the allergy dropdown to activate it
-            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAlleryNameTwoForAccountHolder));
-            dropdown.click();
-
-            // 2. Wait for the input to appear and type the allergy name
-            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameTwoForAccountHolder));
-            input.clear();
-            input.sendKeys(allergyName);
-
-            // 3. Wait for the matching option and select it
-            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-4-0\"]//span[text()='"+allergyName+"']")));
-            option.click();
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy for account holder: " + e.getMessage());
-        }
-        //Reaction
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionTwoForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(reaction);
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy reaction: " + e.getMessage());
-        }
-        //Category
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryTwoForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(category);
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy category: " + e.getMessage());
-        }
-    }
-
-    public void setAllergySetThree(String allergyName, String reaction, String category){
-        //Allergy
-        try {
-            // 1. Click the allergy dropdown to activate it
-            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAlleryNameThreeForAccountHolder));
-            dropdown.click();
-
-            // 2. Wait for the input to appear and type the allergy name
-            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameThreeForAccountHolder));
-            input.clear();
-            input.sendKeys(allergyName);
-
-            // 3. Wait for the matching option and select it
-            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//form[@name='hpForm']//div[@id=\"ui-select-choices-row-5-0\"]//span[text()='"+allergyName+"']")));
-            option.click();
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy for account holder: " + e.getMessage());
-        }
-        //Reaction
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionThreeForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(reaction);
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy reaction: " + e.getMessage());
-        }
-        //Category
-        try {
-            WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryThreeForAccountHolder));
-            Select select = new Select(dropdown);
-            select.selectByVisibleText(category);
-        } catch (Exception e) {
-            System.err.println("Error selecting allergy category: " + e.getMessage());
         }
     }
     public void setDrugAllergySetOne(String allergyName, String reaction, String category){
@@ -973,6 +881,155 @@ public class InvitePatientPage extends BasePage {
             select.selectByVisibleText(relationshipText);
         } catch (Exception e) {
             System.out.println("Failed to select Secondary Insurance Relationship: " + e.getMessage());
+        }
+    }
+
+    public void clickHealthProfileCheckboxForPatientOne() {
+        try {
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(healthProfileCheckBoxForPatientOne));
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Health Profile checkbox not clickable for Patient One. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error clicking Health Profile checkbox for Patient One: " + e.getMessage());
+        }
+    }
+
+    public void clickAddMedicationButtonForPatientOne() {
+        try {
+            WebElement addMedicationBtn = wait.until(ExpectedConditions.elementToBeClickable(addMedicationBtnForPatientOne));
+            addMedicationBtn.click();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Add Medication button not clickable for Patient One. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error clicking Add Medication button for Patient One: " + e.getMessage());
+        }
+    }
+
+    public void selectMedicationForPatientOne(String medicationName) {
+        // Step 1: Click the dropdown
+        try {
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickMedicationNameForPatientOne));
+            dropdown.click();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Medication dropdown not clickable for Patient One. " + e.getMessage());
+            return;
+        } catch (Exception e) {
+            System.err.println("Error clicking medication dropdown for Patient One: " + e.getMessage());
+            return;
+        }
+
+        // Step 2: Enter the medication name
+        try {
+            WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(setMedicationNameForPatientOne));
+            searchInput.sendKeys(medicationName);
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Medication input field not visible for Patient One. " + e.getMessage());
+            return;
+        } catch (Exception e) {
+            System.err.println("Error entering medication name for Patient One: " + e.getMessage());
+            return;
+        }
+
+        // Step 3: Select the option from dropdown
+        try {
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(selectOptionInMedicationForPatientOne));
+            option.click();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Medication option not clickable for Patient One. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error selecting medication option for Patient One: " + e.getMessage());
+        }
+    }
+
+    public void clickAddAllergyButtonForPatientOne() {
+        try {
+            WebElement addAllergyBtn = wait.until(ExpectedConditions.elementToBeClickable(addAllergyBtnForPatientOne));
+            addAllergyBtn.click();
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Add Allergy button not clickable for Patient One. " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error clicking Add Allergy button for Patient One: " + e.getMessage());
+        }
+    }
+    public void setAllergySetOneForPatientOne(String allergyName, String reaction, String category) {
+        // Allergy selection
+        try {
+            // Step 1: Click the allergy dropdown to activate it
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAllergyNameOneForPatientOne));
+            dropdown.click();
+
+            // Step 2: Wait for the input to appear and type the allergy name
+            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameOneForPatientOne));
+            input.clear();
+            input.sendKeys(allergyName);
+
+            // Step 3: Wait for the matching option and select it
+            String optionXpath = "//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//div[@class=\"ui-select-choices-row ng-scope active\"]//span[text()='" + allergyName + "']";
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(optionXpath)));
+            option.click();
+
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy name for Patient One: " + e.getMessage());
+        }
+
+        // Reaction selection
+        try {
+            WebElement reactionDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionOneForPatientOne));
+            Select select = new Select(reactionDropdown);
+            select.selectByVisibleText(reaction);
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy reaction for Patient One: " + e.getMessage());
+        }
+
+        // Category selection
+        try {
+            WebElement categoryDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryOneForPatientOne));
+            Select select = new Select(categoryDropdown);
+            select.selectByVisibleText(category);
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy category for Patient One: " + e.getMessage());
+        }
+    }
+    public void setAllergySetTwoForPatientOne(String allergyName, String reaction, String category) {
+        // Allergy selection
+        try {
+            // Step 1: Click the allergy dropdown to activate it
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(clickAllergyNameTwoForPatientOne));
+            dropdown.click();
+
+            // Step 2: Wait for the input to appear and type the allergy name
+            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(setAllergyNameTwoPatientOne));
+            input.clear();
+            input.sendKeys(allergyName);
+
+            // Step 3: Wait for the matching option and select it
+            String optionXpath = "//div[@ng-repeat=\"patient in newPatient.patients_attributes\"]//div[@class=\"ui-select-choices-row ng-scope active\"]//span[text()='" + allergyName + "']";
+            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(optionXpath)));
+            option.click();
+
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy name for Patient One: " + e.getMessage());
+        }
+
+        // Reaction selection
+        try {
+            WebElement reactionDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyReactionTwoForPatientOne));
+            Select select = new Select(reactionDropdown);
+            select.selectByVisibleText(reaction);
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy reaction for Patient One: " + e.getMessage());
+        }
+
+        // Category selection
+        try {
+            WebElement categoryDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectAllergyCategoryTwoForPatientOne));
+            Select select = new Select(categoryDropdown);
+            select.selectByVisibleText(category);
+        } catch (Exception e) {
+            System.err.println("Error selecting allergy category for Patient One: " + e.getMessage());
         }
     }
 }

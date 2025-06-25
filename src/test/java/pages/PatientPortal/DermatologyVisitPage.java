@@ -44,6 +44,8 @@ public class DermatologyVisitPage extends BasePage {
     private final By memberIDInSecondaryInsurance = By.xpath("(//p[text()='Member ID'])[2]/following-sibling::p");
     private final By memberDobInPrimaryInsurance = By.xpath("(//p[text()='Member DOB'])[1]/following-sibling::p");
     private final By memberDobInSecondaryInsurance = By.xpath("(//p[text()='Member DOB'])[2]/following-sibling::p");
+    private final By selfPay = By.xpath("//div[@class=\"w-full\"]");
+
     private final By selectPatientAsMyChild = By.xpath("//div[@class=\"radio_button_card_container\"]/div[2]");
     private final By selectPatientAsWard = By.xpath("(//p[@class=\"text-2xl font-bold text-indigo\"])[3]");
     private final By nameOfTheChildInSelectChild = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]//p");
@@ -307,6 +309,16 @@ public class DermatologyVisitPage extends BasePage {
         } catch (Exception e) {
             System.err.println("Error getting Member DOB in Secondary Insurance: " + e.getMessage());
             return null;
+        }
+    }
+
+    public void selectSelfPay() {
+        try{
+            wait.until(ExpectedConditions.elementToBeClickable(selfPay)).click();
+        }
+        catch (Exception e){
+            System.err.println("Error selecting self pay: " + e.getMessage());
+
         }
     }
     public String getAddressLineTwoValue() {

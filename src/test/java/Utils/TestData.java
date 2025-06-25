@@ -46,7 +46,7 @@ public class TestData {
 
     public TestData() {
         this.fname = faker.name().firstName();
-        this.lname = faker.name().lastName();
+        this.lname = faker.name().lastName().replaceAll("[^a-zA-Z0-9]", "");
         this.email = (fname + lname + "01@yopmail.com").toLowerCase();
         this.mobileNumber = "715" + faker.phoneNumber().subscriberNumber(7);
         this.zipCode = "92121";
@@ -82,7 +82,7 @@ public class TestData {
         this.medicationOneIndex = faker.number().numberBetween(0, medications.length);
         this.medicationTwoIndex = faker.number().numberBetween(0, medications.length);
     }
-    String [] insurances = {"AETNA", "Blue Cross / Blue Shield of Texas", "MEDICARE","ANTHEM BLUE CROSS","Medical Mutual of Ohio (Zelis)", "Medical Mutual Of Ohio"};
+    String [] insurances = {"AETNA", "Blue Cross / Blue Shield of Texas", "MEDICARE","ANTHEM BLUE CROSS","Medical Mutual of Ohio (Zelis)"};
     String [] relationship = {"Self","Spouse","Parent","Other"};
 
     String[] medications = {"Anu-Med", "Beta Med", "Perio Med", "Medi-Sleep", "Medi-Mucil", "Mediwash", "Medi-Tabs","Medi Pads", "Medi-Patch",
@@ -170,8 +170,10 @@ public class TestData {
         return fname+" "+lname;
     }
     public String getMemberIdForPrimaryInsurance(){ return memberIdForPrimaryInsurance;}
-    public Date getMemberDobForPrimaryInsurance(){
-        return dobForMajor;
+    public String getMemberDobForPrimaryInsurance(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(dobForMajor);
+
     }
     public String getPrimaryInsurance(){
         return insurances[primaryInsuranceIndex];
