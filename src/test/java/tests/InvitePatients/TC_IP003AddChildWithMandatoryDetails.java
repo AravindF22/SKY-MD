@@ -104,7 +104,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
     /**
      * Validate the patient chart for both account holder and child.
      */
-    @Test(priority = 2, dependsOnMethods = "testInviteAccountHolderAndChild")
+    @Test(priority = 2)
     public void testPatientChartValidations() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate Patient Chart for Account Holder and Child");
         // Switch to the patient chart tab

@@ -1,5 +1,6 @@
 package tests.InvitePatients;
 
+import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import org.testng.annotations.AfterClass;

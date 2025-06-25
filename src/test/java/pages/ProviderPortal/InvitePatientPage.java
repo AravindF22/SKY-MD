@@ -794,9 +794,6 @@ public class InvitePatientPage extends BasePage {
     public void setFeetForPatientOne(String feet) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(feetForPatientOne));
-//            element.clear();
-//            element.sendKeys(feet);
-            //element.click();
             int feetValue = Integer.parseInt(feet);
             while(feetValue>=1){
                 // Increase value (Arrow Up)
@@ -821,8 +818,12 @@ public class InvitePatientPage extends BasePage {
     public void setWeightForPatientOne(String weight) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(weightForPatientOne));
-            element.clear();
-            element.sendKeys(weight);
+            int weightValue = Integer.parseInt(weight);
+            while(weightValue>=1){
+                // Increase value (Arrow Up)
+                element.sendKeys(Keys.ARROW_UP);
+                weightValue--;
+            }
         } catch (Exception e) {
             System.out.println("Error setting weight for patient one: " + e.getMessage());
         }

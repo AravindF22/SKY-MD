@@ -95,14 +95,14 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForChild.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForChild.getDobForMinor());
-       // invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
+        invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
         invitePatientPage.checkSecondaryInsuranceForPatientOne();
         invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForChild.getSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForChild.getMemberNameForSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForChild.getMemberDobForSecondaryInsurance());
-       // invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
+        invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
 
         //add patient
         invitePatientPage.clickAddPatientButton();
@@ -149,7 +149,7 @@ public class TC_IP013AddChildWithInsuranceDetails extends BaseTest {
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
     }
-    @Test(priority = 4)
+    @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalValidation() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
