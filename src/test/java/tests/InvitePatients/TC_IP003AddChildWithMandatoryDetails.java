@@ -100,6 +100,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         // Submit the invitation
         ExtentReportManager.getTest().log(Status.INFO, "Submitting the invitation for account holder and child");
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.PASS, "Invitation submitted for account holder and child with mandatory details");
     }
     /**
      * Validate the patient chart for both account holder and child.
@@ -119,6 +120,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
                 "Account Holder email mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Account Holder zip code mismatch in Patient Chart");
+        ExtentReportManager.getTest().log(Status.INFO, "Account holder details validated in patient chart");
         // Search and validate child details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Searching and validating child details in patient chart");
         patientChart.searchPatient(testDataForChild.getFullName());
@@ -129,6 +131,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
                 "Child zip code mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getGuardianName(),
                 "Guardian name mismatch in Patient Chart");
+        ExtentReportManager.getTest().log(Status.PASS, "Patient chart validations completed for account holder and child");
         softAssert.assertAll();
     }
     /**
@@ -144,8 +147,11 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         YopMail yopMail = new YopMail(driver);
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
+        // Switch to the set password tab
+        ExtentReportManager.getTest().log(Status.INFO, "Switching to set password tab");
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.PASS, "Password set successfully for account holder via YopMail");
     }
     /**
      * Login to Patient Portal, verify dependent, and complete Dermatology Visit flow for the child.
@@ -164,6 +170,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         homePagePatPortal.clickMyProfile();
 
         myProfilePage.clickDependents();
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying dependent's name and type");
         softAssert.assertEquals(testDataForChild.getFullName(), myProfilePage.getDependentOneName(),
                 "Dependent's name does not match the expected full name for Child.");
         softAssert.assertEquals("Child", myProfilePage.getDependentOneType(),
@@ -178,7 +185,9 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
         dermatologyVisitPage.selectPatientAsMyChild();
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying child name in Dermatology Visit");
         softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
+        ExtentReportManager.getTest().log(Status.PASS, "Patient Portal dependent and Dermatology Visit flow completed successfully");
         softAssert.assertAll();
     }
     /**

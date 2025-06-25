@@ -13,6 +13,8 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import Utils.ExtentReportManager;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -61,8 +63,11 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
     }
     @Test(priority = 1)
     public void testFillAccountHolderMandatoryDetails(){
+        // Log the start of the test section
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Fill Account Holder Mandatory Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         dashBoardPage.clickInvitePatientLink();
+        // Fill account holder mandatory details
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -71,6 +76,8 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
     }
     @Test(priority = 2)
     public void testAddChildAndFillInvitePatientFormWithReferralClinic() throws IOException {
+        // Log the start of the test section
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Child and Fill Invite Patient Form With Referral Clinic");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
         // Add child fields
@@ -81,7 +88,7 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
         invitePatientPage.setLastNameForPatientOne(testDataForChild.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForChild.getZipCode());
 
-        //Referral section
+        // Fill referral clinic section for child
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
         invitePatientPage.setProviderLastNameInPatientOneReferralClinic(testDataForProvider.getLname());
@@ -93,21 +100,23 @@ public class TC_IP008AddChildWithExistingReferralClinic extends BaseTest {
 
     @Test(priority = 2)
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
+        // Log the start of the test section
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        // Wait BEFORE calling switchToTab
+        // Wait for new tab and switch
         new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(driver -> driver.getWindowHandles().size() > 1);        switchToTab(1);
+                .until(driver -> driver.getWindowHandles().size() > 1);
+        switchToTab(1);
 
-        //Page navigate to Patient chart
-
-        //search for patient
+        // Search for patient and verify referral section
         patientChart.searchPatient(testDataForChild.getFullName());
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.PASS, "Referral section in patient chart validated successfully");
     }
     @AfterClass()
     public void cleanUp() throws InterruptedException {

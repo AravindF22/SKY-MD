@@ -100,14 +100,16 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setLastNameForPatientOne(testDataForChild.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForChild.getZipCode());
 
-        //Referral section
+        // Fill referral section
+        ExtentReportManager.getTest().log(Status.INFO, "Filling referral section for child");
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
         invitePatientPage.setProviderLastNameInPatientOneReferralClinic(testDataForProvider.getLname());
         invitePatientPage.selectClinicStateInPatientOneReferralClinic(testDataForProvider.getReferralClinicState());
         invitePatientPage.selectClinicInPatientOneReferralClinic(testDataForProvider.getReferralClinic());
 
-        //Additional information
+        // Fill additional information
+        ExtentReportManager.getTest().log(Status.INFO, "Filling additional information for child");
         invitePatientPage.clickAdditionalInformationForPatientOne();
         invitePatientPage.setStreetAddressOneForPatientOne(testDataForChild.getStreetAddressOne());
         invitePatientPage.setStreetAddressTwoForPatientOne(testDataForChild.getStreetAddressTwo());
@@ -117,7 +119,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setInchForPatientOne(testDataForChild.getInch());
         invitePatientPage.setWeightForPatientOne(testDataForChild.getWeight());
 
-        //Primary Insurance
+        // Fill primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Filling primary insurance details for child");
         invitePatientPage.checkInsuranceCheckboxForPatientOne();
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForChild.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForAccountHolder.getFullName()); // adding parent name as primary insurance member name
@@ -125,7 +128,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForChild.getDobForMajor());
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
-        //Secondary Insurance
+        // Fill secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Filling secondary insurance details for child");
         invitePatientPage.checkSecondaryInsuranceForPatientOne();
         invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForChild.getSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForChild.getMemberNameForSecondaryInsurance());
@@ -133,12 +137,15 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForChild.getMemberDobForSecondaryInsurance());
         invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
 
+        // Add health profile details for child
         ExtentReportManager.getTest().log(Status.INFO, "Adding child's health profile details");
         invitePatientPage.clickHealthProfileCheckboxForPatientOne();
         invitePatientPage.clickAddMedicationButtonForPatientOne();
         Thread.sleep(500);
         invitePatientPage.selectMedicationForPatientOne(testDataForChild.getMedicationOne());
 
+        // Add allergies for child
+        ExtentReportManager.getTest().log(Status.INFO, "Adding allergies for child");
         invitePatientPage.clickAddAllergyButtonForPatientOne();
         invitePatientPage.setAllergySetOneForPatientOne(testDataForChild.getAllergyOne(), testDataForChild.getAllergyReactionOne(), testDataForChild.getDrugAllergyCategory());
         invitePatientPage.clickAddAllergyButtonForPatientOne();
@@ -169,6 +176,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         patientChart.searchPatient(testDataForChild.getFullName());
         Thread.sleep(2000);
         //Validating Mandatory details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in patient chart");
         softAssert.assertEquals(testDataForChild.getFullName(), patientChart.getNameInThePatientChart(),
                 "Child name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForChild.getZipCode(), patientChart.getZipcodeInPatientChart(),
@@ -176,11 +184,13 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getGuardianName(),
                 "Guardian name mismatch in Patient Chart");
         //Validating Referral clinic
+        ExtentReportManager.getTest().log(Status.INFO, "Validating referral clinic details in patient chart");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
         //Validating Additional details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating additional details in patient chart");
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForChild.getStreetAddressOne()),
                 "Account Holder's address one from test data is not found in the Patient Chart address");
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForChild.getStreetAddressTwo()),
@@ -196,6 +206,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getDobForMinor(), patientChart.getDOB(),
                 "DOB is mismatch for Account Holder in Patient Chart");
         //validating primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in patient chart");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance().toLowerCase(), patientChart.getPrimaryInsurance().toLowerCase(),
                 "Primary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), patientChart.getMemberNameInPrimaryInsurance(),
@@ -207,6 +218,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         System.out.println(" patientChart.getMemberDobInPrimaryInsurance() "+ patientChart.getMemberDobInPrimaryInsurance());
 
         //validating Secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance details in patient chart");
         softAssert.assertEquals(testDataForChild.getSecondaryInsurance().toLowerCase(), patientChart.getSecondaryInsurance().toLowerCase(),
                 "Secondary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForChild.getMemberNameForSecondaryInsurance(), patientChart.getMemberNameInSecondaryInsurance(),
@@ -217,6 +229,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
                 "Member DOB for Secondary Insurance mismatch in Patient Chart.");
 
         //validate health profile
+        ExtentReportManager.getTest().log(Status.INFO, "Validating health profile details in patient chart");
         patientChart.clickHealthProfileButton();
         Thread.sleep(1000);
         softAssert.assertEquals(testDataForChild.getAllergyOne().toLowerCase(), patientChart.getFirstDrugAllergyName().toLowerCase(),
@@ -235,7 +248,10 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set Password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        // Open YopMail and set password
+        ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail and setting password");
         newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
@@ -256,6 +272,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         homePagePatPortal.clickMyProfile();
         myProfilePage.clickDependents();
 
+        // Validate dependent details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating dependent details in My Profile");
         softAssert.assertEquals(testDataForChild.getFullName(), myProfilePage.getDependentOneName(),
                 "Dependent's name does not match the expected full name for Child.");
         softAssert.assertEquals("Child", myProfilePage.getDependentOneType(),
@@ -268,6 +286,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
                 "Child's height in the profile does not match in My Profile");
 
         // Validate Allergy
+        ExtentReportManager.getTest().log(Status.INFO, "Validating allergy details in My Profile");
         myProfilePage.clickHealthProfileLink();
         myProfilePage.clickHealthProfileOfChild();
         myProfilePage.clickAllergyHealthProfile();
@@ -282,6 +301,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
                 "Reaction Two mismatch in Health Profile");
 
         // Validate Medication
+        ExtentReportManager.getTest().log(Status.INFO, "Validating medication details in My Profile");
         myProfilePage.clickBackButtonInHealthProfile();
         myProfilePage.clickMedicationHealthProfile();
         softAssert.assertEquals(testDataForChild.getMedicationOne().toLowerCase(), myProfilePage.getMedicationOneValue().toLowerCase(),
@@ -295,6 +315,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal Visit Flow for the Child");
 
         // Go back to home page and start Dermatology Visit for the child
+        ExtentReportManager.getTest().log(Status.INFO, "Starting dermatology visit for child");
         myProfilePage.clickHomePageLink();
         homePagePatPortal.selectDermatologyVisit();
 
@@ -305,10 +326,13 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
 
+        // Validate selected patient
+        ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
         softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
         dermatologyVisitPage.clickContinueButton();
 
         // Validation of Primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance in dermatology visit");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),
                 "Primary insurance name is mismatched");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),
@@ -321,6 +345,7 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
                 "Relationship to patient is mismatched In Primary insurance");
 
         // Validation of Secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance in dermatology visit");
         softAssert.assertEquals(testDataForChild.getSecondaryInsurance(), dermatologyVisitPage.getSecondaryInsuranceName(),
                 "Secondary insurance name is mismatched");
         softAssert.assertEquals(testDataForChild.getMemberNameForSecondaryInsurance(), dermatologyVisitPage.getMemberNameInSecondaryInsurance(),
@@ -332,6 +357,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getRelationshipForSecondaryInsurance(), dermatologyVisitPage.getRelationshipInSecondaryInsurance(),
                 "Relationship to patient is mismatched In Secondary insurance");
 
+        // Continue and validate address
+        ExtentReportManager.getTest().log(Status.INFO, "Validating address details in dermatology visit");
         Thread.sleep(1000);
         dermatologyVisitPage.selectSelfPay();
         dermatologyVisitPage.clickContinueButtonAfterInsurance();
@@ -345,6 +372,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getZipCode(), dermatologyVisitPage.getZipCodeValue(),
                 "Zip Code mismatch on Dermatology Visit page.");
 
+        // Continue and validate basic info
+        ExtentReportManager.getTest().log(Status.INFO, "Validating basic info in dermatology visit");
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
@@ -359,6 +388,8 @@ public class TC_IP015AddChildWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForChild.getWeight(), dermatologyVisitPage.getWeightValue(),
                 "Weight mismatch on Dermatology Visit page.");
 
+        // Return to home page
+        ExtentReportManager.getTest().log(Status.INFO, "Returning to home page after dermatology visit");
         dermatologyVisitPage.clickBackArrowForVisitForm();
         Thread.sleep(1000);
         dermatologyVisitPage.clickBackArrowForHomePage();
