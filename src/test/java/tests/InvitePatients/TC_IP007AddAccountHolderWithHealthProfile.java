@@ -13,6 +13,8 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import Utils.ExtentReportManager;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -72,8 +74,9 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
 
     @Test(priority = 1)
     public void testInviteAccountHolderWithHealthProfile() throws InterruptedException {
-
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder with Health Profile");
         // Fill basic information
+        ExtentReportManager.getTest().log(Status.INFO, "Filling basic information for account holder");
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -81,27 +84,33 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
 
         // Add health profile details
-        //ADD MEDICATION
+        // ADD MEDICATION
+        ExtentReportManager.getTest().log(Status.INFO, "Adding medication to health profile");
         invitePatientPage.clickHealthProfileCheckBoxForAccountHolder();
         invitePatientPage.clickAddMedicationButtonForAccountHolder();
         Thread.sleep(1000);
         invitePatientPage.selectMedicationForAccountHolder(testDataForAccountHolder.getMedicationOne());
 
-        //ADD ALLERGY
+        // ADD ALLERGY
+        ExtentReportManager.getTest().log(Status.INFO, "Adding allergies to health profile");
         invitePatientPage.clickAddAllergyButtonForAccountHolder();
         invitePatientPage.setDrugAllergySetOne(testDataForAccountHolder.getAllergyOne(), testDataForAccountHolder.getAllergyReactionOne(), testDataForAccountHolder.getDrugAllergyCategory());
         invitePatientPage.clickAddAllergyButtonForAccountHolder();
         invitePatientPage.setEnvironmentAllergySetOne(testDataForAccountHolder.getAllergyTwo(), testDataForAccountHolder.getAllergyReactionTwo(), testDataForAccountHolder.getEnvironmentAllergyCategory());
 
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting invite patient form");
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
     }
 
     @Test(priority = 2)
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
-
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate Patient Chart Health Profile");
         switchToTab(1);
         patientChart.clickHealthProfileButton();
 
+        // Validate allergy and medication details in patient chart
+        ExtentReportManager.getTest().log(Status.INFO, "Validating allergy and medication details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), patientChart.getFirstDrugAllergyName().toLowerCase(),
                 "First allergy name in patient chart does not match in Health profile of Provider Portal");
         softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionOne(), patientChart.getFirstDrugReactionName(),
@@ -113,46 +122,53 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
 
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), patientChart.getFirstMedicationName().toLowerCase(),
                 "medication name in patient chart does not match in Health profile of Provider Portal");
+        ExtentReportManager.getTest().log(Status.INFO, "Patient chart health profile validated successfully");
         softAssert.assertAll();
     }
 
     @Test(priority = 3)
     public void testSetPasswordAndLoginToPortal() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set Password and Login to Patient Portal");
+        // Open YopMail and set password for invited patient
         newTabAndLaunchYopMail();
+        ExtentReportManager.getTest().log(Status.INFO, "Accessing YopMail to set password");
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully, logging into Patient Portal");
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Logged into Patient Portal successfully");
     }
 
     @Test(priority = 4, dependsOnMethods = "testSetPasswordAndLoginToPortal")
     public void testPatientPortalHealthProfileValidations() {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal Health Profile Validations");
         homePagePatPortal.clickMyProfile();
-
         myProfilePage.clickHealthProfileLink();
-
         myProfilePage.clickHealthProfileOfAccountHolder();
         myProfilePage.clickAllergyHealthProfile();
 
-        //validate allergy
+        // Validate allergy details in patient portal profile
+        ExtentReportManager.getTest().log(Status.INFO, "Validating allergy details in patient portal profile");
         softAssert.assertEquals(testDataForAccountHolder.getAllergyOne().toLowerCase(), myProfilePage.getDrugAllergyOneValue().toLowerCase(),
                 "Allergy One name in patient portal profile does not match in Health profile of My Profile");
         softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionOne().toLowerCase(), myProfilePage.getDrugReactionOneValue().toLowerCase(),
                 "Reaction One in patient portal profile does not match in Health profile of My Profile");
-
         softAssert.assertEquals(testDataForAccountHolder.getAllergyTwo().toLowerCase(), myProfilePage.getEnvironmentAllergyOneValue().toLowerCase(),
                 "Allergy Two name in patient portal profile does not match in Health profile of My Profile");
         softAssert.assertEquals(testDataForAccountHolder.getAllergyReactionTwo().toLowerCase(), myProfilePage.getEnvironmentReactionOneValue().toLowerCase(),
                 "Reaction Two name in patient portal profile does not match in Health profile of My Profile");
 
         myProfilePage.clickBackButtonInHealthProfile();
-        //validate medication
+        // Validate medication details in patient portal profile
         myProfilePage.clickMedicationHealthProfile();
+        ExtentReportManager.getTest().log(Status.INFO, "Validating medication details in patient portal profile");
         softAssert.assertEquals(testDataForAccountHolder.getMedicationOne().toLowerCase(), myProfilePage.getMedicationOneValue().toLowerCase(),
                 "MedicationOne name in patient portal profile does not match in Health profile of My Profile");
         myProfilePage.clickBackButtonInHealthProfile();
         myProfilePage.clickBackButtonInHealthProfile();
         myProfilePage.clickBackButtonInHealthProfile();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal health profile validated successfully");
         softAssert.assertAll();
     }
     @AfterClass()

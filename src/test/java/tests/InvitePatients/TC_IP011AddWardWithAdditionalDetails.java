@@ -13,6 +13,8 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import Utils.ExtentReportManager;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -72,22 +74,24 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
     }
     @Test(priority = 1)
     public void testAddWardAndAdditionalDetails() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Ward with Additional Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         dashBoardPage.clickInvitePatientLink();
+        ExtentReportManager.getTest().log(Status.INFO, "Navigating to Invite Patient page");
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
         invitePatientPage.setMobileAs(testDataForAccountHolder.getMobileNumber());
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
-
+        ExtentReportManager.getTest().log(Status.INFO, "Filling account holder details");
         // Add Ward fields
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
-
+        ExtentReportManager.getTest().log(Status.INFO, "Filling ward details and additional information");
         invitePatientPage.clickAdditionalInformationForPatientOne();
         invitePatientPage.setStreetAddressOneForPatientOne(testDataForWard.getStreetAddressOne());
         invitePatientPage.setStreetAddressTwoForPatientOne(testDataForWard.getStreetAddressTwo());
@@ -97,28 +101,29 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
         invitePatientPage.setInchForPatientOne(testDataForWard.getInch());
         invitePatientPage.setWeightForPatientOne(testDataForWard.getWeight());
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Submitted invite form for account holder and ward");
     }
     @Test(priority = 2)
     public void testPatientChartValidations() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         switchToTab(1);
         // Account Holder validations
+        ExtentReportManager.getTest().log(Status.INFO, "Validating account holder details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Account Holder name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getEmail(), patientChart.getEmailInThePatientChart(),
                 "Account Holder email mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Account Holder zip code mismatch in Patient Chart");
-
         // Search for Ward and validate
         patientChart.searchPatient(testDataForWard.getFullName());
-
-        //validation for Ward mandatory details
+        // Validation for Ward mandatory details
         Thread.sleep(2000);
+        ExtentReportManager.getTest().log(Status.INFO, "Validating ward mandatory and additional details in patient chart");
         softAssert.assertEquals(testDataForWard.getFullName(), patientChart.getNameInThePatientChart(),
                 "Ward name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForWard.getZipCode(), patientChart.getZipcodeInPatientChart(),
                 "Ward zip code mismatch in Patient Chart");
-
         // Additional details
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForWard.getStreetAddressOne()), "Account Holder's address one from test data is not found in the Patient Chart address");
         softAssert.assertTrue(patientChart.getAddress().contains(testDataForWard.getStreetAddressTwo()), "Account Holder's address two from test data is not found in the Patient Chart address");
@@ -128,17 +133,21 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
         softAssert.assertEquals(testDataForWard.getWeight(), patientChart.getWeight(), "Weight mismatch for Account Holder in Patient Chart");
         softAssert.assertEquals(testDataForWard.getDobForMajor(), patientChart.getDOB(), "DOB is mismatch for Account Holder in Patient Chart");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient chart details validated successfully");
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Setting password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalDependentValidation() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Validating patient portal profile details for dependent");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
         homePagePatPortal.clickMyProfile();
@@ -153,14 +162,14 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
                 "Ward's weight in the profile does not match in my profile");
         softAssert.assertEquals(testDataForWard.getWholeHeight(), myProfilePage.getDependentOneHeight(),
                 "Ward's height in the profile does not match in my profile");
-
         // Navigate to home page and Dermatology Visit
         myProfilePage.clickHomePageLink();
-
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal dependent profile validated successfully");
     }
     @Test(priority = 5)
     public void testDermatologyVisitValidation() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting Dermatology Visit validation for Ward");
         homePagePatPortal.selectDermatologyVisit();
         dermatologyVisitPage.clickSelectPatient();
         Thread.sleep(1000);
@@ -168,7 +177,7 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
-        //validate Ward name
+        // Validate Ward name
         softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard());
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
@@ -193,11 +202,11 @@ public class TC_IP011AddWardWithAdditionalDetails extends BaseTest {
                 "Height (Inches) mismatch on Dermatology Visit page.");
         softAssert.assertEquals(testDataForWard.getWeight(), dermatologyVisitPage.getWeightValue(),
                 "Weight mismatch on Dermatology Visit page.");
-
         dermatologyVisitPage.clickBackArrowForVisitForm();
         Thread.sleep(1000);
         dermatologyVisitPage.clickBackArrowForHomePage();
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Dermatology Visit validation for Ward completed successfully");
     }
     //@Test(priority = 6)
     public void testPrimaryCareVisitValidation() throws InterruptedException {

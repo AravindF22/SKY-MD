@@ -1,5 +1,6 @@
 package tests.InvitePatients;
 
+import Utils.ExtentReportManager;
 import Utils.TestData;
 import base.BaseTest;
 import org.testng.annotations.BeforeClass;
@@ -12,6 +13,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -72,9 +74,12 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
     }
     @Test(priority = 1)
     private void testAddChildAndInsuranceDetails() throws IOException, InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Ward with Insurance Details");
         //implicit wait
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
+        // Fill in account holder details
+        ExtentReportManager.getTest().log(Status.INFO, "Filling in account holder details");
         invitePatientPage = new InvitePatientPage(driver);
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
@@ -83,13 +88,16 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
 
-        // Add Child fields
+        // Add Ward as dependent with mandatory fields
+        ExtentReportManager.getTest().log(Status.INFO, "Adding Ward as dependent with mandatory details");
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
 
+        // Fill primary insurance details
+        ExtentReportManager.getTest().log(Status.INFO, "Filling primary insurance details for ward");
         invitePatientPage.checkInsuranceCheckboxForPatientOne();
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForWard.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForWard.getFullName());
@@ -97,65 +105,96 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForWard.getDobForMajor());
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForPrimaryInsurance());
 
-        //add patient
+        // Submit the invitation
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting the invitation for account holder and ward");
         invitePatientPage.clickAddPatientButton();
+
+        ExtentReportManager.getTest().log(Status.PASS, "Invitation submitted for account holder and ward with insurance details");
     }
 
     @Test(priority = 2)
     public void testVerifyInsuranceInPatientChart() throws IOException, InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Insurance in Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Switch to patient chart tab
+        ExtentReportManager.getTest().log(Status.INFO, "Switching to patient chart tab");
         switchToTab(1);
 
         //Page navigate to Patient chart
         //search for patient
+        ExtentReportManager.getTest().log(Status.INFO, "Searching for ward in patient chart");
         patientChart.searchPatient(testDataForWard.getFullName());
 
         //validating primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in patient chart");
         softAssert.assertEquals(testDataForWard.getPrimaryInsurance().toLowerCase(), patientChart.getPrimaryInsurance().toLowerCase(),
                 "Primary Insurance mismatch in Patient Chart.");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Primary Insurance matches");
         softAssert.assertEquals(testDataForWard.getMemberNameForPrimaryInsurance(), patientChart.getMemberNameInPrimaryInsurance(),
                 "Member Name for Primary Insurance mismatch in Patient Chart.");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member Name for Primary Insurance matches");
         softAssert.assertEquals(testDataForWard.getMemberIdForPrimaryInsurance(), patientChart.getMemberIdInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Patient Chart.");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member ID for Primary Insurance matches");
         softAssert.assertEquals(testDataForWard.getDobForMajor(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member DOB for Primary Insurance matches");
 
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.PASS, "All insurance details validated successfully in patient chart");
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set Password via YopMail");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        // Open YopMail and set password
+        ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail and setting password");
         newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully via YopMail");
     }
     @Test(priority = 4)
     public void testPatientPortalValidation() throws InterruptedException {
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal Insurance Validation");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 
         // Login to Patient Portal
+        ExtentReportManager.getTest().log(Status.INFO, "Logging in to Patient Portal");
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
+        // Start dermatology visit for ward
+        ExtentReportManager.getTest().log(Status.INFO, "Starting dermatology visit for ward");
         homePagePatPortal.selectDermatologyVisit();
         dermatologyVisitPage.clickSelectPatient();
         Thread.sleep(1000);
         dermatologyVisitPage.selectPatientAsWard();
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
+        // Validate selected patient
+        ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
         softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard());
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Selected patient name matches");
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
 
         //primary insurance validation
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance in dermatology visit");
         softAssert.assertEquals(testDataForWard.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),"Primary insurance name is mismatched");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Primary insurance name matches");
         softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),"Member name is mismatched In Primary insurance");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member name in primary insurance matches");
         softAssert.assertEquals(testDataForWard.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),"Member ID is mismatched In Primary insurance");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member ID in primary insurance matches");
         softAssert.assertEquals(testDataForWard.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),"Member DOB is mismatched In Primary insurance");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Member DOB in primary insurance matches");
         softAssert.assertEquals(testDataForWard.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),"Relationship to patient is mismatched In Primary insurance");
+        ExtentReportManager.getTest().log(Status.INFO, "Validated: Relationship to patient in primary insurance matches");
 
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "All insurance details validated successfully in patient portal");
     }
 }

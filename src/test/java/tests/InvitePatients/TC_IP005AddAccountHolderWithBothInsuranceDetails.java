@@ -10,6 +10,8 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import Utils.ExtentReportManager;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -67,8 +69,11 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
     }
     @Test(priority = 1)
     private void testInvitePatientWithInsurance() throws IOException, InterruptedException {
+        // Test: Invite patient with both primary and secondary insurance details
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite patient with both primary and secondary insurance details");
         //implicit wait
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        ExtentReportManager.getTest().log(Status.INFO, "Filling patient basic details");
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -77,6 +82,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
 
         //Primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Filling primary insurance details");
         invitePatientPage.clickPrimaryInsuranceCheckboxForAH();
         invitePatientPage.setPrimaryInsuranceDropdownForAH(testDataForAccountHolder.getPrimaryInsurance());
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
@@ -85,6 +91,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
         //Secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Filling secondary insurance details");
         invitePatientPage.clickSecondaryInsuranceCheckbox();
         invitePatientPage.setSecondaryInsuranceDropdownForAH(testDataForAccountHolder.getSecondaryInsurance());
         invitePatientPage.setMemberNameInSecondaryInsurance(testDataForAccountHolder.getMemberNameForSecondaryInsurance());
@@ -93,14 +100,19 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
 
         //add patient
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting invite for patient with both insurances");
         invitePatientPage.clickAddPatientButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
     }
     @Test(priority = 2)
     private void testValidatePatientAndInsuranceInChart() throws InterruptedException {
+        // Test: Validate patient and insurance details in Provider Portal's patient chart
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate patient and insurance details in Provider Portal's patient chart");
         Thread.sleep(2000);
         switchToTab(1);
 
         //validating mandatory details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory patient details in chart");
         softAssert.assertEquals((testDataForAccountHolder.getFullName()), patientChart.getNameInThePatientChart(),
                 "Name didn't matched in the Patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), patientChart.getEmailInThePatientChart().toLowerCase(),
@@ -113,6 +125,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
                 "Zip Code mismatch in Patient Chart.");
 
         //validating primary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in chart");
         softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), patientChart.getPrimaryInsurance().toLowerCase(),
                 "Primary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), patientChart.getMemberNameInPrimaryInsurance(),
@@ -123,6 +136,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
 
         //validate secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance details in chart");
         softAssert.assertEquals(testDataForAccountHolder.getSecondaryInsurance().toLowerCase(), patientChart.getSecondaryInsurance().toLowerCase(),
                 "Secondary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberNameForSecondaryInsurance(), patientChart.getMemberNameInSecondaryInsurance(),
@@ -132,28 +146,39 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getMemberDobForSecondaryInsurance(), patientChart.getMemberDobInSecondaryInsurance(),
                 "Member DOB for Secondary Insurance mismatch in Patient Chart.");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient and insurance details validated successfully in Provider Portal's patient chart");
     }
     @Test(priority = 3)
     private void testSetPasswordViaYopMail() throws InterruptedException {
+        // Test: Set password for invited patient via YopMail
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Set password for invited patient via YopMail");
         //Navigate to YopMail
         newTabAndLaunchYopMail();
-        
+        ExtentReportManager.getTest().log(Status.INFO, "Accessing YopMail and clicking set password mail");
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
 
         //Navigate to setPassword page
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4 , dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalValidations(){
+        // Test: Validate insurance details in Patient Portal after login
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate insurance details in Patient Portal after login");
         //navigate to login page
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Logged into Patient Portal");
 
         homePagePatPortal.selectDermatologyVisit();
+        ExtentReportManager.getTest().log(Status.INFO, "Selected Dermatology Visit");
 
         dermatologyVisitPage.clickSelectPatient();
         dermatologyVisitPage.clickSelectPatientAsMySelf();
+        ExtentReportManager.getTest().log(Status.INFO, "Selected patient as self for visit");
 
+        // Validate primary insurance details
+        ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in Dermatology Visit page");
         softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), dermatologyVisitPage.getPrimaryInsuranceName().toLowerCase(),
                 "Primary Insurance name mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),
@@ -166,6 +191,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
                 "Relationship for Primary Insurance mismatch in Dermatology Visit page.");
 
         //secondary insurance validation
+        ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance details in Dermatology Visit page");
         softAssert.assertEquals(testDataForAccountHolder.getSecondaryInsurance().toLowerCase(), dermatologyVisitPage.getSecondaryInsuranceName().toLowerCase(),
                 "Secondary Insurance name mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberNameForSecondaryInsurance(), dermatologyVisitPage.getMemberNameInSecondaryInsurance(),
@@ -177,13 +203,13 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getRelationshipForSecondaryInsurance(), dermatologyVisitPage.getRelationshipInSecondaryInsurance(),
                 "Relationship for Secondary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient portal insurance details validated successfully");
 
         //Navigate to Home page
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForVisitForm();
         dermatologyVisitPage.clickBackArrowForHomePage();
-//        dermatologyVisitPage.clickDeleteVisitButton();
-//        dermatologyVisitPage.setConfirmForDeleteVisit();
+
     }
 
     @AfterClass

@@ -13,6 +13,8 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
+import Utils.ExtentReportManager;
+import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -69,7 +71,11 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
     @Test(priority = 1)
     public void testInviteAccountHolderAndWard() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Log the start of the test
+        ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Ward with Mandatory Details");
 
+        // Fill account holder details
+        ExtentReportManager.getTest().log(Status.INFO, "Filling Account Holder details");
         invitePatientPage.setFirstNameAs(testDataForAccountHolder.getFname());
         invitePatientPage.setLastNameAs(testDataForAccountHolder.getLname());
         invitePatientPage.setEmailAs(testDataForAccountHolder.getEmail());
@@ -78,22 +84,28 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
         invitePatientPage.selectProviderNameAs(testDataForAccountHolder.getProviderName());
 
         // Add ward fields
+        ExtentReportManager.getTest().log(Status.INFO, "Adding Ward (legal guardian of 18+ years) details");
         invitePatientPage.clickAddAdditionalPatientBtnForPatientOne();
         invitePatientPage.selectPatientTypeForPatientOne("Ward (legal guardian of 18+ years)");
         invitePatientPage.setFirstNameForPatientOne(testDataForWard.getFname());
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
 
+        // Submit the invite
+        ExtentReportManager.getTest().log(Status.INFO, "Submitting invite for Account Holder and Ward");
         invitePatientPage.clickAddPatientButton();
     }
 
     @Test(priority = 2, dependsOnMethods = "testInviteAccountHolderAndWard")
     public void testPatientChartValidations() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Switch to patient chart tab
+        ExtentReportManager.getTest().log(Status.INFO, "Switching to Patient Chart tab and validating details");
         switchToTab(1);
         patientChart = new PatientChart(driver);
 
         // Account Holder validations
+        ExtentReportManager.getTest().log(Status.INFO, "Validating Account Holder details in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),
                 "Account Holder name mismatch in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getEmail(), patientChart.getEmailInThePatientChart(),
@@ -102,6 +114,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
                 "Account Holder zip code mismatch in Patient Chart");
 
         // Search for Ward and validate
+        ExtentReportManager.getTest().log(Status.INFO, "Searching and validating Ward details in Patient Chart");
         patientChart.searchPatient(testDataForWard.getFullName());
         Thread.sleep(2000);
         softAssert.assertEquals(testDataForWard.getFullName(), patientChart.getNameInThePatientChart(),
@@ -111,22 +124,27 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getGuardianName(),
                 "Guardian name mismatch in Patient Chart");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient Chart validations completed");
     }
 
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(2000);
+        // Open YopMail and set password for invited patient
+        ExtentReportManager.getTest().log(Status.INFO, "Opening YopMail to set password for invited Account Holder");
         newTabAndLaunchYopMail();
         yopMail.clickSetPasswordMail(testDataForAccountHolder.getEmail());
         switchToTab(3);
         setPasswordPage.setPassword("Welcome@123");
+        ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited Account Holder");
     }
 
     @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
     public void testPatientPortalDependentValidation() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
+        // Log in to Patient Portal and validate dependent
+        ExtentReportManager.getTest().log(Status.INFO, "Logging into Patient Portal and validating dependent details");
         loginPagePatientPortal = new PatientPortalLoginPage(driver);
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
@@ -140,6 +158,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
         softAssert.assertEquals("Ward", myProfilePage.getDependentOneType(),
                 "Dependent's type is not 'Ward' as expected.");
         softAssert.assertAll();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient Portal dependent validation completed");
     }
     @AfterClass
     private void patientAndProviderPortalLogout() throws InterruptedException {
