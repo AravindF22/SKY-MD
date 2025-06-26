@@ -61,38 +61,77 @@ public class PatientChart extends BasePage {
             return false;
         }
     }
-    public String getNameInTopBar(){
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(nameInTopBar));
-        return element.getText();
+    public String getNameInTopBar() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(nameInTopBar));
+            return element.getText();
+        } catch (Exception e) {
+            System.err.println("Failed to get name in top bar: " + e.getMessage());
+            return null;
+        }
     }
-    public String getNameInThePatientChart(){
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(nameInThePatientChart));
-        return element.getText();
+
+    public String getNameInThePatientChart() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(nameInThePatientChart));
+            return element.getText();
+        } catch (Exception e) {
+            System.err.println("Failed to get name in patient chart: " + e.getMessage());
+            return null;
+        }
     }
-    public String getEmailInThePatientChart(){
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(emailInThePatientChart));
-        return element.getText();
+
+    public String getEmailInThePatientChart() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(emailInThePatientChart));
+            return element.getText();
+        } catch (Exception e) {
+            System.err.println("Failed to get email in patient chart: " + e.getMessage());
+            return null;
+        }
     }
-    public String getMobileInPatientChart(){
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(mobileInPatientChart));
-        return element.getText().replaceAll("[^$0-9]", "");
+
+    public String getMobileInPatientChart() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(mobileInPatientChart));
+            return element.getText().replaceAll("[^$0-9]", "");
+        } catch (Exception e) {
+            System.err.println("Failed to get mobile number in patient chart: " + e.getMessage());
+            return null;
+        }
     }
-    public String getZipcodeInPatientChart(){
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(zipcodeInPatientChart));
-        String[] arrayOfAddress = element.getText().split("\\s");
-        return arrayOfAddress[arrayOfAddress.length-1];
+
+    public String getZipcodeInPatientChart() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(zipcodeInPatientChart));
+            String[] arrayOfAddress = element.getText().split("\\s");
+            return arrayOfAddress[arrayOfAddress.length - 1];
+        } catch (Exception e) {
+            System.err.println("Failed to get zip code in patient chart: " + e.getMessage());
+            return null;
+        }
     }
 
     public String getProviderNameFromReferralSection() {
-        WebElement providerNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInReferralClinic));
-        String fullText = providerNameElement.getText(); // e.g., "Provider Name: John Doe"
-        return fullText.replace("Provider Name:", "").trim();
+        try {
+            WebElement providerNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInReferralClinic));
+            String fullText = providerNameElement.getText(); // e.g., "Provider Name: John Doe"
+            return fullText.replace("Provider Name:", "").trim();
+        } catch (Exception e) {
+            System.err.println("Failed to get provider name in referral section: " + e.getMessage());
+            return null;
+        }
     }
 
     public String getClinicNameFromReferralSection() {
-        WebElement clinicNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(clinicNameInReferralClinic));
-        String fullText = clinicNameElement.getText(); // e.g., "Name: Clinic ABC"
-        return fullText.replace("Name:", "").trim();
+        try {
+            WebElement clinicNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(clinicNameInReferralClinic));
+            String fullText = clinicNameElement.getText(); // e.g., "Name: Clinic ABC"
+            return fullText.replace("Name:", "").trim();
+        } catch (Exception e) {
+            System.err.println("Failed to get clinic name in referral section: " + e.getMessage());
+            return null;
+        }
     }
 
     // Action method to enter text in the search field
