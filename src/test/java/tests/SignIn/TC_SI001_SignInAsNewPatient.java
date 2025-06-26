@@ -14,7 +14,6 @@ import pages.PatientPortal.PatientPortalHomePage;
 import pages.PatientPortal.PatientPortalLoginPage;
 import pages.PatientPortal.PatientPortalMyProfilePage;
 import pages.PatientPortal.SignInPage;
-import pages.ProviderPortal.PatientChart;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -40,7 +39,6 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
-
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -89,9 +87,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
     @AfterClass
     public void patientAndProviderPortalLogout() throws InterruptedException {
         // Navigate to myProfile and logout
-
         patientPortalHomePage.clickMyProfile();
-
         myProfilePage = new PatientPortalMyProfilePage(driver);
         myProfilePage.clickSettingsLink();
         myProfilePage.clickLogoutButton();

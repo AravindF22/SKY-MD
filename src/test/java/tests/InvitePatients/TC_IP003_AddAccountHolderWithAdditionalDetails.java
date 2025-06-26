@@ -22,7 +22,7 @@ import java.time.Duration;
  * Description: Invite an account holder with additional details (address, gender, height, weight, DOB)
  *              and verify that all additional information is correctly displayed in the patient chart and patient portal profile.
  */
-public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
+public class TC_IP003_AddAccountHolderWithAdditionalDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -102,6 +102,7 @@ public class TC_IP004AddAccountHolderWithAdditionalDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         // Mandatory details
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Name didn't match in the Patient chart");

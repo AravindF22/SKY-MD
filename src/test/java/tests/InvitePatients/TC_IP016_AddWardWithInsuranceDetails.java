@@ -25,7 +25,7 @@ import java.time.Duration;
  * Description: Invite an account holder and add a ward (legal guardian of 18+ years) with insurance details,
  *              then verify that all insurance information is correctly displayed in the patient chart and patient portal profile for the ward.
  */
-public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
+public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -123,6 +123,7 @@ public class TC_IP014AddWardWithInsuranceDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         //Page navigate to Patient chart
         //search for patient
         ExtentReportManager.getTest().log(Status.INFO, "Searching for ward in patient chart");

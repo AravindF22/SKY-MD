@@ -25,7 +25,7 @@ import java.time.Duration;
  * Description: Invite an account holder and add a ward (legal guardian of 18+ years) with mandatory details,
  *              then verify that all information is correctly displayed in the patient chart and patient portal profile.
  */
-public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
+public class TC_IP013_AddWardWithMandatoryDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -107,6 +107,7 @@ public class TC_IP006AddWardWithMandatoryDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         // Account Holder validations
         ExtentReportManager.getTest().log(Status.INFO, "Validating Account Holder details in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),

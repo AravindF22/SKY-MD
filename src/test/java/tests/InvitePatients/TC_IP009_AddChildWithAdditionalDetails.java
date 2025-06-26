@@ -25,7 +25,7 @@ import java.time.Duration;
  * Description: Invite an account holder and add a child with additional details (address, gender, height, weight, DOB),
  *              then verify that all additional information is correctly displayed in the patient chart and patient portal profile for the child.
  */
-public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
+public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -113,6 +113,7 @@ public class TC_IP010AddChildWithAdditionalDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         // Account Holder validations
         ExtentReportManager.getTest().log(Status.INFO, "Validating AH details in Patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),

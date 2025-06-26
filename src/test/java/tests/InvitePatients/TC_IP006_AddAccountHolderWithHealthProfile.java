@@ -25,7 +25,7 @@ import java.time.Duration;
  * Description: Invite an account holder with health profile details (medications, allergies),
  *              and verify that all health profile information is correctly displayed in the patient chart and patient portal profile.
  */
-public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
+public class TC_IP006_AddAccountHolderWithHealthProfile extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -112,6 +112,7 @@ public class TC_IP007AddAccountHolderWithHealthProfile extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         patientChart.clickHealthProfileButton();
 
         // Validate allergy and medication details in patient chart

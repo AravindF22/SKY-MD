@@ -25,7 +25,7 @@ import java.time.Duration;
  * Description: Invite an account holder with all possible details (referral, additional info, insurance, health profile),
  *              and verify that all information is correctly displayed in the patient chart and patient portal profile.
  */
-public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
+public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -153,6 +153,7 @@ public class TC_IP012AddAccountHolderWithAllDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Validating Mandatory details in Patient Chart");
         //Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),

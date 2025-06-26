@@ -20,7 +20,7 @@ import pages.YopMail;
 import java.io.IOException;
 import java.time.Duration;
 
-public class TC_IP018AddWardWithHealthProfile extends BaseTest {
+public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -136,6 +136,7 @@ public class TC_IP018AddWardWithHealthProfile extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         //Page navigate to Patient chart
         //search for patient
         ExtentReportManager.getTest().log(Status.INFO, "Searching for Ward in patient chart");

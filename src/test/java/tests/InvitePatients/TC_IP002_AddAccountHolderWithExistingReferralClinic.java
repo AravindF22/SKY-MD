@@ -19,7 +19,7 @@ import java.time.Duration;
  * Description: Invite an account holder with an existing referral clinic
  *              and verify that the referral section in the patient chart displays the correct provider and clinic details.
  */
-public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest{
+public class TC_IP002_AddAccountHolderWithExistingReferralClinic extends BaseTest{
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public TestData testDataForAccountHolder;
@@ -101,6 +101,7 @@ public class TC_IP002AddAccountHolderWithExistingReferralClinic extends BaseTest
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying Referral details in Provider Portal");
         // Navigate to Patient Chart and verify referral details
         String expectedProviderName = testDataForProvider.getFullName();

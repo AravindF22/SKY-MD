@@ -22,7 +22,7 @@ import java.time.Duration;
  *              then verify the dependent and visit flow in the Patient Portal,
  *              including validations in the patient chart.
  */
-public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
+public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -117,6 +117,7 @@ public class TC_IP003AddChildWithMandatoryDetails extends BaseTest{
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         // Validate account holder details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Validating account holder details in patient chart");
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),

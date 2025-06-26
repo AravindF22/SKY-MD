@@ -22,7 +22,7 @@ import java.time.Duration;
  * Description: Invite an account holder with both primary and secondary insurance details
  *              and verify that all insurance information is correctly displayed in the patient chart and patient portal.
  */
-public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
+public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest {
     public LoginPage loginPage;
     public DashBoardPage dashBoardPage;
     public InvitePatientPage invitePatientPage;
@@ -115,6 +115,7 @@ public class TC_IP005AddAccountHolderWithBothInsuranceDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
+        Thread.sleep(3000);
         //validating mandatory details
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory patient details in chart");
         softAssert.assertEquals((testDataForAccountHolder.getFullName()), patientChart.getNameInThePatientChart(),
