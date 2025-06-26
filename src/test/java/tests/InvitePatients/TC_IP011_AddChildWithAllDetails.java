@@ -125,7 +125,9 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForChild.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForAccountHolder.getFullName()); // adding parent name as primary insurance member name
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForPrimaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForChild.getDobForMajor());
+        Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
         // Fill secondary insurance
@@ -134,7 +136,9 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForChild.getSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForChild.getMemberNameForSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForChild.getMemberDobForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
 
         // Add health profile details for child

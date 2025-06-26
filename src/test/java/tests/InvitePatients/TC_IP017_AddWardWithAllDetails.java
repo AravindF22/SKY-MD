@@ -124,7 +124,9 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForWard.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForWard.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForWard.getMemberIdForPrimaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForWard.getDobForMajor());
+        Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForPrimaryInsurance());
 
         // Fill secondary insurance
@@ -133,7 +135,9 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForWard.getSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForWard.getMemberNameForSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberIdForPatientOne(testDataForWard.getMemberIdForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForWard.getMemberDobForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForSecondaryInsurance());
 
         // Add health profile details for ward

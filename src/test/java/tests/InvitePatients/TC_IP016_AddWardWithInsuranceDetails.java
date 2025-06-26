@@ -104,8 +104,21 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForWard.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForWard.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForWard.getMemberIdForPrimaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForWard.getDobForMajor());
+        Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForPrimaryInsurance());
+
+        // Fill secondary insurance
+        ExtentReportManager.getTest().log(Status.INFO, "Filling secondary insurance details for ward");
+        invitePatientPage.checkSecondaryInsuranceForPatientOne();
+        invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForWard.getSecondaryInsurance());
+        invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForWard.getMemberNameForSecondaryInsurance());
+        invitePatientPage.setSecondaryInsuranceMemberIdForPatientOne(testDataForWard.getMemberIdForSecondaryInsurance());
+        Thread.sleep(1000);
+        invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForWard.getMemberDobForSecondaryInsurance());
+        Thread.sleep(1000);
+        invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForSecondaryInsurance());
 
         // Submit the invitation
         invitePatientPage.clickAddPatientButton();

@@ -113,7 +113,9 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceDropdownForAH(testDataForAccountHolder.getPrimaryInsurance());
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
         invitePatientPage.setMemberIdInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberIdForPrimaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
+        Thread.sleep(1000);
         invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
         ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Secondary insurance");
@@ -122,7 +124,9 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setSecondaryInsuranceDropdownForAH(testDataForAccountHolder.getSecondaryInsurance());
         invitePatientPage.setMemberNameInSecondaryInsurance(testDataForAccountHolder.getMemberNameForSecondaryInsurance());
         invitePatientPage.setMemberIdInSecondaryInsurance(testDataForAccountHolder.getMemberIdForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setMemberDobInSecondaryInsurance(testDataForAccountHolder.getMemberDobForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setRelationshipInSecondaryInsurance(testDataForAccountHolder.getRelationshipForSecondaryInsurance());
 
         ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Add health profile details");

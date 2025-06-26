@@ -104,14 +104,18 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
         invitePatientPage.selectPrimaryInsuranceForPatientOne(testDataForChild.getPrimaryInsurance());
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForAccountHolder.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForPrimaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForAccountHolder.getDobForMajor());
+        Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
         invitePatientPage.checkSecondaryInsuranceForPatientOne();
         invitePatientPage.selectSecondaryInsuranceForPatientOne(testDataForChild.getSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberNameForPatientOne(testDataForChild.getMemberNameForSecondaryInsurance());
         invitePatientPage.setSecondaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.setSecondaryInsuranceMemberDOBForPatientOne(testDataForChild.getMemberDobForSecondaryInsurance());
+        Thread.sleep(1000);
         invitePatientPage.selectSecondaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForSecondaryInsurance());
 
         // Submit patient invitation
