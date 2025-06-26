@@ -76,8 +76,7 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
-
+        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
 
 // Patient Name
