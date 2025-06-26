@@ -5,10 +5,6 @@ on:
     # Runs every day at 9:30 AM IST (4:00 AM UTC, IST is UTC+5:30)
     - cron: '0 4 * * *'
 
-push:
-  branches:
-    - master
-
   workflow_dispatch:
 
 jobs:
