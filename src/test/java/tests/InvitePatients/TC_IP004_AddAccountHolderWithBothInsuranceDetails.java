@@ -89,7 +89,7 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
         invitePatientPage.setMemberIdInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberIdForPrimaryInsurance());
         Thread.sleep(1000);
-        invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
+        invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberDobForPrimaryInsurance());
         Thread.sleep(1000);
         invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
@@ -141,7 +141,7 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
                 "Member Name for Primary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberIdForPrimaryInsurance(), patientChart.getMemberIdInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Patient Chart.");
-        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), patientChart.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
 
         //validate secondary insurance
