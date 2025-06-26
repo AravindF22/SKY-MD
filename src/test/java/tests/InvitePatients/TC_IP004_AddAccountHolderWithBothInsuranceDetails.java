@@ -194,7 +194,7 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
                 "Member Name for Primary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Dermatology Visit page.");
-        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),
                 "Relationship for Primary Insurance mismatch in Dermatology Visit page.");

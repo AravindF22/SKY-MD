@@ -126,7 +126,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForAccountHolder.getFullName()); // adding parent name as primary insurance member name
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForChild.getMemberIdForPrimaryInsurance());
         Thread.sleep(1000);
-        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForChild.getDobForMajor());
+        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForAccountHolder.getMemberDobForPrimaryInsurance());
         Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForChild.getRelationshipForPrimaryInsurance());
 
@@ -221,9 +221,8 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
                 "Member Name for Primary Insurance mismatch in Patient Chart."); // Ah name for childs primary insurance member name
         softAssert.assertEquals(testDataForChild.getMemberIdForPrimaryInsurance(), patientChart.getMemberIdInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Patient Chart.");
-        softAssert.assertEquals(testDataForChild.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
-        System.out.println(" patientChart.getMemberDobInPrimaryInsurance() "+ patientChart.getMemberDobInPrimaryInsurance());
 
         //validating Secondary insurance
         ExtentReportManager.getTest().log(Status.INFO, "Validating secondary insurance details in patient chart");
@@ -345,7 +344,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
                 "Member name is mismatched In Primary insurance");
         softAssert.assertEquals(testDataForChild.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),
                 "Member ID is mismatched In Primary insurance");
-        softAssert.assertEquals(testDataForChild.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
                 "Member DOB is mismatched In Primary insurance");
         softAssert.assertEquals(testDataForChild.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),
                 "Relationship to patient is mismatched In Primary insurance");

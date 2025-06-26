@@ -125,7 +125,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         invitePatientPage.setPrimaryInsuranceMemberName(testDataForWard.getFullName());
         invitePatientPage.setPrimaryInsuranceMemberIdForPatientOne(testDataForWard.getMemberIdForPrimaryInsurance());
         Thread.sleep(1000);
-        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForWard.getDobForMajor());
+        invitePatientPage.setPrimaryInsuranceMemberDOBForPatientOne(testDataForWard.getMemberDobForPrimaryInsurance());
         Thread.sleep(1000);
         invitePatientPage.selectPrimaryInsuranceRelationshipForPatientOne(testDataForWard.getRelationshipForPrimaryInsurance());
 
