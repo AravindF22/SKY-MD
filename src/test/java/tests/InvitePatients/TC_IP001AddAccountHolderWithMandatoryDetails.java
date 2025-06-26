@@ -78,11 +78,37 @@ public class TC_IP001AddAccountHolderWithMandatoryDetails extends BaseTest {
         }
         ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
 
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(), "Patient name mismatch in chart");
-        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), patientChart.getEmailInThePatientChart().toLowerCase(), "Email mismatch");
-        softAssert.assertEquals(testDataForAccountHolder.getFullName().toUpperCase(), patientChart.getNameInTopBar(), "Top bar name mismatch");
-        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), patientChart.getMobileInPatientChart(), "Mobile number mismatch");
-        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), patientChart.getZipcodeInPatientChart(), "Zip code mismatch");
+        ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
+
+// Patient Name
+        String actualName = patientChart.getNameInThePatientChart();
+        String expectedName = testDataForAccountHolder.getFullName();
+        ExtentReportManager.getTest().log(Status.INFO, "Patient Name - Expected: " + expectedName + ", Actual: " + actualName);
+        softAssert.assertEquals(actualName, expectedName, "Patient name mismatch in chart");
+
+// Email
+        String actualEmail = patientChart.getEmailInThePatientChart().toLowerCase();
+        String expectedEmail = testDataForAccountHolder.getEmail().toLowerCase();
+        ExtentReportManager.getTest().log(Status.INFO, "Email - Expected: " + expectedEmail + ", Actual: " + actualEmail);
+        softAssert.assertEquals(actualEmail, expectedEmail, "Email mismatch");
+
+// Top Bar Name
+        String actualTopBarName = patientChart.getNameInTopBar();
+        String expectedTopBarName = testDataForAccountHolder.getFullName().toUpperCase();
+        ExtentReportManager.getTest().log(Status.INFO, "Top Bar Name - Expected: " + expectedTopBarName + ", Actual: " + actualTopBarName);
+        softAssert.assertEquals(actualTopBarName, expectedTopBarName, "Top bar name mismatch");
+
+// Mobile Number
+        String actualMobile = patientChart.getMobileInPatientChart();
+        String expectedMobile = testDataForAccountHolder.getMobileNumber();
+        ExtentReportManager.getTest().log(Status.INFO, "Mobile Number - Expected: " + expectedMobile + ", Actual: " + actualMobile);
+        softAssert.assertEquals(actualMobile, expectedMobile, "Mobile number mismatch");
+
+// Zip Code
+        String actualZip = patientChart.getZipcodeInPatientChart();
+        String expectedZip = testDataForAccountHolder.getZipCode();
+        ExtentReportManager.getTest().log(Status.INFO, "Zip Code - Expected: " + expectedZip + ", Actual: " + actualZip);
+        softAssert.assertEquals(actualZip, expectedZip, "Zip code mismatch");
         ExtentReportManager.getTest().log(Status.INFO, "Patient chart validated successfully");
         softAssert.assertAll();
     }
