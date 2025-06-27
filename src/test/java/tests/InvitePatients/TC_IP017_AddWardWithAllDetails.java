@@ -155,7 +155,69 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         // Submit the invitation
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "The invitation for account holder and Ward Submitted successfully");
+        // Log account holder details in HTML format
+        String accountHolderDetailsHtml = "<b>Entered Account Holder Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Mobile: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName();
+        ExtentReportManager.getTest().info(accountHolderDetailsHtml);
 
+        // Log Mandatory Details for Ward
+        String wardMandatoryDetailsHtml = "<b>Entered Ward’s Mandatory Details:</b><br>" +
+                "First Name: " + testDataForWard.getFname() + "<br>" +
+                "Last Name: " + testDataForWard.getLname() + "<br>" +
+                "Zipcode: " + testDataForWard.getZipCode() + "<br>" ;
+        ExtentReportManager.getTest().info(wardMandatoryDetailsHtml);
+
+        // Log Referral Clinic Details for Ward
+        String wardReferralHtml = "<b>Entered Ward’s Referral Clinic Details:</b><br>" +
+                "Provider First Name: " + testDataForProvider.getFname() + "<br>" +
+                "Provider Last Name: " + testDataForProvider.getLname() + "<br>" +
+                "Clinic State: " + testDataForProvider.getReferralClinicState() + "<br>" +
+                "Clinic: " + testDataForProvider.getReferralClinic();
+        ExtentReportManager.getTest().info(wardReferralHtml);
+
+        // Log Additional Info for Ward
+        String wardAdditionalInfoHtml = "<b>Entered Ward’s Additional Information:</b><br>" +
+                "Street Address 1: " + testDataForWard.getStreetAddressOne() + "<br>" +
+                "Street Address 2: " + testDataForWard.getStreetAddressTwo() + "<br>" +
+                "Gender: " + testDataForWard.getGender() + "<br>" +
+                "Height: " + testDataForWard.getFeet() + " ft " + testDataForWard.getInch() + " in<br>" +
+                "Weight: " + testDataForWard.getWeight() + " kg<br>" +
+                "DOB: " + testDataForWard.getDobForMajor();
+        ExtentReportManager.getTest().info(wardAdditionalInfoHtml);
+
+        // Log Primary Insurance for Ward
+        String wardPrimaryInsuranceHtml = "<b>Entered Ward’s Primary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForWard.getPrimaryInsurance() + "<br>" +
+                "Member Name: " + testDataForWard.getFullName() + "<br>" +
+                "Member ID: " + testDataForWard.getMemberIdForPrimaryInsurance() + "<br>" +
+                "DOB: " + testDataForWard.getMemberDobForPrimaryInsurance() + "<br>" +
+                "Relationship: " + testDataForWard.getRelationshipForPrimaryInsurance();
+        ExtentReportManager.getTest().info(wardPrimaryInsuranceHtml);
+
+        // Log Secondary Insurance for Ward
+        String wardSecondaryInsuranceHtml = "<b>Entered Ward’s Secondary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForWard.getSecondaryInsurance() + "<br>" +
+                "Member Name: " + testDataForWard.getMemberNameForSecondaryInsurance() + "<br>" +
+                "Member ID: " + testDataForWard.getMemberIdForSecondaryInsurance() + "<br>" +
+                "DOB: " + testDataForWard.getMemberDobForSecondaryInsurance() + "<br>" +
+                "Relationship: " + testDataForWard.getRelationshipForSecondaryInsurance();
+        ExtentReportManager.getTest().info(wardSecondaryInsuranceHtml);
+
+        // Log Health Profile for Ward
+        String wardHealthProfileHtml = "<b>Entered Ward’s Health Profile Details:</b><br>" +
+                "Medication: " + testDataForWard.getMedicationOne() + "<br>" +
+                "Drug Allergy: " + testDataForWard.getAllergyOne() + " (Reaction: " +
+                testDataForWard.getAllergyReactionOne() + ", Category: " +
+                testDataForWard.getDrugAllergyCategory() + ")<br>" +
+                "Environmental Allergy: " + testDataForWard.getAllergyTwo() + " (Reaction: " +
+                testDataForWard.getAllergyReactionTwo() + ", Category: " +
+                testDataForWard.getEnvironmentAllergyCategory() + ")";
+        ExtentReportManager.getTest().info(wardHealthProfileHtml);
     }
     @Test(priority = 2)
     public void testPatientChartValidations() throws InterruptedException {

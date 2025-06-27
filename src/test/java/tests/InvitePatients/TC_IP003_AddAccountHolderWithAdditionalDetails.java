@@ -89,10 +89,23 @@ public class TC_IP003_AddAccountHolderWithAdditionalDetails extends BaseTest {
         invitePatientPage.setHeightInches(testDataForAccountHolder.getInch());
         invitePatientPage.setWeight(testDataForAccountHolder.getWeight());
         invitePatientPage.setDOB(testDataForAccountHolder.getDobForMajor());
-
         ExtentReportManager.getTest().log(Status.INFO, "Submitting invite for account holder");
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
+        String patientDetailsHtml = "<b>Entered Patient Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Phone: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName() + "<br>" +
+                "Street Address 1: " + testDataForAccountHolder.getStreetAddressOne() + "<br>" +
+                "Street Address 2: " + testDataForAccountHolder.getStreetAddressTwo() + "<br>" +
+                "Gender: " + testDataForAccountHolder.getGender() + "<br>" +
+                "Height: " + testDataForAccountHolder.getFeet() + " ft " + testDataForAccountHolder.getInch() + " in<br>" +
+                "Weight: " + testDataForAccountHolder.getWeight() + " lbs<br>" +
+                "DOB: " + testDataForAccountHolder.getDobForMajor();
+        ExtentReportManager.getTest().info(patientDetailsHtml);
     }
     @Test(priority = 2)
     public void testValidatePatientChartDetails() throws InterruptedException {
@@ -120,8 +133,8 @@ public class TC_IP003_AddAccountHolderWithAdditionalDetails extends BaseTest {
         softAssert.assertEquals(testDataForAccountHolder.getWholeHeight(), patientChart.getHeight(), "Height mismatch for Account Holder in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getWeight(), patientChart.getWeight(), "Weight mismatch for Account Holder in Patient Chart");
         softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), patientChart.getDOB(), "DOB is mismatch for Account Holder in Patient Chart");
-        softAssert.assertAll();
         ExtentReportManager.getTest().log(Status.INFO, "Patient chart details validated successfully");
+        softAssert.assertAll();
     }
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {
@@ -165,6 +178,7 @@ public class TC_IP003_AddAccountHolderWithAdditionalDetails extends BaseTest {
         dermatologyVisitPage.clickSelectPatient();
         dermatologyVisitPage.clickSelectPatientAsMySelf();
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
+        Thread.sleep(500);
         dermatologyVisitPage.clickContinueButtonAfterInsurance();
 
         // Validate address and zipcode on Dermatology Visit page

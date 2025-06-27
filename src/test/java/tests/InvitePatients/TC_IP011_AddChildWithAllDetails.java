@@ -154,10 +154,72 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         invitePatientPage.setAllergySetOneForPatientOne(testDataForChild.getAllergyOne(), testDataForChild.getAllergyReactionOne(), testDataForChild.getDrugAllergyCategory());
         invitePatientPage.clickAddAllergyButtonForPatientOne();
         invitePatientPage.setAllergySetTwoForPatientOne(testDataForChild.getAllergyTwo(), testDataForChild.getAllergyReactionTwo(), testDataForChild.getEnvironmentAllergyCategory());
-        invitePatientPage.clickAddPatientButton();
         // Submit the invitation
         ExtentReportManager.getTest().log(Status.INFO, "Submitting the invitation for account holder and child");
         invitePatientPage.clickAddPatientButton();
+// Log HTML formatted mandatory details
+        String mandatoryDetailsHtml = "<b>Entered Account Holder Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Phone: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName();
+        ExtentReportManager.getTest().info(mandatoryDetailsHtml);
+        // Log Mandatory Details for Child
+        String childMandatoryDetailsHtml = "<b>Entered Child’s Mandatory Details:</b><br>" +
+                "First Name: " + testDataForChild.getFname() + "<br>" +
+                "Last Name: " + testDataForChild.getLname() + "<br>" +
+                "Zipcode: " + testDataForChild.getZipCode() + "<br>";
+        ExtentReportManager.getTest().info(childMandatoryDetailsHtml);
+
+// Log Referral Clinic Details for Child
+        String childReferralHtml = "<b>Entered Child’s Referral Clinic Details:</b><br>" +
+                "Provider First Name: " + testDataForProvider.getFname() + "<br>" +
+                "Provider Last Name: " + testDataForProvider.getLname() + "<br>" +
+                "Clinic State: " + testDataForProvider.getReferralClinicState() + "<br>" +
+                "Clinic: " + testDataForProvider.getReferralClinic();
+        ExtentReportManager.getTest().info(childReferralHtml);
+
+// Log Additional Info for Child
+        String childAdditionalInfoHtml = "<b>Entered Child’s Additional Information:</b><br>" +
+                "Street Address 1: " + testDataForChild.getStreetAddressOne() + "<br>" +
+                "Street Address 2: " + testDataForChild.getStreetAddressTwo() + "<br>" +
+                "Gender: " + testDataForChild.getGender() + "<br>" +
+                "Height: " + testDataForChild.getFeet() + " ft " + testDataForChild.getInch() + " in<br>" +
+                "Weight: " + testDataForChild.getWeight() + " kg<br>" +
+                "DOB: " + testDataForChild.getDobForMinor();
+        ExtentReportManager.getTest().info(childAdditionalInfoHtml);
+
+// Log Primary Insurance for Child
+        String childPrimaryInsuranceHtml = "<b>Entered Child’s Primary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForChild.getPrimaryInsurance() + "<br>" +
+                "Member Name: " + testDataForAccountHolder.getFullName() + "<br>" +
+                "Member ID: " + testDataForChild.getMemberIdForPrimaryInsurance() + "<br>" +
+                "DOB: " + testDataForAccountHolder.getMemberDobForPrimaryInsurance() + "<br>" +
+                "Relationship: " + testDataForChild.getRelationshipForPrimaryInsurance();
+        ExtentReportManager.getTest().info(childPrimaryInsuranceHtml);
+
+// Log Secondary Insurance for Child
+        String childSecondaryInsuranceHtml = "<b>Entered Child’s Secondary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForChild.getSecondaryInsurance() + "<br>" +
+                "Member Name: " + testDataForChild.getMemberNameForSecondaryInsurance() + "<br>" +
+                "Member ID: " + testDataForChild.getMemberIdForSecondaryInsurance() + "<br>" +
+                "DOB: " + testDataForChild.getMemberDobForSecondaryInsurance() + "<br>" +
+                "Relationship: " + testDataForChild.getRelationshipForSecondaryInsurance();
+        ExtentReportManager.getTest().info(childSecondaryInsuranceHtml);
+
+// Log Health Profile for Child
+        String childHealthProfileHtml = "<b>Entered Child’s Health Profile Details:</b><br>" +
+                "Medication: " + testDataForChild.getMedicationOne() + "<br>" +
+                "Drug Allergy: " + testDataForChild.getAllergyOne() + " (Reaction: " +
+                testDataForChild.getAllergyReactionOne() + ", Category: " +
+                testDataForChild.getDrugAllergyCategory() + ")<br>" +
+                "Environmental Allergy: " + testDataForChild.getAllergyTwo() + " (Reaction: " +
+                testDataForChild.getAllergyReactionTwo() + ", Category: " +
+                testDataForChild.getEnvironmentAllergyCategory() + ")";
+        ExtentReportManager.getTest().info(childHealthProfileHtml);
+
     }
     @Test(priority = 2)
     public void testPatientChartValidations() throws InterruptedException {
@@ -340,7 +402,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance in dermatology visit");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),
                 "Primary insurance name is mismatched");
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberNameForPrimaryInsurance(), dermatologyVisitPage.getMemberNameInPrimaryInsurance(),
                 "Member name is mismatched In Primary insurance");
         softAssert.assertEquals(testDataForChild.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),
                 "Member ID is mismatched In Primary insurance");
@@ -401,7 +463,6 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
 
         softAssert.assertAll();
     }
-
     @AfterClass()
     public void cleanUp() throws InterruptedException {
         //navigate to my profile

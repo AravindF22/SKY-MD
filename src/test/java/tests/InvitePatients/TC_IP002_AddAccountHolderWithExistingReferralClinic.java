@@ -88,6 +88,19 @@ public class TC_IP002_AddAccountHolderWithExistingReferralClinic extends BaseTes
         // Submit the Invite Patient form
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Invite Patient form submitted successfully");
+        String accountHolderMandatoryDetailsHtml = "<b>Entered Mandatory Details (Account Holder):</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Mobile: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode();
+        ExtentReportManager.getTest().info(accountHolderMandatoryDetailsHtml);
+        String referralClinicDetailsHtml = "<b>Entered Referral Clinic Details (Account Holder):</b><br>" +
+                "Provider First Name: " + testDataForProvider.getFname() + "<br>" +
+                "Provider Last Name: " + testDataForProvider.getLname() + "<br>" +
+                "Clinic State: " + testDataForProvider.getReferralClinicState() + "<br>" +
+                "Clinic: " + testDataForProvider.getReferralClinic();
+        ExtentReportManager.getTest().info(referralClinicDetailsHtml);
     }
 
     /**

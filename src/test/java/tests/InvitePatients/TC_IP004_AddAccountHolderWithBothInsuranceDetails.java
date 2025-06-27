@@ -108,6 +108,34 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
         ExtentReportManager.getTest().log(Status.INFO, "Submitting invite for patient with both insurances");
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
+        String patientDetailsHtml = "<b>Entered Patient Basic Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Phone: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName();
+
+        ExtentReportManager.getTest().info(patientDetailsHtml);
+
+        String primaryInsuranceHtml = "<b>Entered Primary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForAccountHolder.getPrimaryInsurance() + "<br>" +
+                "Member Name: " + testDataForAccountHolder.getMemberNameForPrimaryInsurance() + "<br>" +
+                "Member ID: " + testDataForAccountHolder.getMemberIdForPrimaryInsurance() + "<br>" +
+                "DOB: " + testDataForAccountHolder.getMemberDobForPrimaryInsurance() + "<br>" +
+                "Relationship: " + testDataForAccountHolder.getRelationshipForPrimaryInsurance();
+
+        ExtentReportManager.getTest().info(primaryInsuranceHtml);
+
+        String secondaryInsuranceHtml = "<b>Entered Secondary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForAccountHolder.getSecondaryInsurance() + "<br>" +
+                "Member Name: " + testDataForAccountHolder.getMemberNameForSecondaryInsurance() + "<br>" +
+                "Member ID: " + testDataForAccountHolder.getMemberIdForSecondaryInsurance() + "<br>" +
+                "DOB: " + testDataForAccountHolder.getMemberDobForSecondaryInsurance() + "<br>" +
+                "Relationship: " + testDataForAccountHolder.getRelationshipForSecondaryInsurance();
+
+        ExtentReportManager.getTest().info(secondaryInsuranceHtml);
+
     }
     @Test(priority = 2)
     private void testValidatePatientAndInsuranceInChart() throws InterruptedException {

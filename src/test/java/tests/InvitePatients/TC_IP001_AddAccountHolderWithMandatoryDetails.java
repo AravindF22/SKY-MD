@@ -66,6 +66,14 @@ public class TC_IP001_AddAccountHolderWithMandatoryDetails extends BaseTest {
 
         ExtentReportManager.getTest().log(Status.INFO, "Submitting invite form for account holder");
         invitePatientPage.clickAddPatientButton();
+        String accountHolderDetailsHtml = "<b>Entered Account Holder Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Mobile Number: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName();
+        ExtentReportManager.getTest().info(accountHolderDetailsHtml);
     }
 
     @Test(priority = 2)

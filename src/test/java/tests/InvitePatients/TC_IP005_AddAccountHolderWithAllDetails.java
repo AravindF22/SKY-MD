@@ -77,7 +77,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
     @Test(priority = 1)
     public void testInvitePatientWithAllDetails() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Patient With All Details");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Mandatory fields");
         // Mandatory fields
         invitePatientPage = new InvitePatientPage(driver);
@@ -114,7 +114,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.setMemberNameInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberNameForPrimaryInsurance());
         invitePatientPage.setMemberIdInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberIdForPrimaryInsurance());
         Thread.sleep(1000);
-        invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getDobForMajor());
+        invitePatientPage.setMemberDOBInPrimaryInsuranceForAh(testDataForAccountHolder.getMemberDobForPrimaryInsurance());
         Thread.sleep(1000);
         invitePatientPage.setRelationshipInPrimaryInsuranceForAh(testDataForAccountHolder.getRelationshipForPrimaryInsurance());
 
@@ -148,6 +148,57 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Submitting invite patient form");
         invitePatientPage.clickAddPatientButton();
         ExtentReportManager.getTest().log(Status.INFO, "Invite patient form submitted successfully");
+        // Log Mandatory Details
+        String mandatoryDetailsHtml = "<b>Entered Mandatory Details:</b><br>" +
+                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                "Phone: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                "Provider Name: " + testDataForAccountHolder.getProviderName();
+        ExtentReportManager.getTest().info(mandatoryDetailsHtml);
+        // Log Referral Details
+        String referralDetailsHtml = "<b>Entered Referral Clinic Details:</b><br>" +
+                "Provider First Name: " + testDataForProvider.getFname() + "<br>" +
+                "Provider Last Name: " + testDataForProvider.getLname() + "<br>" +
+                "Referral Clinic State: " + testDataForProvider.getReferralClinicState() + "<br>" +
+                "Referral Clinic: " + testDataForProvider.getReferralClinic();
+        ExtentReportManager.getTest().info(referralDetailsHtml);
+        // Log Additional Info
+        String additionalInfoHtml = "<b>Entered Additional Information:</b><br>" +
+                "Street Address 1: " + testDataForAccountHolder.getStreetAddressOne() + "<br>" +
+                "Street Address 2: " + testDataForAccountHolder.getStreetAddressTwo() + "<br>" +
+                "Gender: " + testDataForAccountHolder.getGender() + "<br>" +
+                "Height: " + testDataForAccountHolder.getFeet() + " ft " + testDataForAccountHolder.getInch() + " in<br>" +
+                "Weight: " + testDataForAccountHolder.getWeight() + " kg<br>" +
+                "DOB: " + testDataForAccountHolder.getDobForMajor();
+        ExtentReportManager.getTest().info(additionalInfoHtml);
+        // Log Primary Insurance
+        String primaryInsuranceHtml = "<b>Entered Primary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForAccountHolder.getPrimaryInsurance() + "<br>" +
+                "Member Name: " + testDataForAccountHolder.getMemberNameForPrimaryInsurance() + "<br>" +
+                "Member ID: " + testDataForAccountHolder.getMemberIdForPrimaryInsurance() + "<br>" +
+                "DOB: " + testDataForAccountHolder.getDobForMajor() + "<br>" +
+                "Relationship: " + testDataForAccountHolder.getRelationshipForPrimaryInsurance();
+        ExtentReportManager.getTest().info(primaryInsuranceHtml);
+        // Log Secondary Insurance
+        String secondaryInsuranceHtml = "<b>Entered Secondary Insurance Details:</b><br>" +
+                "Insurance: " + testDataForAccountHolder.getSecondaryInsurance() + "<br>" +
+                "Member Name: " + testDataForAccountHolder.getMemberNameForSecondaryInsurance() + "<br>" +
+                "Member ID: " + testDataForAccountHolder.getMemberIdForSecondaryInsurance() + "<br>" +
+                "DOB: " + testDataForAccountHolder.getMemberDobForSecondaryInsurance() + "<br>" +
+                "Relationship: " + testDataForAccountHolder.getRelationshipForSecondaryInsurance();
+        ExtentReportManager.getTest().info(secondaryInsuranceHtml);
+        // Log Health Profile
+        String healthProfileHtml = "<b>Entered Health Profile Details:</b><br>" +
+                "Medication: " + testDataForAccountHolder.getMedicationOne() + "<br>" +
+                "Drug Allergy: " + testDataForAccountHolder.getAllergyOne() + " (Reaction: " +
+                testDataForAccountHolder.getAllergyReactionOne() + ", Category: " +
+                testDataForAccountHolder.getDrugAllergyCategory() + ")<br>" +
+                "Environmental Allergy: " + testDataForAccountHolder.getAllergyTwo() + " (Reaction: " +
+                testDataForAccountHolder.getAllergyReactionTwo() + ", Category: " +
+                testDataForAccountHolder.getEnvironmentAllergyCategory() + ")";
+        ExtentReportManager.getTest().info(healthProfileHtml);
     }
     @Test(priority = 2)
     public void testValidatePatientChart() throws InterruptedException {
@@ -203,7 +254,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
                 "Member Name for Primary Insurance mismatch in Patient Chart.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberIdForPrimaryInsurance(), patientChart.getMemberIdInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Patient Chart.");
-        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), patientChart.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), patientChart.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Patient Chart.");
 
         ExtentReportManager.getTest().log(Status.INFO, "Validating Secondary insurance in Patient Chart");
@@ -265,16 +316,23 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
 
         ExtentReportManager.getTest().log(Status.INFO, "Validating mandatory details in My Profile");
         //mandatory details validation in My profile
-        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(), "Name of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(), "Email of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolder(), "Zipcode of the Account Holder is mismatching in My profile");
-        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(), "Mobile Number of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getFullName(), myProfilePage.getNameOfAccountHolder(),
+                "Name of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getEmail().toLowerCase(), myProfilePage.getEmailOfAccountHolder().toLowerCase(),
+                "Email of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getZipCode(), myProfilePage.getZipCodeOfAccountHolder(),
+                "Zipcode of the Account Holder is mismatching in My profile");
+        softAssert.assertEquals(testDataForAccountHolder.getMobileNumber(), myProfilePage.getMobileOfAccountHolder(),
+                "Mobile Number of the Account Holder is mismatching in My profile");
 
         ExtentReportManager.getTest().log(Status.INFO, "Validating additional details in My Profile");
-        //additional details validation in My profile
-        softAssert.assertEquals(testDataForAccountHolder.getGender(), myProfilePage.getGender(), "Gender mismatch in My Profile page.");
-        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), myProfilePage.getAddressLineOne(), "Street Address Line One mismatch in My Profile page.");
-        softAssert.assertTrue(myProfilePage.getAddressLineTwo().contains(testDataForAccountHolder.getStreetAddressTwo()), "Street Address Line Two from test data is not found in My Profile page.");
+        //Additional details validation in My profile
+        softAssert.assertEquals(testDataForAccountHolder.getGender(), myProfilePage.getGender(),
+                "Gender mismatch in My Profile page.");
+        softAssert.assertEquals(testDataForAccountHolder.getStreetAddressOne(), myProfilePage.getAddressLineOne(),
+                "Street Address Line One mismatch in My Profile page.");
+        softAssert.assertTrue(myProfilePage.getAddressLineTwo().contains(testDataForAccountHolder.getStreetAddressTwo()),
+                "Street Address Line Two from test data is not found in My Profile page.");
 
         ExtentReportManager.getTest().log(Status.INFO, "Validating Health profile in My Profile");
         //Validate health profile in my profile
@@ -322,7 +380,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
                 "Member Name for Primary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getMemberIdForPrimaryInsurance(), dermatologyVisitPage.getMemberIDInPrimaryInsurance(),
                 "Member ID for Primary Insurance mismatch in Dermatology Visit page.");
-        softAssert.assertEquals(testDataForAccountHolder.getDobForMajor(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
+        softAssert.assertEquals(testDataForAccountHolder.getMemberDobForPrimaryInsurance(), dermatologyVisitPage.getMemberDobInPrimaryInsurance(),
                 "Member DOB for Primary Insurance mismatch in Dermatology Visit page.");
         softAssert.assertEquals(testDataForAccountHolder.getRelationshipForPrimaryInsurance(), dermatologyVisitPage.getRelationshipInPrimaryInsurance(),
                 "Relationship for Primary Insurance mismatch in Dermatology Visit page.");
