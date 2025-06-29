@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReader;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -174,29 +175,35 @@ public class PatientChart extends BasePage {
         WebElement weightElement = wait.until(ExpectedConditions.visibilityOfElementLocated(weight));
         return weightElement.getText().replaceAll("\\.0 pound\\(s\\)","").trim();
     }
-
     public String getDOB() {
-        WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
-        String dob =  dobElement.getText().trim();
-        return dob;
-//       try{
-//           WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
-//           String dob =  dobElement.getText().trim();
-//           SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-//           Date date = inputFormat.parse(dob);  // Throws ParseException if invalid
-//           SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-//           String formattedDate = targetFormat.format(date);
-//           return formattedDate;
-//       }
-//       catch (TimeoutException e) {
-//           System.err.println("Timeout: DOB element not visible.");
-//       } catch (ParseException e) {
-//           System.err.println("Parse error: DOB text is in an unexpected format.");
-//       } catch (Exception e) {
-//           System.err.println("Unexpected error while getting DOB: " + e.getMessage());
-//       }
-//        return null; // Return null if anything fails
+        try {
+            WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
+            String dob = dobElement.getText().trim();
+
+            boolean isGitHubActions = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"));
+
+            if (isGitHubActions) {
+                // No format conversion if running in GitHub Actions
+                return dob;
+            } else {
+                // Convert format from MM/dd/yyyy to dd/MM/yyyy
+                SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                Date date = inputFormat.parse(dob);
+
+                SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                return targetFormat.format(date);
+            }
+
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: DOB element not visible.");
+        } catch (ParseException e) {
+            System.err.println("Parse error: DOB text is in an unexpected format.");
+        } catch (Exception e) {
+            System.err.println("Unexpected error while getting DOB: " + e.getMessage());
+        }
+        return null;
     }
+
 
     public String getDOBInTopBar() {
         WebElement dobTopBarElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dobInTopBar));
@@ -247,24 +254,28 @@ public class PatientChart extends BasePage {
     }
 
     public String getMemberDobInPrimaryInsurance() {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
-        String dob=  element.getText().replaceAll("Member DOB:","").trim();
-        return dob;
-//        try {
-//            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
-//            String dob=  element.getText().replaceAll("Member DOB:","").trim();
-//            // Adjust the format here to match your actual input!
-//            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
-//            Date date = sdf.parse(dob);
-//            // Format the date into the desired output format
-//            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-//            return targetFormat.format(date);
-//        } catch (TimeoutException e) {
-//            System.err.println("Timeout: Member DOB in Primary Insurance element not found.");
-//        } catch (Exception e) {
-//            System.err.println("Error retrieving Member DOB in Primary Insurance: " + e.getMessage());
-//        }
-//        return null;
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
+            String dob = element.getText().replaceAll("Member DOB:", "").trim();
+
+            boolean isGitHubActions = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"));
+
+            if (isGitHubActions) {
+                return dob;
+            } else {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                Date date = inputFormat.parse(dob);
+                SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                return targetFormat.format(date);
+            }
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Member DOB in Primary Insurance element not found.");
+        } catch (ParseException e) {
+            System.err.println("Parse error in Primary Insurance DOB: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error in Primary Insurance DOB: " + e.getMessage());
+        }
+        return null;
     }
     public String getSecondaryInsurance() {
         try {
@@ -303,24 +314,28 @@ public class PatientChart extends BasePage {
     }
 
     public String getMemberDobInSecondaryInsurance() {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
-        String dob = element.getText().replaceAll("Member DOB:","").trim();
-        return dob;
-//        try {
-//            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
-//            String dob = element.getText().replaceAll("Member DOB:","").trim();
-//            // Adjust the format here to match your actual input!
-//            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-//            Date date = sdf.parse(dob);
-//            // Format the date into the desired output format
-//            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-//            return targetFormat.format(date);
-//        } catch (TimeoutException e) {
-//            System.err.println("Timeout: Member DOB in Secondary Insurance element not found.");
-//        } catch (Exception e) {
-//            System.err.println("Error retrieving Member DOB in Secondary Insurance: " + e.getMessage());
-//        }
-//        return null;
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
+            String dob = element.getText().replaceAll("Member DOB:", "").trim();
+
+            boolean isGitHubActions = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"));
+
+            if (isGitHubActions) {
+                return dob;
+            } else {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                Date date = inputFormat.parse(dob);
+                SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                return targetFormat.format(date);
+            }
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Member DOB in Secondary Insurance element not found.");
+        } catch (ParseException e) {
+            System.err.println("Parse error in Secondary Insurance DOB: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error in Secondary Insurance DOB: " + e.getMessage());
+        }
+        return null;
     }
     // Click the Health Profile button
     public void clickHealthProfileButton() {

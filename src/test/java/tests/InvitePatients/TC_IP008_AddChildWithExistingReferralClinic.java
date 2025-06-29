@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -13,7 +14,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -37,9 +38,7 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and provider
         testDataForAccountHolder = new TestData();
@@ -48,8 +47,8 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -75,7 +74,7 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
     }
     @Test(priority = 2)
-    public void testAddChildAndFillInvitePatientFormWithReferralClinic() throws IOException {
+    public void testAddChildAndFillInvitePatientFormWithReferralClinic() {
         // Log the start of the test section
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Child and Fill Invite Patient Form With Referral Clinic");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -87,7 +86,7 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
         invitePatientPage.setLastNameForPatientOne(testDataForChild.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForChild.getZipCode());
         ExtentReportManager.getTest().log(Status.INFO, "Adding child referral details");
-        // Fill referral clinic section for child
+        // Fill a referral clinic section for child
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
         invitePatientPage.setProviderLastNameInPatientOneReferralClinic(testDataForProvider.getLname());
@@ -95,10 +94,10 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
         invitePatientPage.selectClinicInPatientOneReferralClinic(testDataForProvider.getReferralClinic());
 
         invitePatientPage.clickAddPatientButton();
-        ExtentReportManager.getTest().log(Status.INFO, "child added successfully with referral deatils");
+        ExtentReportManager.getTest().log(Status.INFO, "child added successfully with referral details");
     }
     @Test(priority = 3)
-    public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
+    public void testVerifyReferralSectionInPatientChart() throws InterruptedException {
         // Log the start of the test section
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -108,7 +107,7 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
             Assert.fail("Patient chart page not loaded.");
         }
         Thread.sleep(3000);
-        // Search for patient and verify referral section
+        // Search for a patient and verify referral section
         patientChart.searchPatient(testDataForChild.getFullName());
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");

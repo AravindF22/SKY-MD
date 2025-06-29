@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -14,7 +15,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -44,9 +45,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and Ward
         testDataForAccountHolder = new TestData();
@@ -54,8 +53,8 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -74,7 +73,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
-    public void testAddWardAndAdditionalDetails() throws InterruptedException {
+    public void testAddWardAndAdditionalDetails() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Ward with Additional Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         dashBoardPage.clickInvitePatientLink();
@@ -159,7 +158,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
-    public void testPatientPortalDependentValidation() throws InterruptedException {
+    public void testPatientPortalDependentValidation() {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient portal profile details for dependent");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
@@ -194,7 +193,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "validating Ward name in Dermatology visit");
         // Validate Ward name
         softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
-                "Ward name is mismatching in Derm visit");
+                "Ward name is mismatching in Dermatology visit");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterInsurance();
@@ -227,7 +226,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         softAssert.assertAll();
     }
     //@Test(priority = 6)
-    public void testPrimaryCareVisitValidation() throws InterruptedException {
+    public void testPrimaryCareVisitValidation() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         homePagePatPortal = new PatientPortalHomePage(driver);
         homePagePatPortal.selectPrimaryCareVisit();

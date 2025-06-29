@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -44,16 +45,15 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
     @BeforeClass
     public void setUp() throws IOException {
         //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
         //Test data for account holder
         testDataForAccountHolder = new TestData();
         testDataForProvider = new TestData();
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
 
         // Navigate to Invite Patient

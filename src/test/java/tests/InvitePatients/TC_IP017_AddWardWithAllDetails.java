@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.testng.Assert;
@@ -38,10 +39,8 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        // Load configuration properties file
-        loadPropFile();
         // Launch Provider Portal
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         // Initialize test data for account holder and ward
         testDataForAccountHolder = new TestData();
@@ -50,8 +49,8 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
 
         // Login as Medical Assistant (MA) in Provider Portal
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -99,7 +98,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         invitePatientPage.setLastNameForPatientOne(testDataForWard.getLname());
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
 
-        // Fill referral section
+        // Fill the referral section
         ExtentReportManager.getTest().log(Status.INFO, "Filling referral section for ward");
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
@@ -315,7 +314,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         setPasswordPage.setPassword("Welcome@123");
     }
     @Test(priority = 4, dependsOnMethods = {"testSetPasswordViaYopMail"})
-    public void testPatientPortalMyProfile() throws InterruptedException {
+    public void testPatientPortalMyProfile() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal My Profile Verification");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 

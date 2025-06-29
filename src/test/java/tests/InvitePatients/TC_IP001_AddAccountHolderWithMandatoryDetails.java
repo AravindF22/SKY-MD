@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.testng.Assert;
@@ -29,13 +30,12 @@ public class TC_IP001_AddAccountHolderWithMandatoryDetails extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
         testDataForAccountHolder = new TestData();
 
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
 
         dashBoardPage = new DashBoardPage(driver);

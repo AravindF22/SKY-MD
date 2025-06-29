@@ -1,7 +1,8 @@
 package tests.SignIn;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -9,7 +10,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
 import pages.PatientPortal.PatientPortalLoginPage;
 import pages.PatientPortal.SignInPage;
 
@@ -23,14 +23,12 @@ import java.time.Duration;
 public class TC_SI002_SignInAsExistingCustomer extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
     public SignInPage signInPage;
-    public PatientPortalHomePage patientPortalHomePage;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
     public WebDriverWait wait;
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     @BeforeMethod
@@ -38,7 +36,7 @@ public class TC_SI002_SignInAsExistingCustomer extends BaseTest {
         softAssert = new SoftAssert();
     }
     @Test(priority = 1)
-    public void testSignUpWithExistingEmailShowsToast() throws InterruptedException {
+    public void testSignUpWithExistingEmailShowsToast() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Navigating to Sign Up page");
 
@@ -47,7 +45,7 @@ public class TC_SI002_SignInAsExistingCustomer extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Clicked on Sign Up link");
 
         signInPage = new SignInPage(driver);
-        signInPage.enterEmail(property.getProperty("ExistingPatientEmail"));
+        signInPage.enterEmail(ConfigReader.getProperty("ExistingPatientEmail"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered existing email");
 
         signInPage.clickNextButton();

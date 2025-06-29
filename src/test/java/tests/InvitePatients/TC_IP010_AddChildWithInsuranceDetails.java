@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -14,7 +15,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -42,9 +43,7 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
     public SoftAssert softAssert;
     @BeforeClass
     public void setUp() throws IOException {
-        //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and provider
         testDataForAccountHolder = new TestData();
@@ -52,8 +51,8 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
 
         //Navigate to Invite Patient
@@ -75,7 +74,7 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
         yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
-    private void testAddChildAndInsuranceDetails() throws IOException, InterruptedException {
+    public void testAddChildAndInsuranceDetails() throws InterruptedException {
         // Set implicit wait for element loading
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add child and insurance details");
@@ -124,7 +123,7 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
     }
 
     @Test(priority = 2)
-    public void testVerifyInsuranceInPatientChart() throws IOException, InterruptedException {
+    public void testVerifyInsuranceInPatientChart() throws InterruptedException {
         // Set implicit wait for element loading
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify insurance details in patient chart");

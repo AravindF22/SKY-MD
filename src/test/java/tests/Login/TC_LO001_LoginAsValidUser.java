@@ -1,7 +1,8 @@
 package tests.Login;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -30,8 +31,7 @@ public class TC_LO001_LoginAsValidUser extends BaseTest {
     public WebDriverWait wait;
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     @BeforeMethod
@@ -45,10 +45,10 @@ public class TC_LO001_LoginAsValidUser extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Starting login with valid patient credentials");
 
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
-        patientPortalLoginPage.setEmail(property.getProperty("ExistingPatientEmail"));
+        patientPortalLoginPage.setEmail(ConfigReader.getProperty("ExistingPatientEmail"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered valid email");
 
-        patientPortalLoginPage.setPassword(property.getProperty("PatientPortalPassword"));
+        patientPortalLoginPage.setPassword(ConfigReader.getProperty("PatientPortalPassword"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered valid password");
 
         patientPortalLoginPage.clickLoginButton();
@@ -64,11 +64,10 @@ public class TC_LO001_LoginAsValidUser extends BaseTest {
         } else {
             ExtentReportManager.getTest().log(Status.INFO, "Login failed or home page did not load.");
         }
-
         softAssert.assertAll();
     }
     @AfterClass
-    public void patientAndProviderPortalLogout() throws InterruptedException {
+    public void patientAndProviderPortalLogout() {
         // Navigate to myProfile and logout
         patientPortalHomePage.clickMyProfile();
 

@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.testng.Assert;
@@ -38,10 +39,8 @@ public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        // Load configuration properties file
-        loadPropFile();
         // Launch Provider Portal
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         // Initialize test data for account holder and Ward
         testDataForAccountHolder = new TestData();
@@ -50,8 +49,8 @@ public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
 
         // Login as Medical Assistant (MA) in Provider Portal
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -80,7 +79,7 @@ public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
      * 3. Add Ward as dependent with mandatory and health profile fields
      */
     @Test(priority = 1)
-    public void testInviteAccountHolderAndWard() throws InterruptedException {
+    public void testInviteAccountHolderAndWard() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Ward with Mandatory Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Navigate to Invite Patient page
@@ -184,7 +183,7 @@ public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Password set successfully from YopMail");
     }
     /*
-     * Test: Validate health profile details in Patient Portal for the Ward.
+     * Test: Validate health profile details in the Patient Portal for the Ward.
      * Steps:
      * 1. Navigate to My Profile > Health Profile > Ward
      * 2. Validate allergy and medication details
@@ -215,7 +214,7 @@ public class TC_IP018_AddWardWithHealthProfile extends BaseTest {
         softAssert.assertEquals(testDataForWard.getAllergyReactionTwo().toLowerCase(), myProfilePage.getEnvironmentReactionOneValue().toLowerCase(),
                 "Reaction Two name in patient portal profile does not match in Health profile of My Profile");
 
-        myProfilePage.clickBackButtonInHealthProfile(); // Go back from allergy section
+        myProfilePage.clickBackButtonInHealthProfile(); // Go back from an allergy section
         ExtentReportManager.getTest().log(Status.INFO, "Opening medication section in health profile");
         //validate medication
         myProfilePage.clickMedicationHealthProfile(); // Open medication section

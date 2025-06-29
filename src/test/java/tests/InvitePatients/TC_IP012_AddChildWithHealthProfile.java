@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.testng.Assert;
@@ -38,10 +39,8 @@ public class TC_IP012_AddChildWithHealthProfile extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        // Load configuration properties file
-        loadPropFile();
         // Launch Provider Portal
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         // Initialize test data for account holder and child
         testDataForAccountHolder = new TestData();
@@ -50,8 +49,8 @@ public class TC_IP012_AddChildWithHealthProfile extends BaseTest {
 
         // Login as Medical Assistant (MA) in Provider Portal
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -72,14 +71,14 @@ public class TC_IP012_AddChildWithHealthProfile extends BaseTest {
         yopMail = new YopMail(driver);
     }
     /*
-     * Test: Invite an account holder and add a child with Health profile.
+     * Test: Invite an account holder and add a child with a Health profile.
      * Steps:
      * 1. Navigate to Invite Patient page
      * 2. Fill in account holder details
      * 3. Add child as dependent with mandatory and health profile fields
      */
     @Test(priority = 1)
-    public void testInviteAccountHolderAndChild() throws InterruptedException {
+    public void testInviteAccountHolderAndChild() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Child with Mandatory Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Navigate to Invite Patient page
@@ -124,7 +123,7 @@ public class TC_IP012_AddChildWithHealthProfile extends BaseTest {
      * Test: Validate the health profile of the invited child in the Provider Portal's patient chart.
      * Steps:
      * 1. Switch to patient chart tab
-     * 2. Search for the child
+     * 2. Search for child
      * 3. Validate allergy and medication details
      */
     @Test(priority = 2)
@@ -214,7 +213,7 @@ public class TC_IP012_AddChildWithHealthProfile extends BaseTest {
         softAssert.assertEquals(testDataForChild.getAllergyReactionTwo().toLowerCase(), myProfilePage.getEnvironmentReactionOneValue().toLowerCase(),
                 "Reaction Two name in patient portal profile does not match in Health profile of My Profile");
 
-        myProfilePage.clickBackButtonInHealthProfile(); // Go back from allergy section
+        myProfilePage.clickBackButtonInHealthProfile(); // Go back from an allergy section
         ExtentReportManager.getTest().log(Status.INFO, "Opening medication section in health profile");
         //validate medication
         myProfilePage.clickMedicationHealthProfile(); // Open medication section

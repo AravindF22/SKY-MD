@@ -1,7 +1,8 @@
 package tests.Login;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.Keys;
@@ -11,7 +12,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
 import pages.PatientPortal.PatientPortalLoginPage;
 import pages.PatientPortal.PatientPortalMyProfilePage;
 
@@ -21,13 +21,12 @@ import java.time.Duration;
  * Test Case: TC_LO003
  * Description: Verify error messages are displayed on the login page
  *              when both email and password fields are left empty.
- *              when invalid email is entered.
- *              when password entered less than minimum value.
- *              when password entered More than Maximum value.
+ *              When invalid email is entered.
+ *              When password entered less than minimum value.
+ *              When password entered More than the Maximum value.
  */
 public class TC_LO003_VerifyLoginPageErrorMessages extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
-    public PatientPortalHomePage patientPortalHomePage;
     public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
@@ -35,8 +34,7 @@ public class TC_LO003_VerifyLoginPageErrorMessages extends BaseTest {
     public Actions actions;
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         actions = new Actions(driver);
     }
@@ -73,7 +71,7 @@ public class TC_LO003_VerifyLoginPageErrorMessages extends BaseTest {
     public void testErrorMessageForInvalidEmail() {
         ExtentReportManager.getTest().log(Status.INFO, "Testing error message for invalid email format");
 
-        patientPortalLoginPage.setEmail(property.getProperty("invalidEmailOne"));
+        patientPortalLoginPage.setEmail(ConfigReader.getProperty("invalidEmailOne"));
 
         boolean isValidError = patientPortalLoginPage.isEnterValidEmailErrorDisplayed();
         softAssert.assertTrue(isValidError, "'Please enter a valid email address' error was not displayed.");
@@ -86,14 +84,14 @@ public class TC_LO003_VerifyLoginPageErrorMessages extends BaseTest {
     public void testErrorMessageForInvalidPassword() {
         ExtentReportManager.getTest().log(Status.INFO, "Testing error message for short password");
 
-        patientPortalLoginPage.setPassword(property.getProperty("invalidPasswordlessThanEight"));
+        patientPortalLoginPage.setPassword(ConfigReader.getProperty("invalidPasswordlessThanEight"));
         boolean isMinError = patientPortalLoginPage.isMinEightCharactersErrorDisplayed();
         softAssert.assertTrue(isMinError, "'Password must be at least 8 characters' error was not displayed.");
         ExtentReportManager.getTest().log(Status.PASS, "Verified error for password less than 8 characters");
 
         ExtentReportManager.getTest().log(Status.INFO, "Testing error message for long password");
 
-        patientPortalLoginPage.setPassword(property.getProperty("invalidPasswordMoreThanTwenty"));
+        patientPortalLoginPage.setPassword(ConfigReader.getProperty("invalidPasswordMoreThanTwenty"));
         boolean isMaxError = patientPortalLoginPage.isMaxTwentyCharactersErrorDisplayed();
         softAssert.assertTrue(isMaxError, "'Password cannot exceed 20 characters' error was not displayed.");
         ExtentReportManager.getTest().log(Status.INFO, "Verified error for password more than 20 characters");

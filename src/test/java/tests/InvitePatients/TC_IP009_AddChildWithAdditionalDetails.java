@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -14,7 +15,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -44,9 +45,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and child
         testDataForAccountHolder = new TestData();
@@ -54,8 +53,8 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -74,7 +73,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
         yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
-    public void testAddChildAndAdditionalDetails() throws InterruptedException {
+    public void testAddChildAndAdditionalDetails() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Child with Additional Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         dashBoardPage.clickInvitePatientLink();
@@ -155,7 +154,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4, dependsOnMethods = "testSetPasswordViaYopMail")
-    public void testPatientPortalDependentAndVisitFlow() throws InterruptedException {
+    public void testPatientPortalDependentAndVisitFlow() {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient portal profile details for dependent");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // Login to Patient Portal
@@ -183,7 +182,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
     public void testDermatologyVisitValidation() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting Dermatology Visit validation for Child");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        //select dermatology visit
+        //select a dermatology visit
         homePagePatPortal.selectDermatologyVisit();
         //dermatology Visit Page
         dermatologyVisitPage.clickSelectPatient();
@@ -228,7 +227,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
         softAssert.assertAll();
     }
     //@Test(priority = 6)
-    public void testPrimaryCareVisitValidation() throws InterruptedException {
+    public void testPrimaryCareVisitValidation() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         homePagePatPortal.selectPrimaryCareVisit();
 

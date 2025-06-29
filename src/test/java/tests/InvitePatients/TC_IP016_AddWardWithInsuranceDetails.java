@@ -1,7 +1,8 @@
 package tests.InvitePatients;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -42,9 +43,7 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
     public SoftAssert softAssert;
     @BeforeClass
     public void setUp() throws IOException {
-        //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and provider
         testDataForAccountHolder = new TestData();
@@ -52,8 +51,8 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
 
         //Navigate to Invite Patient
@@ -75,7 +74,7 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
         yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
-    private void testAddChildAndInsuranceDetails() throws IOException, InterruptedException {
+    public void testAddChildAndInsuranceDetails() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Ward with Insurance Details");
         //implicit wait
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
@@ -126,7 +125,7 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
     }
 
     @Test(priority = 2)
-    public void testVerifyInsuranceInPatientChart() throws IOException, InterruptedException {
+    public void testVerifyInsuranceInPatientChart() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Insurance in Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // Switch to patient chart tab
@@ -181,7 +180,7 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Logging in to Patient Portal");
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
 
-        // Start dermatology visit for ward
+        // Start a dermatology visit for ward
         ExtentReportManager.getTest().log(Status.INFO, "Starting dermatology visit for ward");
         homePagePatPortal.selectDermatologyVisit();
         dermatologyVisitPage.clickSelectPatient();

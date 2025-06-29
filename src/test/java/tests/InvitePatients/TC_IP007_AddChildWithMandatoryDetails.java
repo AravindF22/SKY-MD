@@ -1,5 +1,6 @@
 package tests.InvitePatients;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -11,7 +12,7 @@ import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
 import com.aventstack.extentreports.Status;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -39,10 +40,8 @@ public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
 
     @BeforeClass
     public void setUp() throws IOException {
-        // Load configuration properties file
-        loadPropFile();
         // Launch Provider Portal
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         // Initialize test data for account holder and child
         testDataForAccountHolder = new TestData();
@@ -50,8 +49,8 @@ public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
 
         // Login as Medical Assistant (MA) in Provider Portal
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -75,7 +74,7 @@ public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
      * Invite an account holder and add a child with only mandatory details.
      */
     @Test(priority = 1)
-    public void testInviteAccountHolderAndChild() throws InterruptedException {
+    public void testInviteAccountHolderAndChild() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Child with Mandatory Details");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         // Navigate to Invite Patient page
@@ -141,7 +140,7 @@ public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
         softAssert.assertAll();
     }
     /**
-     * Set password for the invited account holder using YopMail.
+     * Set the Password for the invited account holder using YopMail.
      */
     @Test(priority = 3)
     public void testSetPasswordViaYopMail() throws InterruptedException {

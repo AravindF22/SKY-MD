@@ -5,11 +5,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReader;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DermatologyVisitPage extends BasePage {
     private WebDriverWait wait;
@@ -283,12 +285,13 @@ public class DermatologyVisitPage extends BasePage {
     public String getMemberDobInPrimaryInsurance() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
-            String dob =  element.getText().trim();
-            // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = sdf.parse(dob);
-            // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dob = element.getText().trim();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = inputFormat.parse(dob);
+            String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"))
+                    ? "MM/dd/yyyy"
+                    : "dd/MM/yyyy";
+            SimpleDateFormat targetFormat = new SimpleDateFormat(format, Locale.US);
             return targetFormat.format(date);
         } catch (Exception e) {
             System.err.println("Error getting Member DOB in Primary Insurance: " + e.getMessage());
@@ -296,15 +299,18 @@ public class DermatologyVisitPage extends BasePage {
         }
     }
 
+
     public String getMemberDobInSecondaryInsurance() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
-            String dob =  element.getText().trim();
-            // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = sdf.parse(dob);
-            // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dob = element.getText().trim();
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = inputFormat.parse(dob);
+            String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"))
+                    ? "MM/dd/yyyy"
+                    : "dd/MM/yyyy";
+            SimpleDateFormat targetFormat = new SimpleDateFormat(format, Locale.US);
             return targetFormat.format(date);
         } catch (Exception e) {
             System.err.println("Error getting Member DOB in Secondary Insurance: " + e.getMessage());

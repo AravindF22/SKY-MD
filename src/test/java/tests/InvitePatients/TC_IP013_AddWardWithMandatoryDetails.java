@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -14,7 +15,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -42,15 +43,14 @@ public class TC_IP013_AddWardWithMandatoryDetails extends BaseTest {
     @BeforeClass
     public void setUp() throws IOException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         testDataForAccountHolder = new TestData();
         testDataForWard = new TestData();
 
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
 
         dashBoardPage = new DashBoardPage(driver);
@@ -70,7 +70,7 @@ public class TC_IP013_AddWardWithMandatoryDetails extends BaseTest {
         yopMail = new YopMail(driver);
     }
     @Test(priority = 1)
-    public void testInviteAccountHolderAndWard() throws InterruptedException {
+    public void testInviteAccountHolderAndWard() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         // Log the start of the test
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Invite Account Holder and Add Ward with Mandatory Details");

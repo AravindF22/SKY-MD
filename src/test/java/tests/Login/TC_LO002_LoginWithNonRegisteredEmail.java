@@ -1,16 +1,15 @@
 package tests.Login;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
 import pages.PatientPortal.PatientPortalLoginPage;
 import pages.PatientPortal.PatientPortalMyProfilePage;
 
@@ -23,15 +22,13 @@ import java.time.Duration;
  */
 public class TC_LO002_LoginWithNonRegisteredEmail extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
-    public PatientPortalHomePage patientPortalHomePage;
     public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
     public WebDriverWait wait;
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     @BeforeMethod
@@ -45,10 +42,10 @@ public class TC_LO002_LoginWithNonRegisteredEmail extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Starting login with valid patient credentials");
 
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
-        patientPortalLoginPage.setEmail(property.getProperty("NewPatientEmail"));
+        patientPortalLoginPage.setEmail(ConfigReader.getProperty("NewPatientEmail"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered Non registered email");
 
-        patientPortalLoginPage.setPassword(property.getProperty("PatientPortalMasterPassword"));
+        patientPortalLoginPage.setPassword(ConfigReader.getProperty("PatientPortalMasterPassword"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered valid password");
 
         patientPortalLoginPage.clickLoginButton();

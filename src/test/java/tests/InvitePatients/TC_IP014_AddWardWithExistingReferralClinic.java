@@ -1,6 +1,7 @@
 package tests.InvitePatients;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -12,7 +13,7 @@ import pages.ProviderPortal.InvitePatientPage;
 import pages.ProviderPortal.LoginPage;
 import pages.ProviderPortal.PatientChart;
 import pages.YopMail;
-import Utils.ExtentReportManager;
+import utils.ExtentReportManager;
 import com.aventstack.extentreports.Status;
 
 import java.io.IOException;
@@ -37,8 +38,7 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
     @BeforeClass
     public void setUp() throws IOException {
         //Loading config File
-        loadPropFile();
-        driver.get(property.getProperty("ProviderPortalUrl"));
+        driver.get(ConfigReader.getProperty("ProviderPortalUrl"));
 
         //Test data for account holder and provider
         testDataForAccountHolder = new TestData();
@@ -47,8 +47,8 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
 
         // Login as MA
         loginPage = new LoginPage(driver);
-        loginPage.setEmailAs(property.getProperty("MA_Email"));
-        loginPage.setPasswordAs(property.getProperty("MA_Password"));
+        loginPage.setEmailAs(ConfigReader.getProperty("MA_Email"));
+        loginPage.setPasswordAs(ConfigReader.getProperty("MA_Password"));
         loginPage.clickLoginButton();
     }
     @BeforeMethod
@@ -77,7 +77,7 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
         invitePatientPage.setZipcodeAs(testDataForAccountHolder.getZipCode());
     }
     @Test(priority = 2)
-    public void testAddChildAndFillInvitePatientFormWithReferralClinic() throws IOException {
+    public void testAddChildAndFillInvitePatientFormWithReferralClinic() {
         // Log the start of the test
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Add Ward and Fill Invite Patient Form With Referral Clinic");
         // Add ward fields
@@ -91,7 +91,7 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
         invitePatientPage.setZipCodeForPatientOne(testDataForWard.getZipCode());
 
         ExtentReportManager.getTest().log(Status.INFO, "Entering Ward Referral details");
-        // Fill referral section for ward
+        // Fill the referral section for ward
         invitePatientPage.clickReferralClinicCheckBoxForPatientOne();
         invitePatientPage.setProviderFirstNameInPatientOneReferralClinic(testDataForProvider.getFname());
         invitePatientPage.setProviderLastNameInPatientOneReferralClinic(testDataForProvider.getLname());
@@ -103,7 +103,7 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Clicked Add Patient button for ward");
     }
     @Test(priority = 2)
-    public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
+    public void testVerifyReferralSectionInPatientChart() throws InterruptedException {
         // Log the start of the test
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         switchToTab(1);
@@ -112,16 +112,16 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
             Assert.fail("Patient chart page not loaded.");
         }
         Thread.sleep(3000);
-        // Page navigate to Patient chart and search for patient
+        // Page navigates to Patient chart and searches for patient
         patientChart.searchPatient(testDataForWard.getFullName());
         ExtentReportManager.getTest().log(Status.INFO, "Searched for ward in patient chart: " + testDataForWard.getFullName());
 
-        // Assert provider name in referral section
+        // Assert provider name in a referral section
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         ExtentReportManager.getTest().log(Status.INFO, "Verified provider name in referral section");
 
-        // Assert clinic name in referral section
+        // Assert clinic name in a referral section
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
         ExtentReportManager.getTest().log(Status.INFO, "Verified clinic name in referral section");

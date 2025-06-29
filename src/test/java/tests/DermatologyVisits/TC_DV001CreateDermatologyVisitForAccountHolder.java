@@ -1,6 +1,7 @@
 package tests.DermatologyVisits;
 
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.TestData;
 import base.BaseTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -19,8 +20,7 @@ public class TC_DV001CreateDermatologyVisitForAccountHolder extends BaseTest {
 
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         testDataForAccountHolder = new TestData();
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalLoginPage.login("elbertwuckert01@yopmail.com", "Welcome@123");

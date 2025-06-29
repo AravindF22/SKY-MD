@@ -1,7 +1,8 @@
 package tests.SignIn;
 
-import Utils.ExtentReportManager;
-import Utils.TestData;
+import utils.ConfigReader;
+import utils.ExtentReportManager;
+import utils.TestData;
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,8 +32,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
     public WebDriverWait wait;
     @BeforeClass
     public void setUp() throws IOException {
-        loadPropFile();
-        driver.get(property.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         testDataForAccountHolder = new TestData();
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
@@ -56,7 +56,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         signInPage.clickNextButton();
         ExtentReportManager.getTest().log(Status.INFO, "Entered email and clicked Next");
 
-        signInPage.enterPassword(property.getProperty("PatientPortalPassword"));
+        signInPage.enterPassword(ConfigReader.getProperty("PatientPortalPassword"));
         ExtentReportManager.getTest().log(Status.INFO, "Entered password");
 
         signInPage.clickAgeCheckIcon();
@@ -85,7 +85,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         softAssert.assertAll();
     }
     @AfterClass
-    public void patientAndProviderPortalLogout() throws InterruptedException {
+    public void patientAndProviderPortalLogout() {
         // Navigate to myProfile and logout
         patientPortalHomePage.clickMyProfile();
         myProfilePage = new PatientPortalMyProfilePage(driver);

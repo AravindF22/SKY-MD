@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
+import utils.ConfigReader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,13 +24,10 @@ import java.util.*;
 public class BaseTest {
     // there is only one driver instance
     protected static WebDriver driver;
-    public Properties property;
-
     @BeforeClass()
     @Parameters("browser")
     public void setup(String browser) throws IOException {
         browser = browser.toLowerCase();
-        loadPropFile();
         switch (browser) {
             case "chrome":
                 ChromeOptions chromeOptions = new ChromeOptions();
@@ -41,7 +39,7 @@ public class BaseTest {
                // chromeOptions.addArguments("--auto-open-devtools-for-tabs");
 
                 // Headless mode setup
-               if(property.getProperty("headless").equals("true")){
+               if(ConfigReader.getProperty("headless").equals("true")){
                    chromeOptions.addArguments("--headless=new"); // For Chrome 109+
                    chromeOptions.addArguments("window-size=1920,1080");
                }
@@ -50,7 +48,7 @@ public class BaseTest {
 
             case "edge":
                 EdgeOptions edgeOptions = new EdgeOptions();
-                if(property.getProperty("headless").equals("true")) {
+                if(ConfigReader.getProperty("headless").equals("true")) {
                     edgeOptions.addArguments("--headless=new");
                     edgeOptions.addArguments("window-size=1920,1080");
                 }
@@ -59,7 +57,7 @@ public class BaseTest {
 
             case "firefox":
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
-                if(property.getProperty("headless").equals("true")) {
+                if(ConfigReader.getProperty("headless").equals("true")) {
                     firefoxOptions.addArguments("--headless");
                     firefoxOptions.addArguments("--width=1920");
                     firefoxOptions.addArguments("--height=1080");
@@ -71,19 +69,13 @@ public class BaseTest {
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
         driver.manage().deleteAllCookies();
-        if (property.getProperty("headless").equals("false")) {
+        if (ConfigReader.getProperty("headless").equals("false")) {
             driver.manage().window().maximize();
         }
     }
     @AfterClass()
     public void tearDown() {
        driver.quit();
-    }
-    //for loading config file
-    public void loadPropFile() throws IOException {
-        FileInputStream file = new FileInputStream("./src//test//resources//config.properties");
-        property = new Properties();
-        property.load(file);
     }
     public void switchToTab( int tab) throws InterruptedException {
         try {

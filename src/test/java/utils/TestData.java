@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import com.github.javafaker.Faker;
 
@@ -134,12 +134,14 @@ public class TestData {
     }
 
     //additional information
-    public String getDobForMajor(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        return sdf.format(dobForMajor); // e.g., "03/15/1990"
+    public String getDobForMajor() {
+        String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(dobForMajor);
     }
     public String getDobForMinor(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMinor); // e.g., "03/15/1990"
     }
     public String getStreetAddressOne(){
@@ -170,10 +172,10 @@ public class TestData {
         return fname+" "+lname;
     }
     public String getMemberIdForPrimaryInsurance(){ return memberIdForPrimaryInsurance;}
-    public String getMemberDobForPrimaryInsurance(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    public String getMemberDobForPrimaryInsurance() {
+        String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMajor);
-
     }
     public String getPrimaryInsurance(){
         return insurances[primaryInsuranceIndex];
@@ -188,9 +190,10 @@ public class TestData {
     public String getMemberIdForSecondaryInsurance(){
         return memberIdForSecondaryInsurance;
     }
-    public String getMemberDobForSecondaryInsurance(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        return sdf.format(memberDobForSecondaryInsurance); // e.g., "03/15/1990"
+    public String getMemberDobForSecondaryInsurance() {
+        String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(memberDobForSecondaryInsurance);
     }
     public String getRelationshipForPrimaryInsurance(){
         return relationship[relationShipForPrimaryInsuranceIndex];

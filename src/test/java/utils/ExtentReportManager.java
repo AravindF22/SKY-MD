@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import base.BaseTest;
 import com.aventstack.extentreports.*;
