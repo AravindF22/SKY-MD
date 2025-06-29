@@ -352,11 +352,14 @@ public class DermatologyVisitPage extends BasePage {
             WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(dob));
             String dob = element.getAttribute("value").trim();
             // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = sdf.parse(dob);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = inputFormat.parse(dob);
 
             // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions"))
+                    ? "MM/dd/yyyy"
+                    : "dd/MM/yyyy";
+            SimpleDateFormat targetFormat = new SimpleDateFormat(format, Locale.US);
             return targetFormat.format(date);
         } catch (Exception e) {
             System.err.println("Error getting DOB value: " + e.getMessage());
