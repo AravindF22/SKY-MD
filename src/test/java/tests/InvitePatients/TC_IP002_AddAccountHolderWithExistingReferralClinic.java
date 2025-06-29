@@ -110,11 +110,11 @@ public class TC_IP002_AddAccountHolderWithExistingReferralClinic extends BaseTes
     public void testVerifyReferralSectionInPatientChart() throws IOException, InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         switchToTab(1);
+        Thread.sleep(5000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying Referral details in Provider Portal");
         // Navigate to Patient Chart and verify referral details
         String expectedProviderName = testDataForProvider.getFullName();

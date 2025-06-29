@@ -204,11 +204,11 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
     public void testValidatePatientChart() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Validating patient chart details in Provider Portal");
         switchToTab(1);
+        Thread.sleep(5000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Validating Mandatory details in Patient Chart");
         //Mandatory details
         softAssert.assertEquals(testDataForAccountHolder.getFullName(), patientChart.getNameInThePatientChart(),

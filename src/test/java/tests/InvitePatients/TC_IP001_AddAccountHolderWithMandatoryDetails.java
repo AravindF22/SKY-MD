@@ -80,11 +80,11 @@ public class TC_IP001_AddAccountHolderWithMandatoryDetails extends BaseTest {
     public void testPatientChartDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         switchToTab(1);
+        Thread.sleep(5000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying patient chart details in Provider Portal");
         softAssert.assertEquals(patientChart.getNameInThePatientChart(), testDataForAccountHolder.getFullName(),
                 "Patient name mismatch in chart");

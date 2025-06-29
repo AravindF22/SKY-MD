@@ -108,11 +108,11 @@ public class TC_IP006_AddAccountHolderWithHealthProfile extends BaseTest {
     public void testValidatePatientChartHealthProfile() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate Patient Chart Health Profile");
         switchToTab(1);
+        Thread.sleep(5000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         patientChart.clickHealthProfileButton();
 
         // Validate allergy and medication details in patient chart

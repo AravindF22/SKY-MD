@@ -225,11 +225,11 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         // Switch to the patient chart tab
         ExtentReportManager.getTest().log(Status.INFO, "Switching to Patient Chart tab");
         switchToTab(1);
+        Thread.sleep(5000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         // Search and validate Ward details in patient chart
         ExtentReportManager.getTest().log(Status.INFO, "Searching and validating ward details in patient chart");
         patientChart.searchPatient(testDataForWard.getFullName());
