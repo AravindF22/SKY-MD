@@ -198,7 +198,7 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
         ExtentReportManager.getTest().log(Status.INFO, "Password set successfully for invited patient");
     }
     @Test(priority = 4 , dependsOnMethods = "testSetPasswordViaYopMail")
-    public void testPatientPortalValidations(){
+    public void testPatientPortalValidations() throws InterruptedException {
         // Test: Validate insurance details in Patient Portal after login
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Validate insurance details in Patient Portal after login");
         //navigate to login page
@@ -211,7 +211,7 @@ public class TC_IP004_AddAccountHolderWithBothInsuranceDetails extends BaseTest 
         dermatologyVisitPage.clickSelectPatient();
         dermatologyVisitPage.clickSelectPatientAsMySelf();
         ExtentReportManager.getTest().log(Status.INFO, "Selected patient as self for visit");
-
+        Thread.sleep(2000);
         // Validate primary insurance details
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in Dermatology Visit page");
         softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), dermatologyVisitPage.getPrimaryInsuranceName().toLowerCase(),

@@ -396,7 +396,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
         softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
         dermatologyVisitPage.clickContinueButton();
-
+        Thread.sleep(3000);
         // Validation of Primary insurance
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance in dermatology visit");
         softAssert.assertEquals(testDataForChild.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),

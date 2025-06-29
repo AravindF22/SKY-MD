@@ -385,7 +385,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
         softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
                 "Name is matched with the selected ward ");
         dermatologyVisitPage.clickContinueButton();
-
+        Thread.sleep(3000);
         // Validate Primary Insurance
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance in dermatology visit");
         softAssert.assertEquals(testDataForWard.getPrimaryInsurance(), dermatologyVisitPage.getPrimaryInsuranceName(),

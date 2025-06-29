@@ -371,7 +371,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         dermatologyVisitPage.clickSelectPatient();
         dermatologyVisitPage.clickSelectPatientAsMySelf();
         ExtentReportManager.getTest().log(Status.INFO, "Selected patient as self for visit");
-
+        Thread.sleep(2000);
         // Validate primary insurance details
         ExtentReportManager.getTest().log(Status.INFO, "Validating primary insurance details in Dermatology Visit page");
         softAssert.assertEquals(testDataForAccountHolder.getPrimaryInsurance().toLowerCase(), dermatologyVisitPage.getPrimaryInsuranceName().toLowerCase(),
