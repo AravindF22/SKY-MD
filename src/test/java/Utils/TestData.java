@@ -171,7 +171,7 @@ public class TestData {
     }
     public String getMemberIdForPrimaryInsurance(){ return memberIdForPrimaryInsurance;}
     public String getMemberDobForPrimaryInsurance(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         return sdf.format(dobForMajor);
 
     }
@@ -189,7 +189,7 @@ public class TestData {
         return memberIdForSecondaryInsurance;
     }
     public String getMemberDobForSecondaryInsurance(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         return sdf.format(memberDobForSecondaryInsurance); // e.g., "03/15/1990"
     }
     public String getRelationshipForPrimaryInsurance(){

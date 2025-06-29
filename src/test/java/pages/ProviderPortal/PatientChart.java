@@ -247,21 +247,24 @@ public class PatientChart extends BasePage {
     }
 
     public String getMemberDobInPrimaryInsurance() {
-        try {
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
-            String dob=  element.getText().replaceAll("Member DOB:","").trim();
-            // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
-            Date date = sdf.parse(dob);
-            // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-            return targetFormat.format(date);
-        } catch (TimeoutException e) {
-            System.err.println("Timeout: Member DOB in Primary Insurance element not found.");
-        } catch (Exception e) {
-            System.err.println("Error retrieving Member DOB in Primary Insurance: " + e.getMessage());
-        }
-        return null;
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
+        String dob=  element.getText().replaceAll("Member DOB:","").trim();
+        return dob;
+//        try {
+//            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
+//            String dob=  element.getText().replaceAll("Member DOB:","").trim();
+//            // Adjust the format here to match your actual input!
+//            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
+//            Date date = sdf.parse(dob);
+//            // Format the date into the desired output format
+//            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
+//            return targetFormat.format(date);
+//        } catch (TimeoutException e) {
+//            System.err.println("Timeout: Member DOB in Primary Insurance element not found.");
+//        } catch (Exception e) {
+//            System.err.println("Error retrieving Member DOB in Primary Insurance: " + e.getMessage());
+//        }
+//        return null;
     }
     public String getSecondaryInsurance() {
         try {
@@ -300,21 +303,24 @@ public class PatientChart extends BasePage {
     }
 
     public String getMemberDobInSecondaryInsurance() {
-        try {
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
-            String dob = element.getText().replaceAll("Member DOB:","").trim();
-            // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-            Date date = sdf.parse(dob);
-            // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
-            return targetFormat.format(date);
-        } catch (TimeoutException e) {
-            System.err.println("Timeout: Member DOB in Secondary Insurance element not found.");
-        } catch (Exception e) {
-            System.err.println("Error retrieving Member DOB in Secondary Insurance: " + e.getMessage());
-        }
-        return null;
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
+        String dob = element.getText().replaceAll("Member DOB:","").trim();
+        return dob;
+//        try {
+//            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
+//            String dob = element.getText().replaceAll("Member DOB:","").trim();
+//            // Adjust the format here to match your actual input!
+//            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+//            Date date = sdf.parse(dob);
+//            // Format the date into the desired output format
+//            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
+//            return targetFormat.format(date);
+//        } catch (TimeoutException e) {
+//            System.err.println("Timeout: Member DOB in Secondary Insurance element not found.");
+//        } catch (Exception e) {
+//            System.err.println("Error retrieving Member DOB in Secondary Insurance: " + e.getMessage());
+//        }
+//        return null;
     }
     // Click the Health Profile button
     public void clickHealthProfileButton() {
