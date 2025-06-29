@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class PatientChart extends BasePage {
     private WebDriverWait wait;
@@ -177,14 +178,14 @@ public class PatientChart extends BasePage {
     public String getDOB() {
         WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
         String dob =  dobElement.getText().trim();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         Date date = null;
         try {
             date = sdf.parse(dob);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         String formattedDate = targetFormat.format(date);
         return formattedDate;
     }
@@ -242,10 +243,10 @@ public class PatientChart extends BasePage {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInPrimaryInsurance));
             String dob=  element.getText().replaceAll("Member DOB:","").trim();
             // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy",Locale.US);
             Date date = sdf.parse(dob);
             // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
             return targetFormat.format(date);
         } catch (TimeoutException e) {
             System.err.println("Timeout: Member DOB in Primary Insurance element not found.");
@@ -295,10 +296,10 @@ public class PatientChart extends BasePage {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobInSecondaryInsurance));
             String dob = element.getText().replaceAll("Member DOB:","").trim();
             // Adjust the format here to match your actual input!
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
             Date date = sdf.parse(dob);
             // Format the date into the desired output format
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy",Locale.US);
             return targetFormat.format(date);
         } catch (TimeoutException e) {
             System.err.println("Timeout: Member DOB in Secondary Insurance element not found.");
