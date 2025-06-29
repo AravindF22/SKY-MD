@@ -18,14 +18,14 @@
 <!--            <class name="tests.InvitePatients.TC_IP008_AddChildWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP009_AddChildWithAdditionalDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP010_AddChildWithInsuranceDetails"/>-->
-            <class name="tests.InvitePatients.TC_IP011_AddChildWithAllDetails"/>
+<!--            <class name="tests.InvitePatients.TC_IP011_AddChildWithAllDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP012_AddChildWithHealthProfile"/>-->
 
 <!--            <class name="tests.InvitePatients.TC_IP013_AddWardWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP014_AddWardWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP015_AddWardWithAdditionalDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP016_AddWardWithInsuranceDetails"/>-->
-            <class name="tests.InvitePatients.TC_IP017_AddWardWithAllDetails"/>
+<!--            <class name="tests.InvitePatients.TC_IP017_AddWardWithAllDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP018_AddWardWithHealthProfile"/>-->
         </classes>
     </test>

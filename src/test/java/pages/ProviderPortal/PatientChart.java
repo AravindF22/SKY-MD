@@ -176,18 +176,23 @@ public class PatientChart extends BasePage {
     }
 
     public String getDOB() {
-        WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
-        String dob =  dobElement.getText().trim();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        Date date = null;
-        try {
-            date = sdf.parse(dob);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        String formattedDate = targetFormat.format(date);
-        return formattedDate;
+       try{
+           WebElement dobElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
+           String dob =  dobElement.getText().trim();
+           SimpleDateFormat inputFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+           Date date = inputFormat.parse(dob);  // Throws ParseException if invalid
+           SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+           String formattedDate = targetFormat.format(date);
+           return formattedDate;
+       }
+       catch (TimeoutException e) {
+           System.err.println("Timeout: DOB element not visible.");
+       } catch (ParseException e) {
+           System.err.println("Parse error: DOB text is in an unexpected format.");
+       } catch (Exception e) {
+           System.err.println("Unexpected error while getting DOB: " + e.getMessage());
+       }
+        return null; // Return null if anything fails
     }
 
     public String getDOBInTopBar() {

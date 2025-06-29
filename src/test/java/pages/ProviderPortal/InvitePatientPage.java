@@ -229,6 +229,7 @@ public class InvitePatientPage extends BasePage {
         WebElement dobField = wait.until(ExpectedConditions.visibilityOfElementLocated(dobForAccountHolder));
         dobField.clear();
         dobField.sendKeys(dob);
+        dobField.sendKeys(Keys.TAB); // Ensure focus is moved
     }
 
     // Select Gender by visible text
@@ -345,6 +346,7 @@ public class InvitePatientPage extends BasePage {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dobForAHInPrimaryInsurance));
             element.clear();
             element.sendKeys(dob);
+            element.sendKeys(Keys.TAB); // Ensure focus is moved
         } catch (Exception e) {
             System.err.println("Error setting member DOB In Primary Insurance For Ah: " + e.getMessage());
         }
@@ -429,6 +431,7 @@ public class InvitePatientPage extends BasePage {
             WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(memberDobFoAhInSecondaryInsurance));
             input.clear();
             input.sendKeys(dob);
+            input.sendKeys(Keys.TAB); // Ensure focus is moved
         } catch (Exception e) {
             System.err.println("Error setting member DOB in secondary insurance: " + e.getMessage());
         }
@@ -688,6 +691,7 @@ public class InvitePatientPage extends BasePage {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dobForPatientOne));
             element.clear();
             element.sendKeys(dob);
+            element.sendKeys(Keys.TAB); // Ensure focus is moved
         } catch (Exception e) {
             System.out.println("Error setting date of birth for patient one: " + e.getMessage());
         }
@@ -799,6 +803,7 @@ public class InvitePatientPage extends BasePage {
             WebElement field = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberDOBForPatientOne));
             field.clear();
             field.sendKeys(dob);
+            field.sendKeys(Keys.TAB); // Ensure focus is moved
         } catch (Exception e) {
             System.out.println("Failed to set member DOB: " + e.getMessage());
         }
@@ -871,6 +876,7 @@ public class InvitePatientPage extends BasePage {
             WebElement dobField = wait.until(ExpectedConditions.visibilityOfElementLocated(secondaryInsuranceMemberDOBForPatientOne));
             dobField.clear();
             dobField.sendKeys(dob);
+            dobField.sendKeys(Keys.TAB); // Ensure focus is moved
         } catch (Exception e) {
             System.out.println("Failed to set Secondary Insurance Member DOB: " + e.getMessage());
         }

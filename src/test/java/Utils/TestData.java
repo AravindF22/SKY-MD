@@ -135,7 +135,7 @@ public class TestData {
 
     //additional information
     public String getDobForMajor(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         return sdf.format(dobForMajor); // e.g., "03/15/1990"
     }
     public String getDobForMinor(){

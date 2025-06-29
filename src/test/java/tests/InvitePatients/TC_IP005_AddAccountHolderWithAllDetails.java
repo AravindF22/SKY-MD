@@ -101,11 +101,11 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
         invitePatientPage.clickAdditionalInformationCheckboxForAccountHolder();
         invitePatientPage.setStreetAddressOne(testDataForAccountHolder.getStreetAddressOne());
         invitePatientPage.setStreetAddressTwo(testDataForAccountHolder.getStreetAddressTwo());
+        invitePatientPage.setDOB(testDataForAccountHolder.getDobForMajor());
         invitePatientPage.selectGender(testDataForAccountHolder.getGender());
         invitePatientPage.setHeightFeet(testDataForAccountHolder.getFeet());
         invitePatientPage.setHeightInches(testDataForAccountHolder.getInch());
         invitePatientPage.setWeight(testDataForAccountHolder.getWeight());
-        invitePatientPage.setDOB(testDataForAccountHolder.getDobForMajor());
 
         ExtentReportManager.getTest().log(Status.INFO, "Filling invite patient form: Primary insurance");
         //Primary insurance
