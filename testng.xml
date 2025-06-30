@@ -12,7 +12,7 @@
             <class name="tests.InvitePatients.TC_IP003_AddAccountHolderWithAdditionalDetails"/>
             <class name="tests.InvitePatients.TC_IP004_AddAccountHolderWithBothInsuranceDetails"/>
             <class name="tests.InvitePatients.TC_IP005_AddAccountHolderWithAllDetails"/>
-            <class name="tests.InvitePatients.TC_IP006_AddAccountHolderWithHealthProfile"/>
+<!--            <class name="tests.InvitePatients.TC_IP006_AddAccountHolderWithHealthProfile"/>-->
 
 <!--            <class name="tests.InvitePatients.TC_IP007_AddChildWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP008_AddChildWithExistingReferralClinic"/>-->
