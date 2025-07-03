@@ -102,18 +102,20 @@ public class TC_IP008_AddChildWithExistingReferralClinic extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Verify Referral Section In Patient Chart");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         switchToTab(1);
+        Thread.sleep(3000);
         if(!patientChart.isPatientChart()){
             ExtentReportManager.getTest().log(Status.INFO, "Patient chart not visible – test skipped");
             Assert.fail("Patient chart page not loaded.");
         }
-        Thread.sleep(3000);
         // Search for a patient and verify referral section
         patientChart.searchPatient(testDataForChild.getFullName());
+        Thread.sleep(500);
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
-        ExtentReportManager.getTest().log(Status.PASS, "Referral section in patient chart validated successfully");
+        ExtentReportManager.getTest().log(Status.INFO, "Referral section in patient chart validated successfully");
         softAssert.assertAll();
     }
     @AfterClass()

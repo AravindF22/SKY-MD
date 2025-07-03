@@ -16,6 +16,8 @@ import utils.ConfigReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
@@ -36,7 +38,8 @@ public class BaseTest {
                 Map<String, Object> chromePrefs = new HashMap<>();
                 chromePrefs.put("profile.default_content_setting_values.notifications", 1);
                 chromeOptions.setExperimentalOption("prefs", chromePrefs);
-               // chromeOptions.addArguments("--auto-open-devtools-for-tabs");
+                chromeOptions.addArguments("--disable-save-password-bubble");
+                // chromeOptions.addArguments("--auto-open-devtools-for-tabs");
 
                 // Headless mode setup
                if(ConfigReader.getProperty("headless").equals("true")){
@@ -106,9 +109,6 @@ public class BaseTest {
                 break;
         }
     }
-    public void newTab(){
-        driver.switchTo().newWindow(WindowType.TAB);
-    }
     public void newTabAndLaunchYopMail(){
         driver.switchTo().newWindow(WindowType.TAB);
         driver.navigate().to("https://yopmail.com/en/");
@@ -130,6 +130,16 @@ public class BaseTest {
             return relativePath;
         }catch(Exception e){
             e.printStackTrace();
+            return null;
+        }
+    }
+    public String convertToAbsoluteURL(String relativeURL){
+        try{
+            Path imagePath = Paths.get(relativeURL).normalize();
+            String absolutePath = imagePath.toAbsolutePath().toString();
+            return absolutePath;
+        }catch(Exception e){
+            System.out.println("Error converting relative URL to absolute URL: " + e.getMessage());
             return null;
         }
     }

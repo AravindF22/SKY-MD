@@ -22,10 +22,11 @@ public class PatientPortalHomePage extends BasePage {
     }
     public void selectDermatologyVisit() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(dermatologyVisit));
-            element.click();
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dermatologyVisit));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         } catch (TimeoutException e) {
-            System.err.println("Timeout: Dermatology Visit option not clickable.");
+            System.err.println("Timeout: 'Dermatology Visit' option not clickable within the wait time.");
         } catch (Exception e) {
             System.err.println("Error clicking Dermatology Visit: " + e.getMessage());
         }

@@ -243,6 +243,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
                 "Guardian name mismatch in Patient Chart");
         //Validating Referral clinic
         ExtentReportManager.getTest().log(Status.INFO, "Validating referral clinic details in patient chart");
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
@@ -382,7 +383,7 @@ public class TC_IP017_AddWardWithAllDetails extends BaseTest {
 
         // Validate selected patient
         ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
-        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
+        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getFirstWardName(),
                 "Name is matched with the selected ward ");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(3000);

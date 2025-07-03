@@ -191,7 +191,7 @@ public class TC_IP016_AddWardWithInsuranceDetails extends BaseTest {
         Thread.sleep(1000);
         // Validate selected patient
         ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
-        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
+        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getFirstWardName(),
                 "Selected Ward name is wrong");
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();

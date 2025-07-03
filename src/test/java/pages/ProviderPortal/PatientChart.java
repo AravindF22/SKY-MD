@@ -54,6 +54,8 @@ public class PatientChart extends BasePage {
 
     private final By profileIcon = By.xpath("//a[@class=\"dropdown-toggle clear\"]/span[1]");
     private final By logoutButton = By.xpath("//a[text()='Logout']");
+    private final By RefBatch = By.xpath("//div[@title=\"Patient is referred\"]");
+
     public boolean isPatientChart() {
         try {
             String text = wait.until(ExpectedConditions.visibilityOfElementLocated(isPatientChart)).getText();
@@ -461,6 +463,19 @@ public class PatientChart extends BasePage {
             return null;
         }
     }
+    public boolean isRefBatchDisplayed() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(RefBatch));
+            return element.isDisplayed();
+        } catch (TimeoutException e) {
+            System.out.println("RefBatch element not found: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error checking RefBatch visibility: " + e.getMessage());
+            return false;
+        }
+    }
+
     // Click the profile icon
     public void clickProfileIcon() {
         try {

@@ -254,6 +254,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
                 "Guardian name mismatch in Patient Chart");
         //Validating Referral clinic
         ExtentReportManager.getTest().log(Status.INFO, "Validating referral clinic details in patient chart");
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
@@ -394,7 +395,7 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
 
         // Validate selected patient
         ExtentReportManager.getTest().log(Status.INFO, "Validating selected patient in dermatology visit");
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
+        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getFirstPatientName());
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(3000);
         // Validation of Primary insurance

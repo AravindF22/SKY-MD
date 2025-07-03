@@ -31,8 +31,13 @@ jobs:
 
       - name: Install Google Chrome
         run: |
-          sudo apt update
-          sudo apt install -y google-chrome-stable
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+      - name: Print Java and Maven versions
+        run: |
+         java -version
+         mvn -version
 
       - name: Run Tests using testng.xml
         run: mvn clean test -DsuiteXmlFile=testng.xml

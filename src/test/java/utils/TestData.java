@@ -4,6 +4,9 @@ import com.github.javafaker.Faker;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TestData {
     private final Faker faker = new Faker();
@@ -43,7 +46,16 @@ public class TestData {
     private final int allergyCategoryThreeIndex;
     private final int medicationOneIndex;
     private final int medicationTwoIndex;
-
+    private final int concernIndex;
+    private final int symptomsOneIndex;
+    private final int sufferingConditionDays;
+    private final int statusIndex;
+    private final int selectDaysIndex;
+    private final int severityIndex;
+    private final int bodyPartsIndex;
+    private final int lifeStyleItemsIndex;
+    private final String optionalFieldText;
+    private Random random;
     public TestData() {
         this.fname = faker.name().firstName();
         this.lname = faker.name().lastName().replaceAll("[^a-zA-Z0-9]", "");
@@ -81,9 +93,41 @@ public class TestData {
         this.allergyCategoryThreeIndex = faker.number().numberBetween(0,allergyCategory.length);
         this.medicationOneIndex = faker.number().numberBetween(0, medications.length);
         this.medicationTwoIndex = faker.number().numberBetween(0, medications.length);
+        this.sufferingConditionDays = faker.number().numberBetween(1,100);
+        this.concernIndex = faker.number().numberBetween(0, concerns.length);
+        this.symptomsOneIndex = faker.number().numberBetween(0, symptoms.length);
+        this.statusIndex = faker.number().numberBetween(0, status.length);
+        this.selectDaysIndex = faker.number().numberBetween(0,selectDays.length);
+        this.severityIndex = faker.number().numberBetween(0, severity.length);
+        this.bodyPartsIndex = faker.number().numberBetween(0, bodyParts.length);
+        this.lifeStyleItemsIndex = faker.number().numberBetween(0,lifeStyleItems.length);
+        this.optionalFieldText = faker.lorem().word();
     }
     String [] insurances = {"AETNA", "Blue Cross / Blue Shield of Texas", "MEDICARE","ANTHEM BLUE CROSS","Medical Mutual of Ohio (Zelis)"};
     String [] relationship = {"Self","Spouse","Parent","Other"};
+    String[] symptoms = {
+            "Arthritis", "Bleeding", "Blistering", "Bruising", "Burning", "Changing Color",
+            "Changing Shape", "Comes and Goes", "Crusted", "Dark Skin Spots", "Dry Skin", "Elevated", "Enlarging",
+            "Fever", "Flaring", "Flushing", "Inflamed", "Irritated", "Itching", "Loss of Skin Pigment", "Painful",
+            "Redness", "Rough", "Scarring", "Sores in Mouth", "Spreading", "Stable", "Swelling", "Tender",};
+    String[] concerns = {
+            "Acne", "Cold Sores", "Cosmetic Procedure Follow Up",
+            "Dandruff", "Excessive Sweating", "Eyelash Thinning", "Hair Loss",
+            "Nail Issue", "Rash", "Rosacea", "Skin Aging", "Skin Discoloration",
+            "Skin Lesion", "Referred by RA Fisher", "Referred by WartPEEL"};
+    String[] bodyParts = {
+            "Abdomen", "Ankle - Left",
+            "Ankle - Right", "Anus",
+            "Arm - Lower Left",
+            "Arm - Lower Right",
+            "Arm - Upper Left"};
+    String[] status = {"Improving", "Worsening", "Unchanged"};
+    String[] selectDays = {"Day(s)", "Month(s)", "Year(s)"};
+    String[] severity = {"Mild", "Moderate", "Severe"};
+    String[] lifeStyleItems = {
+            "Excessive Sun Exposure",
+            "High Carb Diet", "Indoor Tanning",
+            "Smoker", "Stress", "Travel Abroad", "None"};
 
     String[] medications = {"Anu-Med", "Beta Med", "Perio Med", "Medi-Sleep", "Medi-Mucil", "Mediwash", "Medi-Tabs","Medi Pads", "Medi-Patch",
             "Medi-Phedryl", "Medi-Bismuth", "Solu-Medrol", "Solu-Medrol (PF)", "Mediproxen", "Medi-Seltzer", "Psoriasis Medicated", "Allergy Medication",
@@ -93,11 +137,11 @@ public class TestData {
 
     String[] allergies = {
             "Cats", "Ca Phosphate/Cats Claw", "Uncaria Tomentosa (Cats Claw)",
-            "Testim", "Testoderm", "testolactone",
-            "Testopel", "Testred", "testosterone","Testosterone (Eqv-Testim)", "Testopel Pellets",
+            "Testim", "Testoderm", "Testolactone",
+            "Testopel Implant Pellet", "Testred Oral Capsule", "Testosterone","Testosterone (Eqv-Testim)", "Testopel Pellets",
             "Testosterone Cypionate", "Testoderm(obsolete)", "Testolactone(obsolete)", "Testolin(obsolete)",
             "Testomar(obsolete)", "Testred(obsolete)", "Testro(obsolete)",
-            "Depo-Testadiol", "Bar-Test", "Depo-Testosterone", "Active Test", "Advocate Test", "dogs"};
+            "Depo-Testadiol", "Bar-Test", "Depo-Testosterone", "Active Test", "Advocate Test", "Dogs"};
 
     String[] alleryReaction = {
             "Anaphylaxis", "Brachycardia", "Chest Pain", "Conjunctivitis",
@@ -113,9 +157,7 @@ public class TestData {
     public String getFname() {
         return fname;
     }
-    public String getLname() {
-        return lname;
-    }
+    public String getLname() {return lname;}
     public String getEmail() {
         return email;
     }
@@ -161,16 +203,10 @@ public class TestData {
     public String getFeetForMinor(){
         return feetForMinor;
     }
-    public String getWholeHeight(){
-        return feet+"."+inch;
-    }
-    public String getWeight(){
-        return weight;
-    }
+    public String getWholeHeight(){return feet+"."+inch;}
+    public String getWeight(){return weight;}
     //primary insurance
-    public String getMemberNameForPrimaryInsurance(){
-        return fname+" "+lname;
-    }
+    public String getMemberNameForPrimaryInsurance(){return fname+" "+lname;}
     public String getMemberIdForPrimaryInsurance(){ return memberIdForPrimaryInsurance;}
     public String getMemberDobForPrimaryInsurance() {
         String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
@@ -178,18 +214,14 @@ public class TestData {
         return sdf.format(dobForMajor);
     }
     public String getPrimaryInsurance(){
-        return insurances[primaryInsuranceIndex];
-    }
+        return insurances[primaryInsuranceIndex];}
     //secondary insurance
     public String getSecondaryInsurance(){
-        return insurances[secondaryInsuranceIndex];
-    }
+        return insurances[secondaryInsuranceIndex];}
     public String getMemberNameForSecondaryInsurance(){
-        return memberNameForSecondaryInsurance;
-    }
+        return memberNameForSecondaryInsurance;}
     public String getMemberIdForSecondaryInsurance(){
-        return memberIdForSecondaryInsurance;
-    }
+        return memberIdForSecondaryInsurance;}
     public String getMemberDobForSecondaryInsurance() {
         String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -235,6 +267,41 @@ public class TestData {
     }
     public String getEnvironmentAllergyCategory(){
         return allergyCategory[1];
+    }
+    public String getConcern(){
+        return concerns[concernIndex];}
+    public String getSymptomOne(){
+        return symptoms[symptomsOneIndex];}
+    public String getStatus(){
+        return status[statusIndex];}
+    public String getSeverity(){
+        return severity[severityIndex];}
+    public String getSelectDays(){
+        return selectDays[selectDaysIndex];}
+    public String getSufferingConditionDays(){
+        return String.valueOf(sufferingConditionDays);}
+    public String getBodyParts(){
+        return bodyParts[bodyPartsIndex];}
+    public String getLifeStyleItem(){
+        return lifeStyleItems[lifeStyleItemsIndex];}
+    public String getWhatMakesWorse(){
+        random = new Random();
+        int count = 5 + random.nextInt(6); // Random number between 5 and 10
+        String worse = IntStream.range(0, count)
+                .mapToObj(i -> faker.lorem().word())
+                .collect(Collectors.joining(", "));
+        return worse;
+    }
+    public String getWhatMakesBetter(){
+        random = new Random();
+        int count = 5 + random.nextInt(6); // Random number between 5 and 10
+        String better = IntStream.range(0, count)
+                .mapToObj(i -> faker.lorem().word())
+                .collect(Collectors.joining(", "));
+        return better;
+    }
+    public String getOptionalFieldText(){
+        return optionalFieldText;
     }
 }
 

@@ -192,7 +192,7 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         Thread.sleep(1000);
         ExtentReportManager.getTest().log(Status.INFO, "validating Ward name in Dermatology visit");
         // Validate Ward name
-        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getNameOfTheWardInSelectWard(),
+        softAssert.assertEquals(testDataForWard.getFullName(), dermatologyVisitPage.getFirstWardName(),
                 "Ward name is mismatching in Dermatology visit");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);

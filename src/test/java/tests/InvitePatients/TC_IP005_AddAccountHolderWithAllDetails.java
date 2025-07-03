@@ -224,6 +224,7 @@ public class TC_IP005_AddAccountHolderWithAllDetails extends BaseTest {
 
         ExtentReportManager.getTest().log(Status.INFO, "Validating Referral details in Patient Chart");
         //referral details
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),

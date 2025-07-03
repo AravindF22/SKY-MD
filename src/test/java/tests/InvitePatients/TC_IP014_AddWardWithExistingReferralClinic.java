@@ -1,5 +1,6 @@
 package tests.InvitePatients;
 
+import org.testng.annotations.AfterClass;
 import utils.ConfigReader;
 import utils.TestData;
 import base.BaseTest;
@@ -114,21 +115,19 @@ public class TC_IP014_AddWardWithExistingReferralClinic extends BaseTest {
         Thread.sleep(3000);
         // Page navigates to Patient chart and searches for patient
         patientChart.searchPatient(testDataForWard.getFullName());
+        Thread.sleep(500);
         ExtentReportManager.getTest().log(Status.INFO, "Searched for ward in patient chart: " + testDataForWard.getFullName());
-
         // Assert provider name in a referral section
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         softAssert.assertEquals(testDataForProvider.getFullName(), patientChart.getProviderNameFromReferralSection(),
                 "Provider name in the referral section of AH is mismatching");
-        ExtentReportManager.getTest().log(Status.INFO, "Verified provider name in referral section");
-
         // Assert clinic name in a referral section
         softAssert.assertEquals(testDataForProvider.getReferralClinic(), patientChart.getClinicNameFromReferralSection(),
                 "Clinic name in the referral section of AH is mismatching");
-        ExtentReportManager.getTest().log(Status.INFO, "Verified clinic name in referral section");
         ExtentReportManager.getTest().log(Status.INFO, "Referral section in patient chart validated successfully");
         softAssert.assertAll();
     }
-    //@AfterClass()
+    @AfterClass()
     public void cleanUp() throws InterruptedException {
        // switchToTab("SkyMD Provider Portal");
         patientChart.clickProfileIcon();

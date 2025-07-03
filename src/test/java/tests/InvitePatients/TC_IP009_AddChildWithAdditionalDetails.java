@@ -193,7 +193,7 @@ public class TC_IP009_AddChildWithAdditionalDetails extends BaseTest {
         Thread.sleep(1000);
         ExtentReportManager.getTest().log(Status.INFO, "Validating Child's Name in Dermatology visit");
         //validate child name
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild(),
+        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getFirstPatientName(),
                 "Child name doesn't match");
         dermatologyVisitPage.clickContinueButton();
         Thread.sleep(1000);

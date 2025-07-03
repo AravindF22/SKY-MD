@@ -114,6 +114,7 @@ public class TC_IP002_AddAccountHolderWithExistingReferralClinic extends BaseTes
             Assert.fail("Patient chart page not loaded.");
         }
         ExtentReportManager.getTest().log(Status.INFO, "Verifying Referral details in Provider Portal");
+        softAssert.assertTrue(patientChart.isRefBatchDisplayed(), "RefBatch (Patient is referred) is not displayed in the Patient Chart.");
         // Navigate to Patient Chart and verify referral details
         String expectedProviderName = testDataForProvider.getFullName();
         String actualProviderName = patientChart.getProviderNameFromReferralSection();

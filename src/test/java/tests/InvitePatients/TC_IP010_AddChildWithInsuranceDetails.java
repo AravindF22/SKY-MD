@@ -194,7 +194,7 @@ public class TC_IP010_AddChildWithInsuranceDetails extends BaseTest {
         Thread.sleep(1000);
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
+        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getFirstPatientName());
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
 
         // Validate primary insurance in portal

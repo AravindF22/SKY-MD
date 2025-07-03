@@ -190,7 +190,7 @@ public class TC_IP007_AddChildWithMandatoryDetails extends BaseTest{
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         Thread.sleep(1000);
         ExtentReportManager.getTest().log(Status.INFO, "Verifying child name in Dermatology Visit");
-        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getNameOfTheChildInSelectChild());
+        softAssert.assertEquals(testDataForChild.getFullName(), dermatologyVisitPage.getFirstPatientName());
         ExtentReportManager.getTest().log(Status.INFO, "Patient Portal dependent and Dermatology Visit flow completed successfully");
         // Navigate back from Dermatology Visit and home page
         dermatologyVisitPage.clickBackArrowForVisitForm();

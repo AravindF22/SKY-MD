@@ -1,5 +1,7 @@
 package tests.Login;
 
+import org.testng.annotations.AfterClass;
+import pages.PatientPortal.PatientPortalHomePage;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -26,14 +28,20 @@ public class TC_LO002_LoginWithNonRegisteredEmail extends BaseTest {
     public TestData testDataForAccountHolder;
     public SoftAssert softAssert;
     public WebDriverWait wait;
+    public PatientPortalHomePage patientPortalHomePage;
+    public PatientPortalMyProfilePage patientPortalMyProfilePage;
+
     @BeforeClass
     public void setUp() throws IOException {
         driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        testDataForAccountHolder = new TestData();
     }
     @BeforeMethod
     public void initializeAsset(){
         softAssert = new SoftAssert();
+        patientPortalLoginPage = new PatientPortalLoginPage(driver);
+        patientPortalHomePage = new PatientPortalHomePage(driver);
+        patientPortalMyProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testLoginWithValidCredentials()
@@ -42,7 +50,7 @@ public class TC_LO002_LoginWithNonRegisteredEmail extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Starting login with valid patient credentials");
 
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
-        patientPortalLoginPage.setEmail(ConfigReader.getProperty("NewPatientEmail"));
+        patientPortalLoginPage.setEmail(testDataForAccountHolder.getEmail());
         ExtentReportManager.getTest().log(Status.INFO, "Entered Non registered email");
 
         patientPortalLoginPage.setPassword(ConfigReader.getProperty("PatientPortalMasterPassword"));
@@ -60,5 +68,15 @@ public class TC_LO002_LoginWithNonRegisteredEmail extends BaseTest {
             ExtentReportManager.getTest().log(Status.INFO, "Toast message not shown for invalid credentials.");
         }
         softAssert.assertAll();
+    }
+    @AfterClass
+    public void patientAndProviderPortalLogout() {
+        // Navigate to myProfile and logout
+        patientPortalHomePage.clickMyProfile();
+
+        myProfilePage = new PatientPortalMyProfilePage(driver);
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
     }
 }
