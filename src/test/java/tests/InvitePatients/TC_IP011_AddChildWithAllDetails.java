@@ -329,7 +329,6 @@ public class TC_IP011_AddChildWithAllDetails extends BaseTest {
     public void testPatientPortalMyProfile() {
         ExtentReportManager.getTest().log(Status.INFO, "Starting test: Patient Portal My Profile Verification");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-
         // Login to Patient Portal as account holder
         ExtentReportManager.getTest().log(Status.INFO, "Logging in to Patient Portal as account holder");
         loginPagePatientPortal.login(testDataForAccountHolder.getEmail(), "Welcome@123");
