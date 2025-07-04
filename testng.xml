@@ -4,6 +4,16 @@
     <listeners>
         <listener class-name="utils.ExtentReportManager"/>
     </listeners>
+    <test name="Derm test">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.DermatologyVisits.TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder"/>
+            <class name="tests.DermatologyVisits.TC_DV002_CreateSelfPayDermatologyVisitForChild"/>
+            <class name="tests.DermatologyVisits.TC_DV003_CreateSelfPayDermatologyVisitForWard"/>
+            <class name="tests.DermatologyVisits.TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse"/>
+            <class name="tests.TCTest"/>
+        </classes>
+    </test>
 <!--    <test name="InvitePatientTest">-->
 <!--        <parameter name="browser" value="chrome"/>-->
 <!--        <classes>-->
@@ -40,15 +50,5 @@
 <!--        </classes>-->
 <!--    </test>-->
 
-    <test name="Derm test">
-        <parameter name="browser" value="chrome"/>
-        <classes>
-            <class name="tests.DermatologyVisits.TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder"/>
-            <class name="tests.DermatologyVisits.TC_DV002_CreateSelfPayDermatologyVisitForChild"/>
-            <class name="tests.DermatologyVisits.TC_DV003_CreateSelfPayDermatologyVisitForWard"/>
-            <class name="tests.DermatologyVisits.TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse"/>
-<!--            <class name="tests.TCTest"/>-->
 
-        </classes>
-    </test>
 </suite>
