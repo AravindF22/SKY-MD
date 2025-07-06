@@ -84,6 +84,7 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
     public void testBasicDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Basic Details");
+        Thread.sleep(1000);
         patientPortalHomePage.selectDermatologyVisit();
         dermatologyVisitPage.selectDermProviderSection();
         dermatologyVisitPage.clickContinueAfterSelectingDermProvider();
@@ -189,10 +190,10 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
         Assert.assertTrue(dermatologyVisitPage.clickSearchMedicationButton(), "Failed to click search medication button");
         Assert.assertTrue(dermatologyVisitPage.addMedication(
                 testDataForSomeOneElse.getMedicationOne(),
-                "test",
-                "Oil",
-                "PRN",
-                "PRN"), "Failed to add medication");
+                testDataForSomeOneElse.getDosageOne(),
+                testDataForSomeOneElse.getMedicationFormOne(),
+                testDataForSomeOneElse.getMedicationFrequencyOne(),
+                testDataForSomeOneElse.getMedicationPerOne()), "Failed to add medication");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after adding medication");
         dermatologyVisitPage.clickYesBtnInSkinCareProduct();
         dermatologyVisitPage.enterSkinCareProduct("test");
@@ -264,38 +265,50 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
     }
     @Test(priority = 9, description = "Print Account Holder and Visit Details in Extent Report")
     public void printVisitDetailsInReport() {
-        String accountAndVisitDetailsHtml = "<b>Entered Account Holder Details:</b><br>" +
-                "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
-                "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
-                "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
-                "Mobile Number: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
-                "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
-                "Provider Name: " + testDataForAccountHolder.getProviderName() + "<br><br>" +
+        String accountAndVisitDetailsHtml =
+                "<b>Entered Account Holder Details:</b><br>" +
+                        "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                        "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                        "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                        "Mobile Number: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                        "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
+                        "Provider Name: " + testDataForAccountHolder.getProviderName() + "<br><br>" +
 
-                "<b>Entered Visit Details:</b><br>" +
-                "Visit Type: Dermatology Visit<br>" +
-                "SomeOne Else First Name: " + testDataForSomeOneElse.getFname() + "<br>" +
-                "SomeOne Else Last Name: " + testDataForSomeOneElse.getLname() + "<br>" +
-                "SomeOne Else Full Name: " + testDataForSomeOneElse.getFullName() + "<br>" +
-                "Address Line 1: " + testDataForSomeOneElse.getStreetAddressOne() + "<br>" +
-                "Address Line 2: " + testDataForSomeOneElse.getStreetAddressTwo() + "<br>" +
-                "Date of Birth: " + testDataForSomeOneElse.getDobForMajor() + "<br>" +
-                "Height: " + testDataForSomeOneElse.getFeet() + " feet " + testDataForSomeOneElse.getInch() + " inches<br>" +
-                "Weight: " + testDataForSomeOneElse.getWeight() + "<br>" +
-                "Gender: Male<br>" +
-                "Dermatology Concern: " + testDataForSomeOneElse.getConcern() + "<br>" +
-                "Affected Body Parts: " + testDataForSomeOneElse.getBodyParts() + "<br>" +
-                "Current Status: " + testDataForSomeOneElse.getStatus() + "<br>" +
-                "Condition Duration: " + testDataForSomeOneElse.getSufferingConditionDays() + " " + testDataForSomeOneElse.getSelectDays() + "<br>" +
-                "Severity Level: " + testDataForSomeOneElse.getSeverity() + "<br>" +
-                "Selected Symptoms: " + testDataForSomeOneElse.getSymptomOne() + "<br>" +
-                "What Makes It Worse: test worse<br>" +
-                "What Makes It Better: test better<br>" +
-                "Lifestyle Factors: Stress<br>" +
-                "Allergies: " + testDataForSomeOneElse.getAllergyOne() + " (Reaction: " + testDataForSomeOneElse.getAllergyReactionOne() + ", Category: " + testDataForSomeOneElse.getDrugAllergyCategory() + ")<br>" +
-                "Current Medications: " + testDataForSomeOneElse.getMedicationOne() + " (Reason: test, Form: Oil, Frequency: PRN, Duration: PRN)<br>" +
-                "Current Skin Care Products: test<br>" +
-                "Additional Information: test optional...";
+                        "<b>Visit Type: Dermatology Visit</b><br>" +
+                        "<b>Basic Details:</b><br>" +
+                        "Address Line 1: " + testDataForSomeOneElse.getStreetAddressOne() + "<br>" +
+                        "Address Line 2: " + testDataForSomeOneElse.getStreetAddressTwo() + "<br>" +
+                        "Date of Birth: " + testDataForSomeOneElse.getDobForMajor() + "<br>" +
+                        "Height: " + testDataForSomeOneElse.getFeet() + " feet " + testDataForSomeOneElse.getInch() + " inches<br>" +
+                        "Weight: " + testDataForSomeOneElse.getWeight() + "<br>" +
+                        "Gender: Male<br>" +
+
+                        "<b>Visit Details:</b><br>" +
+                        "Dermatology Concern: " + testDataForSomeOneElse.getConcern() + "<br>" +
+                        "Affected Body Parts: " + testDataForSomeOneElse.getBodyParts() + "<br>" +
+                        "Current Status: " + testDataForSomeOneElse.getStatus() + "<br>" +
+                        "Condition Duration: " + testDataForSomeOneElse.getSufferingConditionDays() + " " + testDataForSomeOneElse.getSelectDays() + "<br>" +
+                        "Severity Level: " + testDataForSomeOneElse.getSeverity() + "<br>" +
+
+                        "<b>Symptoms:</b><br>" +
+                        "Selected Symptoms: " + testDataForSomeOneElse.getSymptomOne() + "<br>" +
+                        "What Makes It Worse: " + testDataForSomeOneElse.getWhatMakesWorse() + "<br>" +
+                        "What Makes It Better: " + testDataForSomeOneElse.getWhatMakesBetter() + "<br>" +
+
+                        "<b>Medical History:</b><br>" +
+                        "Lifestyle Factors: " + testDataForSomeOneElse.getLifeStyleItem() + "<br>" +
+                        "Allergies: " + testDataForSomeOneElse.getAllergyOne() + " (Reaction: " +
+                        testDataForSomeOneElse.getAllergyReactionOne() + ", Category: " +
+                        testDataForSomeOneElse.getDrugAllergyCategory() + ")<br>" +
+                        "Current Medications: " + testDataForAccountHolder.getMedicationOne() + "<br>" +
+                        "(Dosage: " + testDataForAccountHolder.getDosageOne() + ", " +
+                        "Form: " + testDataForAccountHolder.getMedicationFormOne() + ", " +
+                        "Frequency: " + testDataForAccountHolder.getMedicationFrequencyOne() + ", " +
+                        "Per: " + testDataForAccountHolder.getMedicationPerOne() + ")<br>" +
+                        "Current Skin Care Products: test<br>" +
+                        "Additional Information: " + testDataForSomeOneElse.getOptionalFieldText();
+
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
+
     }
 }

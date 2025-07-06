@@ -16,6 +16,7 @@ public class PatientPortalHomePage extends BasePage {
     private final By myProfileLink = By.xpath("(//p[text()='My Profile'])[1]");
     private final By dermatologyVisit = By.xpath("//p[text()='Dermatology Visit']");
     private final By primaryCareVisit = By.xpath("//p[text()='Primary Care Visit']");
+    private final By behaviouralHealthVisit = By.xpath("//p[contains(text(),'behavioral health')]/parent::div");
 
     public void clickMyProfile(){
         wait.until(ExpectedConditions.visibilityOfElementLocated(myProfileLink)).click();
@@ -48,6 +49,17 @@ public class PatientPortalHomePage extends BasePage {
             return true;
         }catch (Exception e){
             System.out.println("Welcome to SkyMD is not visible "+ e.getMessage());
+            return false;
+        }
+    }
+    public boolean selectBehaviouralHealthVisit(){
+        try {
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(behaviouralHealthVisit));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking Behavioural Health Visit: " + e.getMessage());
             return false;
         }
     }

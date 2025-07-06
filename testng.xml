@@ -11,31 +11,32 @@
             <class name="tests.DermatologyVisits.TC_DV002_CreateSelfPayDermatologyVisitForChild"/>
             <class name="tests.DermatologyVisits.TC_DV003_CreateSelfPayDermatologyVisitForWard"/>
             <class name="tests.DermatologyVisits.TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse"/>
-            <class name="tests.TCTest"/>
+            <class name="tests.BehaviouralHealthVisits.TC_BH001_CreateBHVisitForAccountHolder"/>
+<!--            <class name="tests.TCTest"/>-->
         </classes>
     </test>
     <test name="InvitePatientTest">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="tests.InvitePatients.TC_IP001_AddAccountHolderWithMandatoryDetails"/>
-<!--            <class name="tests.InvitePatients.TC_IP002_AddAccountHolderWithExistingReferralClinic"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP003_AddAccountHolderWithAdditionalDetails"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP004_AddAccountHolderWithBothInsuranceDetails"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP005_AddAccountHolderWithAllDetails"/>-->
+            <class name="tests.InvitePatients.TC_IP002_AddAccountHolderWithExistingReferralClinic"/>
+            <class name="tests.InvitePatients.TC_IP003_AddAccountHolderWithAdditionalDetails"/>
+            <class name="tests.InvitePatients.TC_IP004_AddAccountHolderWithBothInsuranceDetails"/>
+            <class name="tests.InvitePatients.TC_IP005_AddAccountHolderWithAllDetails"/>
 <!--            <class name="tests.InvitePatients.TC_IP006_AddAccountHolderWithHealthProfile"/>-->
 
 <!--            <class name="tests.InvitePatients.TC_IP007_AddChildWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP008_AddChildWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP009_AddChildWithAdditionalDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP010_AddChildWithInsuranceDetails"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP011_AddChildWithAllDetails"/>-->
+            <class name="tests.InvitePatients.TC_IP011_AddChildWithAllDetails"/>
 <!--            <class name="tests.InvitePatients.TC_IP012_AddChildWithHealthProfile"/>-->
 
 <!--            <class name="tests.InvitePatients.TC_IP013_AddWardWithMandatoryDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP014_AddWardWithExistingReferralClinic"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP015_AddWardWithAdditionalDetails"/>-->
 <!--            <class name="tests.InvitePatients.TC_IP016_AddWardWithInsuranceDetails"/>-->
-<!--            <class name="tests.InvitePatients.TC_IP017_AddWardWithAllDetails"/>-->
+            <class name="tests.InvitePatients.TC_IP017_AddWardWithAllDetails"/>
 <!--            <class name="tests.InvitePatients.TC_IP018_AddWardWithHealthProfile"/>-->
         </classes>
     </test>
@@ -49,6 +50,4 @@
 <!--            <class name="tests.Login.TC_LO003_VerifyLoginPageErrorMessages"/>-->
 <!--        </classes>-->
 <!--    </test>-->
-
-
 </suite>

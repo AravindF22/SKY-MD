@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TestData {
+    //Faker is initialized only once, improving performance
     private final Faker faker = new Faker();
     private final String fname;
     private final String lname;
@@ -38,14 +39,22 @@ public class TestData {
     private final int allergyOneIndex ;
     private final int allergyTwoIndex ;
     private final int allergyThreeIndex;
-    private final int alleryReactionOneIndex ;
-    private final int alleryReactionTwoIndex ;
-    private final int alleryReactionThreeIndex;
+    private final int allergyReactionOneIndex;
+    private final int allergyReactionTwoIndex;
+    private final int allergyReactionThreeIndex;
     private final int allergyCategoryOneIndex;
     private final int allergyCategoryTwoIndex;
     private final int allergyCategoryThreeIndex;
     private final int medicationOneIndex;
     private final int medicationTwoIndex;
+    private final int dosageOneValue;
+    private final int dosageTwoValue;
+    private final int medicationFormOneIndex;
+    private final int medicationFormTwoIndex;
+    private final int medicationFrequencyOneIndex;
+    private final int medicationFrequencyTwoIndex;
+    private final int medicationPerOneIndex;
+    private final int medicationPerTwoIndex;
     private final int concernIndex;
     private final int symptomsOneIndex;
     private final int sufferingConditionDays;
@@ -55,6 +64,29 @@ public class TestData {
     private final int bodyPartsIndex;
     private final int lifeStyleItemsIndex;
     private final String optionalFieldText;
+    private final int therapyReasonsIndex;
+    private final int smokingItemsIndex;
+    private final int symptomsListIndex;
+    private final int medicalConditionIndex;
+    private final int exerciseStatusIndex;
+    private final int alcoholStatusIndex;
+    private final int therapistHistoryIndex;
+    private final String reasonForPastTherapistVisit;
+    private final int hospitalizedHistoryIndex;
+    private final int suicidalThoughtIndex;
+    private final int hospitalizedReasonIndex;
+    private final String additionalFieldText;
+    private final int questionnaireOneIndex;
+    private final int questionnaireTwoIndex;
+    private final int questionnaireThreeIndex;
+    private final int questionnaireFourIndex;
+    private final int questionnaireFiveIndex;
+    private final int questionnaireSixIndex;
+    private final int questionnaireSevenIndex;
+    private final int questionnaireEightIndex;
+    private final int questionnaireNineIndex;
+    private final int questionnaireTenIndex;
+
     private Random random;
     public TestData() {
         this.fname = faker.name().firstName();
@@ -85,9 +117,9 @@ public class TestData {
         this.allergyOneIndex =faker.number().numberBetween(0, allergies.length);
         this.allergyTwoIndex = faker.number().numberBetween(0, allergies.length);
         this.allergyThreeIndex = faker.number().numberBetween(0, allergies.length);
-        this.alleryReactionOneIndex = faker.number().numberBetween(0,alleryReaction.length);
-        this.alleryReactionTwoIndex = faker.number().numberBetween(0,alleryReaction.length);
-        this.alleryReactionThreeIndex = faker.number().numberBetween(0,alleryReaction.length);
+        this.allergyReactionOneIndex = faker.number().numberBetween(0,alleryReaction.length);
+        this.allergyReactionTwoIndex = faker.number().numberBetween(0,alleryReaction.length);
+        this.allergyReactionThreeIndex = faker.number().numberBetween(0,alleryReaction.length);
         this.allergyCategoryOneIndex = faker.number().numberBetween(0,allergyCategory.length);
         this.allergyCategoryTwoIndex = faker.number().numberBetween(0,allergyCategory.length);
         this.allergyCategoryThreeIndex = faker.number().numberBetween(0,allergyCategory.length);
@@ -102,6 +134,36 @@ public class TestData {
         this.bodyPartsIndex = faker.number().numberBetween(0, bodyParts.length);
         this.lifeStyleItemsIndex = faker.number().numberBetween(0,lifeStyleItems.length);
         this.optionalFieldText = faker.lorem().word();
+        this.therapyReasonsIndex = faker.number().numberBetween(0,therapyReasons.length);
+        this.smokingItemsIndex = faker.number().numberBetween(0, SmokingItems.length);
+        this.symptomsListIndex = faker.number().numberBetween(0, symptomsList.length);
+        this.medicalConditionIndex = faker.number().numberBetween(0, MedicalConditions.length);
+        this.exerciseStatusIndex = faker.number().numberBetween(0, exerciseStatuses.length);
+        this.alcoholStatusIndex = faker.number().numberBetween(0,alcoholStatuses.length);
+        this.therapistHistoryIndex = faker.number().numberBetween(0, therapistHistorySts.length);
+        this.reasonForPastTherapistVisit = faker.lorem().word();
+        this.hospitalizedHistoryIndex = faker.number().numberBetween(0, hospitalizedHistorySts.length);
+        this.suicidalThoughtIndex = faker.number().numberBetween(0,suicidalThoughts.length);
+        this.hospitalizedReasonIndex = faker.number().numberBetween(0, hospitalizedReason.length);
+        this.additionalFieldText = faker.lorem().word();
+        this.questionnaireOneIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireTwoIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireThreeIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireFourIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireFiveIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireSixIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireSevenIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireEightIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireNineIndex = faker.number().numberBetween(0, questionnaireOptions.length);
+        this.questionnaireTenIndex = faker.number().numberBetween(0, questionnaireTenOptions.length);
+        this.medicationFormOneIndex = faker.number().numberBetween(0, medicationForms.length);
+        this.medicationFormTwoIndex = faker.number().numberBetween(0, medicationForms.length);
+        this.medicationFrequencyOneIndex  = faker.number().numberBetween(0, medicationFrequencies.length);
+        this.medicationFrequencyTwoIndex  = faker.number().numberBetween(0, medicationFrequencies.length);
+        this.medicationPerOneIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
+        this.medicationPerTwoIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
+        this.dosageOneValue = faker.number().numberBetween(1, 501);
+        this.dosageTwoValue = faker.number().numberBetween(1, 501);
     }
     String [] insurances = {"AETNA", "Blue Cross / Blue Shield of Texas", "MEDICARE","ANTHEM BLUE CROSS","Medical Mutual of Ohio (Zelis)"};
     String [] relationship = {"Self","Spouse","Parent","Other"};
@@ -134,13 +196,23 @@ public class TestData {
             "Allergy Medicine","Mediwash Eye Irrigant", "medroxyprogesterone", "Testim", "Testopel", "Testred", "First-Testosterone", "FIRST-Testosterone MC",
             "testosterone", "Depo-Testosterone", "spherule-derv Cocci skin test", "testosterone cypionate", "testosterone enanthate", "testosterone propionate",
             "candida albicans skin test", "testosterone undecanoate"};
+    String[] units = {"mg", "ml", "g", "units", "drops", "puffs"};
 
+    String[] medicationForms = {
+            "Capsule", "Cream", "Foam", "Gel", "Implant", "Injection", "Liquid",
+            "Lotion", "Oil", "Ointment", "Patch", "Ring", "Shampoo", "Tablet", "Other"
+    };
+    String[] medicationFrequencies = {
+            "Once", "Twice","Three", "Four", "Five", "Six", "PRN", "Other"
+    };
+    String[] medicationPerOptions = {
+            "Hour", "Day", "Week", "Month", "Year", "PRN", "Other"
+    };
     String[] allergies = {
-            "Cats", "Ca Phosphate/Cats Claw", "Uncaria Tomentosa (Cats Claw)",
-            "Testim", "Testoderm", "Testolactone",
-            "Testopel Implant Pellet", "Testred Oral Capsule", "Testosterone","Testosterone (Eqv-Testim)", "Testopel Pellets",
-            "Testosterone Cypionate", "Testoderm(obsolete)", "Testolactone(obsolete)", "Testolin(obsolete)",
-            "Testomar(obsolete)", "Testred(obsolete)", "Testro(obsolete)",
+            "Cats", "Ca Phosphate/Cats Claw", "Uncaria Tomentosa (Cats Claw)", "Testim", "Testoderm",
+            "Testolactone", "Testopel Implant Pellet", "Testred Oral Capsule", "Testosterone","Testosterone (Eqv-Testim)",
+            "Testopel Pellets", "Testosterone Cypionate", "Testoderm(obsolete)", "Testolactone(obsolete)",
+            "Testolin(obsolete)", "Testomar(obsolete)", "Testred(obsolete)", "Testro(obsolete)",
             "Depo-Testadiol", "Bar-Test", "Depo-Testosterone", "Active Test", "Advocate Test", "Dogs"};
 
     String[] alleryReaction = {
@@ -150,6 +222,56 @@ public class TestData {
             "Runny nose", "Shortness of breath", "Tachycardia", "Tongue swelling", "Vomiting Wheezing"};
 
     String [] allergyCategory = {"Drug or Medication Allergy", "Environment or Food Allergy"};
+
+    String[] SmokingItems = {
+            "Cigarettes", "Vape",
+            "Cannabis", "Chew",
+            "Cigar", "Pipe"};
+    String[] therapyReasons = {
+            "Feeling depressed", "Experiencing anxiety",
+            "Mood is impacting areas of my life", "Relationship conflicts",
+            "Feelings of purposelessness/ lack of meaning",
+            "A recent loss - grief", "Recent or past trauma",
+            "Working through a challenge", "Building self-worth, " +
+            "self confidence", "Personal improvement", "Parenting",
+            "LGBTQ+ matters", "Religion", "Social anxiety", "Alcohol abuse"};
+    String[] symptomsList = {
+            "Decreased appetite", "Increased appetite",
+            "Trouble concentrating", "Difficulty sleeping", "Excessive sleep", "Low motivation",
+            "Isolation from others", "Fatigue/Low energy", "Excessive energy", "Low Self-esteem",
+            "Depressed mood", "Tearful or crying spells", "Anxiety", "Regretful", "Fear",
+            "Compulsive", "Procrastination", "Decreased libido", "Increased libido"
+    };
+    String[] MedicalConditions = {
+            "Asthma",
+            "Arthritis", "Cancer", "Skin Cancer",
+            "Headaches / Migraines", "Hepatitis",
+            "Anemia", "High Blood Pressure (HTN)",
+            "Abnormal Cholesterol", "Diabetes"
+    };
+    String [] therapistHistorySts = {"Yes", "No"};
+    String [] hospitalizedHistorySts = {"Yes", "No"};
+
+    String [] exerciseStatuses ={"Yes", "No"};
+    String [] alcoholStatuses = {"Never", "Occasionally", "Daily", "Previously/Quit"};
+
+    String[] suicidalThoughts = {
+            "Never", "Over a year ago",
+            "Over the last several months",
+            "This week", "Currently"
+    };
+    String[]  hospitalizedReason = {
+            "Recent or past hospitalizations for psychopathy, hallucinations, delusions, substance abuse",
+            "Recent inpatient treatment for active suicidality, self harm, or assault committed to others",
+            "Recent inpatient treatment for severe substance abuse of any kind - especially opioid, fentanyl, alcohol",
+            "Recent arrest or hospitalization for mental health concern"
+    };
+    String[] questionnaireOptions = {
+            "Not at all", "Several days", "More than half the days","Nearly every day"
+    };
+    String[] questionnaireTenOptions = {
+            "Not difficult at all","Somewhat difficult", "Very difficult", "Extremely difficult"
+    };
     // mandatory details
     public String getFullName(){
         return fname+" "+lname;
@@ -236,6 +358,9 @@ public class TestData {
     public String getMedicationOne(){
         return medications[medicationOneIndex];
     }
+    public String getMedicationTwo(){
+        return medications[medicationTwoIndex];
+    }
     public String getAllergyOne(){return allergies[allergyOneIndex];
     }
     public String getAllergyTwo(){
@@ -245,13 +370,13 @@ public class TestData {
         return allergies[allergyThreeIndex];
     }
     public String getAllergyReactionOne(){
-        return alleryReaction[alleryReactionOneIndex];
+        return alleryReaction[allergyReactionOneIndex];
     }
     public String getAllergyReactionTwo(){
-        return alleryReaction[alleryReactionTwoIndex];
+        return alleryReaction[allergyReactionTwoIndex];
     }
     public String getAllergyReactionThree(){
-        return alleryReaction[alleryReactionThreeIndex];
+        return alleryReaction[allergyReactionThreeIndex];
     }
     public String getAllergyCategoryOne(){
         return allergyCategory[allergyCategoryOneIndex];
@@ -302,6 +427,106 @@ public class TestData {
     }
     public String getOptionalFieldText(){
         return optionalFieldText;
+    }
+    public String getTherapyReasons(){
+        return therapyReasons[therapyReasonsIndex];
+    }
+    public String getSmokingItem(){
+        return SmokingItems[smokingItemsIndex];
+    }
+    public String getSymptoms(){
+        return symptomsList[symptomsListIndex];
+    }
+    public String getMedicalCondition(){
+        return MedicalConditions[medicalConditionIndex];
+    }
+    public String getExerciseStatus(){
+        return exerciseStatuses[exerciseStatusIndex];
+    }
+    public String getAlcoholStatus(){
+        return alcoholStatuses[alcoholStatusIndex];
+    }
+    public String getTherapistHistoryStatus(){
+        return therapistHistorySts[therapistHistoryIndex];
+    }
+    public String getHospitalizedHistoryStatus(){
+        return hospitalizedHistorySts[hospitalizedHistoryIndex];
+    }
+    public String getSuicidalThoughtStatus(){
+        return suicidalThoughts[suicidalThoughtIndex];
+    }
+    public String getReasonForPastTherapistVisit(){
+        return reasonForPastTherapistVisit;
+    }
+    public String getHospitalizedReason(){
+        return hospitalizedReason[hospitalizedReasonIndex];
+    }
+    public String getAdditionalText(){
+        return additionalFieldText;
+    }
+    public String getQuestionnaireOne(){
+        return questionnaireOptions[questionnaireOneIndex];
+    }
+    public String getQuestionnaireTwo() {
+        return questionnaireOptions[questionnaireTwoIndex];
+    }
+
+    public String getQuestionnaireThree() {
+        return questionnaireOptions[questionnaireThreeIndex];
+    }
+
+    public String getQuestionnaireFour() {
+        return questionnaireOptions[questionnaireFourIndex];
+    }
+
+    public String getQuestionnaireFive() {
+        return questionnaireOptions[questionnaireFiveIndex];
+    }
+
+    public String getQuestionnaireSix() {
+        return questionnaireOptions[questionnaireSixIndex];
+    }
+
+    public String getQuestionnaireSeven() {
+        return questionnaireOptions[questionnaireSevenIndex];
+    }
+
+    public String getQuestionnaireEight() {
+        return questionnaireOptions[questionnaireEightIndex];
+    }
+
+    public String getQuestionnaireNine() {
+        return questionnaireOptions[questionnaireNineIndex];
+    }
+
+    public String getQuestionnaireTen() {
+        return questionnaireTenOptions[questionnaireTenIndex];
+    }
+    public String getMedicationFormOne(){
+        return medicationForms[medicationFormOneIndex];
+    }
+    public String getMedicationFormTwo(){
+        return medicationForms[medicationFormTwoIndex];
+    }
+    public String getMedicationFrequencyOne(){
+        return medicationFrequencies[medicationFrequencyOneIndex];
+    }
+    public String getMedicationFrequencyTwo(){
+        return medicationFrequencies[medicationFrequencyTwoIndex];
+    }
+    public String getMedicationPerOne(){
+        return medicationPerOptions[medicationPerOneIndex];
+    }
+    public String getMedicationPerTwo(){
+        return medicationPerOptions[medicationPerTwoIndex];
+    }
+    public String getDosageOne() {
+        String unit = units[faker.random().nextInt(units.length)];
+        return dosageOneValue + " " + unit;
+    }
+    public String getDosageTwo(){
+        String unit = units[faker.random().nextInt(units.length)];
+        return dosageTwoValue + " " + unit;
     }
 }
 

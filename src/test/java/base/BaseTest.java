@@ -78,7 +78,7 @@ public class BaseTest {
     }
     @AfterClass()
     public void tearDown() {
-       driver.quit();
+       //driver.quit();
     }
     public void switchToTab( int tab) throws InterruptedException {
         try {

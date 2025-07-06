@@ -1002,7 +1002,8 @@ public class DermatologyVisitPage extends BasePage {
         try {
             // Step 1: Click the medication input to activate the dropdown
             try {
-                WebElement medicationInput = wait.until(ExpectedConditions.elementToBeClickable(enterMedication));
+                Thread.sleep(1000);
+                WebElement medicationInput = wait.until(ExpectedConditions.visibilityOfElementLocated(enterMedication));
                 medicationInput.click();
             } catch (Exception e) {
                 System.out.println("Error clicking medication input: " + e.getMessage());

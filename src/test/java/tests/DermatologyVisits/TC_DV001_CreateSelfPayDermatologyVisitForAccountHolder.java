@@ -114,7 +114,7 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
         ExtentReportManager.getTest().log(Status.INFO, "Visit details completed");
     }
 
-    @Test(priority = 4, dependsOnMethods = "testvisitDetails")
+    @Test(priority = 4, dependsOnMethods = "testVisitDetails")
     public void testVisitPhotos() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Photos");
 
@@ -164,10 +164,10 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
         Assert.assertTrue(dermatologyVisitPage.clickSearchMedicationButton(), "Failed to click search medication button");
         Assert.assertTrue(dermatologyVisitPage.addMedication(
                 testDataForAccountHolder.getMedicationOne(),
-                "test",
-                "Oil",
-                "PRN",
-                "PRN"), "Failed to add medication details");
+                testDataForAccountHolder.getDosageOne(),
+                testDataForAccountHolder.getMedicationFormOne(),
+                testDataForAccountHolder.getMedicationFrequencyOne(),
+                testDataForAccountHolder.getMedicationPerOne()), "Failed to add medication details");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after adding medication");
         dermatologyVisitPage.clickYesBtnInSkinCareProduct();
         dermatologyVisitPage.enterSkinCareProduct("test");
@@ -245,7 +245,8 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
     }
     @Test(priority = 9, description = "Print Account Holder and Visit Details in Extent Report")
     public void printVisitDetailsInReport() {
-        String accountAndVisitDetailsHtml = "<b>Entered Account Holder Details:</b><br>" +
+        String accountAndVisitDetailsHtml =
+                "<b>Entered Account Holder Details:</b><br>" +
                 "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
                 "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
                 "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
@@ -253,28 +254,34 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
                 "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" +
                 "Provider Name: " + testDataForAccountHolder.getProviderName() + "<br><br>" +
 
-                "<b>Entered Visit Details:</b><br>" +
-                "Visit Type: Dermatology Visit<br>" +
+                "<b>Visit Type: Dermatology Visit</b><br>" +
+                        "<b>Basic Details:</b><br>" +
                 "Address Line 1: " + testDataForAccountHolder.getStreetAddressOne() + "<br>" +
                 "Address Line 2: " + testDataForAccountHolder.getStreetAddressTwo() + "<br>" +
                 "Date of Birth: " + testDataForAccountHolder.getDobForMajor() + "<br>" +
                 "Height: " + testDataForAccountHolder.getFeet() + " feet " + testDataForAccountHolder.getInch() + " inches<br>" +
                 "Weight: " + testDataForAccountHolder.getWeight() + "<br>" +
                 "Gender: Male<br>" +
+                        "<b>Visit Details:</b><br>" +
                 "Dermatology Concern: " + testDataForAccountHolder.getConcern() + "<br>" +
                 "Affected Body Parts: " + testDataForAccountHolder.getBodyParts() + "<br>" +
                 "Current Status: " + testDataForAccountHolder.getStatus() + "<br>" +
                 "Condition Duration: " + testDataForAccountHolder.getSufferingConditionDays() + " " + testDataForAccountHolder.getSelectDays() + "<br>" +
                 "Severity Level: " + testDataForAccountHolder.getSeverity() + "<br>" +
+                        "<b>Symptoms:</b><br>" +
                 "Selected Symptoms: " + testDataForAccountHolder.getSymptomOne() + "<br>" +
                 "What Makes It Worse: " + testDataForAccountHolder.getWhatMakesWorse() + "<br>" +
                 "What Makes It Better: " + testDataForAccountHolder.getWhatMakesBetter() + "<br>" +
+                        "<b>Medical History:</b><br>" +
                 "Lifestyle Factors: " + testDataForAccountHolder.getLifeStyleItem() + "<br>" +
                 "Allergies: " + testDataForAccountHolder.getAllergyOne() + " (Reaction: " +
                 testDataForAccountHolder.getAllergyReactionOne() + ", Category: " +
                 testDataForAccountHolder.getDrugAllergyCategory() + ")<br>" +
-                "Current Medications: " + testDataForAccountHolder.getMedicationOne() +
-                " (Reason: test, Form: Oil, Frequency: PRN, Duration: PRN)<br>" +
+                "Current Medications: " + testDataForAccountHolder.getMedicationOne() +"<br>"+
+                        "(Dosage: " + testDataForAccountHolder.getDosageOne() + ", " +
+                        "Form: " + testDataForAccountHolder.getMedicationFormOne() + ", " +
+                        "Frequency: " + testDataForAccountHolder.getMedicationFrequencyOne() + ", " +
+                        "Per: " + testDataForAccountHolder.getMedicationPerOne() +")<br>"+
                 "Current Skin Care Products: test<br>" +
                 "Additional Information: " + testDataForAccountHolder.getOptionalFieldText();
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
