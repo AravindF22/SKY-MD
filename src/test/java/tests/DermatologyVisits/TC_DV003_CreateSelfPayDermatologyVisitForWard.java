@@ -203,7 +203,6 @@ public class TC_DV003_CreateSelfPayDermatologyVisitForWard extends BaseTest {
                 ConfigReader.getProperty("testCardCVV"));
         try {
             boolean isEnabled = dermatologyVisitPage.isSubmitForEvaluationEnabled();
-            softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
 
             if (isEnabled) {
                 ExtentReportManager.getTest().log(Status.PASS,

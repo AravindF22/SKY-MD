@@ -84,6 +84,11 @@ public class DermatologyVisitPage extends BasePage {
     private final By noBtnForSmartPhoneUpload = By.xpath("//button[text()='No']");
     private final By uploadCloseUpPic = By.xpath("(//div[@class=\"flex justify-evenly\"]/div/div)[1]");
     private final By uploadFarAwayPic = By.xpath("(//div[@class=\"flex justify-evenly\"]/div/div)[2]");
+    private final By addMorePhotosBtn = By.xpath("//button[text()='Add More Photos']");
+    private final By uploadCloseUpPic2 = By.cssSelector("#case_image_pickerclose_up_photo_2");
+    private final By uploadFarAwayPic2 = By.cssSelector("#case_image_pickerfar_away_photo_2");
+    private final By uploadCloseUpPic3 = By.cssSelector("#case_image_pickerclose_up_photo_3");
+    private final By uploadFarAwayPic3 = By.cssSelector("#case_image_pickerfar_away_photo_3");
     private final By worseText = By.xpath("//textarea[@id= 'worse']");
     private final By betterText = By.xpath("//textarea[@id= 'better']");
     //allergy
@@ -128,6 +133,7 @@ public class DermatologyVisitPage extends BasePage {
     private final By visitSubmitted = By.xpath("//h2[text()='Visit Submitted']");
     private final By providerNameInVisitSubmittedPage = By.xpath("//div[@class='flex opacity-100']//h3");
     private final By goToMyVisitsButton = By.xpath("//button[text()='Go to My Visits']");
+
     public void selectDermProviderSection() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(selectDermProvider));
@@ -682,16 +688,21 @@ public class DermatologyVisitPage extends BasePage {
 
     public boolean selectAffectedBodyPart(String part) {
         try {
-            By searchBodyParts = By.xpath("//input[@placeholder=\"Type something..\"]");
+            By bodyPartSearchField = By.xpath("//input[contains(@placeholder,\"yp\")]");
             By bodyPartAfterSearch = By.xpath("//p[contains(text(),'" + part + "')]");
             By doneButton = By.xpath("//p[text()='Done']");
             wait.until(ExpectedConditions.elementToBeClickable(searchAffectedPart)).click();
-            wait.until(ExpectedConditions.elementToBeClickable(searchBodyParts)).sendKeys(part);
-            wait.until(ExpectedConditions.elementToBeClickable(bodyPartAfterSearch)).click();
+            Thread.sleep(500);
+            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(bodyPartSearchField));
+            input.click();
+            input.clear();
+            input.sendKeys(part);
+            Thread.sleep(500);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(bodyPartAfterSearch)).click();
             wait.until(ExpectedConditions.elementToBeClickable(doneButton)).click();
             return true;
         } catch (Exception e) {
-            System.out.println("Error setting Gender: " + e.getMessage());
+            System.out.println("Error selecting affected body part: " + e.getMessage());
             return false;
         }
     }
@@ -778,6 +789,64 @@ public class DermatologyVisitPage extends BasePage {
             return false;
         }
     }
+    public boolean clickAddMorePhotosBtn() {
+        try {
+            WebElement addMoreBtn = wait.until(ExpectedConditions.elementToBeClickable(addMorePhotosBtn));
+            addMoreBtn.click();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error clicking Add More Photos button: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean uploadCloseUpPic2(String path) {
+        try {
+            Thread.sleep(500);
+            WebElement uploadCloseUpPic = wait.until(ExpectedConditions.presenceOfElementLocated(uploadCloseUpPic2));
+            uploadCloseUpPic.sendKeys(path);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error setting Close Up Photo 2 upload: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean uploadFarAwayPic2(String path) {
+        try {
+            Thread.sleep(500);
+            WebElement uploadFarAwayPic = wait.until(ExpectedConditions.presenceOfElementLocated(uploadFarAwayPic2));
+            uploadFarAwayPic.sendKeys(path);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error setting Far Away Photo 2 upload: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean uploadCloseUpPic3(String path) {
+        try {
+            Thread.sleep(500);
+            WebElement uploadCloseUpPic = wait.until(ExpectedConditions.presenceOfElementLocated(uploadCloseUpPic3));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", uploadCloseUpPic);
+            uploadCloseUpPic.sendKeys(path);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error setting Close Up Photo 3 upload: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean uploadFarAwayPic3(String path) {
+        try {
+            Thread.sleep(500);
+            WebElement uploadFarAwayPic = wait.until(ExpectedConditions.presenceOfElementLocated(uploadFarAwayPic3));
+            uploadFarAwayPic.sendKeys(path);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error setting Far Away Photo 3 upload: " + e.getMessage());
+            return false;
+        }
+    }
+
 
     public boolean selectSymptoms(String symptom) {
         try {
@@ -860,7 +929,7 @@ public class DermatologyVisitPage extends BasePage {
 
     public boolean clickFirstPharmacy() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(firstPharmacy));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstPharmacy));
             element.click();
             return true;
         } catch (Exception e) {
@@ -925,7 +994,7 @@ public class DermatologyVisitPage extends BasePage {
             WebElement allergyInput = wait.until(ExpectedConditions.elementToBeClickable(enterAllergy));
             // allergyInput.sendKeys(allergyName + Keys.ENTER);
             allergyInput.sendKeys(allergyName);
-
+            Thread.sleep(2000);
             // Step 4: Wait for the matching Allergy option (by exact text) to appear
             try {
                 WebElement matchingOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -937,6 +1006,7 @@ public class DermatologyVisitPage extends BasePage {
                 WebElement createOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//div[contains(@id,'option') and text()='Create \"" + allergyName + "\"']")));
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createOption);
+                Thread.sleep(500);
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createOption);
             }
             // 4. Select reaction from dropdown

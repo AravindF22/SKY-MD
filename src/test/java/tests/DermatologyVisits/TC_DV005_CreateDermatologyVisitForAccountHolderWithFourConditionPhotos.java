@@ -8,10 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.DermatologyVisitPage;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -19,21 +16,21 @@ import utils.TestData;
 import java.io.IOException;
 import java.time.Duration;
 
-public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
+public class TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPhotos  extends BaseTest{
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public DermatologyVisitPage dermatologyVisitPage;
     public TestData testDataForAccountHolder;
-    public TestData testDataForChild;
     public SignInPage signInPage;
     public SoftAssert softAssert;
     public WebDriverWait wait;
+    private MyVisitsPage myVisitsPage;
+    public String visitId = null;
 
     @BeforeClass
     public void setUp() throws IOException {
         driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         testDataForAccountHolder = new TestData();
-        testDataForChild = new TestData();
     }
     @BeforeMethod
     public void initializeAsset(){
@@ -42,12 +39,14 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
-
+        myVisitsPage = new MyVisitsPage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Sign in as new valid patient");
+        ExtentReportManager.getTest().log(Status.INFO, "Navigated to Patient Portal Login Page");
+
         patientPortalLoginPage.clickSignUpLink();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked on Sign Up link");
         signInPage.enterEmail(testDataForAccountHolder.getEmail());
@@ -70,7 +69,6 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         signInPage.clickSignInButton();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked Sign In button");
 
-        patientPortalHomePage = new PatientPortalHomePage(driver);
         boolean isHome = patientPortalHomePage.isHomePage();
         ExtentReportManager.getTest().log(Status.INFO, "Verifying home page load");
         softAssert.assertTrue(isHome, "Home page did not load properly after sign in.");
@@ -81,11 +79,11 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         }
         softAssert.assertAll();
     }
-    @Test(priority = 2)
+    @Test(priority = 2, dependsOnMethods = "testSignInAsNewValidPatient")
     public void testBasicDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Basic Details");
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         patientPortalHomePage.selectDermatologyVisit();
         dermatologyVisitPage.selectDermProviderSection();
         dermatologyVisitPage.clickContinueAfterSelectingDermProvider();
@@ -93,36 +91,27 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         dermatologyVisitPage.proceedBasisOfProvider("Dr. Janice Fahey");
         Thread.sleep(1000);
         dermatologyVisitPage.clickSelectPatient();
-        //child
-        dermatologyVisitPage.selectPatientAsMyChild();
-        dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
-        dermatologyVisitPage.clickAddChildButton();
-        dermatologyVisitPage.enterChildFirstName(testDataForChild.getFname());
-        dermatologyVisitPage.enterChildLastName(testDataForChild.getLname());
-        dermatologyVisitPage.clickSaveChildButton();
-        softAssert.assertEquals(dermatologyVisitPage.getFirstChildName(), testDataForChild.getFullName(),
-                "First child name mismatch in dermatology visit");
-        dermatologyVisitPage.clickContinueButtonAfterInsurance();
+        dermatologyVisitPage.clickSelectPatientAsMySelf();
         dermatologyVisitPage.clickContinueButtonAfterSelectPatient();
         dermatologyVisitPage.clickContinueButtonAfterInsurance();
         ExtentReportManager.getTest().log(Status.INFO, "Basic details completed");
-        softAssert.assertAll();
     }
 
     @Test(priority = 3, dependsOnMethods = "testBasicDetails")
     public void testVisitDetails() {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Details");
-        Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForChild.getStreetAddressOne()), "Failed to set address line one");
-        dermatologyVisitPage.setAddressLineTwo(testDataForChild.getStreetAddressTwo());
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
-        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForChild.getDobForMinor()), "Failed to set date of birth");
-        Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForChild.getFeet()), "Failed to set height in feet");
-        Assert.assertTrue(dermatologyVisitPage.setInches(testDataForChild.getInch()), "Failed to set height in inches");
-        Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForChild.getWeight()), "Failed to set weight");
-        Assert.assertTrue(dermatologyVisitPage.setGender("Male"), "Failed to set gender");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting visit details");
+        Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForAccountHolder.getStreetAddressOne()));
+        dermatologyVisitPage.setAddressLineTwo(testDataForAccountHolder.getStreetAddressTwo());
+        dermatologyVisitPage.clickContinueButton();
+        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForAccountHolder.getDobForMajor()), "Failed to set DOB");
+        Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForAccountHolder.getFeet()), "Failed to set Feet");
+        Assert.assertTrue(dermatologyVisitPage.setInches(testDataForAccountHolder.getInch()), "Failed to set Inches");
+        Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForAccountHolder.getWeight()), "Failed to set Weight");
+        Assert.assertTrue(dermatologyVisitPage.setGender("Male"), "Failed to set Gender");
+        dermatologyVisitPage.clickContinueButton();
+
         Assert.assertTrue(dermatologyVisitPage.uploadId(convertToAbsoluteURL(ConfigReader.getProperty("idPhotoPath"))), "Failed to upload ID photo");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after uploading ID photo"); 
+        dermatologyVisitPage.clickContinueButton();
         ExtentReportManager.getTest().log(Status.INFO, "Visit details completed");
     }
 
@@ -130,21 +119,27 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
     public void testVisitPhotos() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Photos");
 
-        Assert.assertTrue(dermatologyVisitPage.setDermatologyConcern(testDataForChild.getConcern()), "Failed to set dermatology concern");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting concern");
-        Assert.assertTrue(dermatologyVisitPage.selectAffectedBodyPart(testDataForChild.getBodyParts()), "Failed to select affected body part");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting body part");
-        Assert.assertTrue(dermatologyVisitPage.selectStatus(testDataForChild.getStatus()), "Failed to select status");
-        Assert.assertTrue(dermatologyVisitPage.selectCount(testDataForChild.getSufferingConditionDays()), "Failed to select condition duration count");
-        Assert.assertTrue(dermatologyVisitPage.selectDay(testDataForChild.getSelectDays()), "Failed to select days");
-        Assert.assertTrue(dermatologyVisitPage.selectSeverity(testDataForChild.getSeverity()), "Failed to select severity");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting status details");
-        Assert.assertTrue(dermatologyVisitPage.clickNoBtnForSmartPhoneUpload(), "Failed to click No button for smartphone upload");
-        Thread.sleep(1000);
+        Assert.assertTrue(dermatologyVisitPage.setDermatologyConcern(testDataForAccountHolder.getConcern()), "Failed to set dermatology concern");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting dermatology concern");
+        Assert.assertTrue(dermatologyVisitPage.selectAffectedBodyPart(testDataForAccountHolder.getBodyParts()), "Failed to select affected body part");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting affected body part");
+        Assert.assertTrue(dermatologyVisitPage.selectStatus(testDataForAccountHolder.getStatus()), "Failed to select status");
+        Assert.assertTrue(dermatologyVisitPage.selectCount(testDataForAccountHolder.getSufferingConditionDays()), "Failed to select suffering condition days");
+        Assert.assertTrue(dermatologyVisitPage.selectDay(testDataForAccountHolder.getSelectDays()), "Failed to select days");
+        Assert.assertTrue(dermatologyVisitPage.selectSeverity(testDataForAccountHolder.getSeverity()), "Failed to select severity");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after providing condition details");
+        Assert.assertTrue(dermatologyVisitPage.clickNoBtnForSmartPhoneUpload(), "Failed to click no button for smartphone upload");
+        Thread.sleep(500);
         Assert.assertTrue(dermatologyVisitPage.uploadCloseUpPic(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoOnePath"))), "Failed to upload close up photo");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         Assert.assertTrue(dermatologyVisitPage.uploadFarAwayPic(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoTwoPath"))), "Failed to upload far away photo");
+        Thread.sleep(500);
+        Assert.assertTrue(dermatologyVisitPage.clickAddMorePhotosBtn(), "Failed to click add more photos button");
+        Assert.assertTrue(dermatologyVisitPage.uploadCloseUpPic2(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoThreePath"))), "Failed to upload close up photo 2");
+        Thread.sleep(500);
+        Assert.assertTrue(dermatologyVisitPage.uploadFarAwayPic2(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoFourPath"))), "Failed to upload far away photo 2");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after uploading photos");
+        Thread.sleep(5000);
         ExtentReportManager.getTest().log(Status.INFO, "Visit photos completed");
     }
 
@@ -152,12 +147,12 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
     public void testVisitSymptoms() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Symptoms");
         Thread.sleep(1000);
-        Assert.assertTrue(dermatologyVisitPage.selectSymptoms(testDataForChild.getSymptomOne()), "Failed to select symptoms");
+        Assert.assertTrue(dermatologyVisitPage.selectSymptoms(testDataForAccountHolder.getSymptomOne()), "Failed to select symptoms");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting symptoms");
-        Assert.assertTrue(dermatologyVisitPage.setWorseText(testDataForChild.getWhatMakesWorse()), "Failed to set what makes condition worse");
-        Assert.assertTrue(dermatologyVisitPage.setBetterText(testDataForChild.getWhatMakesBetter()), "Failed to set what makes condition better");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting condition details");
-        Assert.assertTrue(dermatologyVisitPage.selectLiftStyle(testDataForChild.getLifeStyleItem()), "Failed to select lifestyle item");
+        Assert.assertTrue(dermatologyVisitPage.setWorseText(testDataForAccountHolder.getWhatMakesWorse()), "Failed to set what makes worse text");
+        Assert.assertTrue(dermatologyVisitPage.setBetterText(testDataForAccountHolder.getWhatMakesBetter()), "Failed to set what makes better text");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting texts");
+        Assert.assertTrue(dermatologyVisitPage.selectLiftStyle(testDataForAccountHolder.getLifeStyleItem()), "Failed to select lifestyle");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting lifestyle");
         ExtentReportManager.getTest().log(Status.INFO, "Visit symptoms completed");
     }
@@ -166,41 +161,41 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
     public void testVisitMedicalHistory() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Medical History");
         Assert.assertTrue(dermatologyVisitPage.addAllergy(
-                testDataForChild.getAllergyOne(),
-                testDataForChild.getAllergyReactionOne(),
-                testDataForChild.getDrugAllergyCategory()), "Failed to add allergy details");
+                testDataForAccountHolder.getAllergyOne(),
+                testDataForAccountHolder.getAllergyReactionOne(),
+                testDataForAccountHolder.getDrugAllergyCategory()), "Failed to add allergy details");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after adding allergy");
         Thread.sleep(3000);
-        Assert.assertTrue(dermatologyVisitPage.clickYesButtonInMedication(), "Failed to click Yes button in medication section");
+        Assert.assertTrue(dermatologyVisitPage.clickYesButtonInMedication(), "Failed to click Yes button in medication");
         Thread.sleep(1000);
         Assert.assertTrue(dermatologyVisitPage.clickSearchMedicationButton(), "Failed to click search medication button");
         Assert.assertTrue(dermatologyVisitPage.addMedication(
-                testDataForChild.getMedicationOne(),
-                testDataForChild.getDosageOne(),
-                testDataForChild.getMedicationFormOne(),
-                testDataForChild.getMedicationFrequencyOne(),
-                testDataForChild.getMedicationPerOne()), "Failed to add medication details");
+                testDataForAccountHolder.getMedicationOne(),
+                testDataForAccountHolder.getDosageOne(),
+                testDataForAccountHolder.getMedicationFormOne(),
+                testDataForAccountHolder.getMedicationFrequencyOne(),
+                testDataForAccountHolder.getMedicationPerOne()), "Failed to add medication details");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after adding medication");
         dermatologyVisitPage.clickYesBtnInSkinCareProduct();
         dermatologyVisitPage.enterSkinCareProduct("test");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after providing medical history");
         ExtentReportManager.getTest().log(Status.INFO, "Visit medical history completed");
     }
 
     @Test(priority = 7, dependsOnMethods = "testVisitMedicalHistory")
     public void testVisitPayment() {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Payment");
-        Assert.assertTrue(dermatologyVisitPage.clickAddPharmacyAndSwitchToListView(), "Failed to click add pharmacy and switch to list view");
-        Assert.assertTrue(dermatologyVisitPage.clickFirstPharmacy(), "Failed to select first pharmacy");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after selecting pharmacy");
-        dermatologyVisitPage.setOptionalField(testDataForChild.getOptionalFieldText());
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting optional field");
+        Assert.assertTrue(dermatologyVisitPage.clickAddPharmacyAndSwitchToListView(), "Failed to click Add Pharmacy and switch to list view");
+        Assert.assertTrue(dermatologyVisitPage.clickFirstPharmacy(), "Failed to click first pharmacy");
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
+        dermatologyVisitPage.setOptionalField(testDataForAccountHolder.getOptionalFieldText());
+        dermatologyVisitPage.clickContinueButton();
         Assert.assertTrue(dermatologyVisitPage.clickNextButtonForTAndC(), "Failed to click next button for Terms and Conditions");
         Assert.assertTrue(dermatologyVisitPage.clickAllAcceptTerms(), "Failed to accept all terms");
         Assert.assertTrue(dermatologyVisitPage.paymentByCard(
                 ConfigReader.getProperty("testCardNumber"),
                 ConfigReader.getProperty("testCardExpiryDate"),
-                ConfigReader.getProperty("testCardCVV")), "Failed to complete payment by card");
+                ConfigReader.getProperty("testCardCVV")), "Failed to process card payment");
         try {
             boolean isEnabled = dermatologyVisitPage.isSubmitForEvaluationEnabled();
 
@@ -215,7 +210,12 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
             ExtentReportManager.getTest().log(Status.FAIL,
                     "Failed to verify Submit for Evaluation button state: " + e.getMessage());
         }
-        Assert.assertTrue(dermatologyVisitPage.clickSubmitForEvaluation(), "Failed to click Submit for Evaluation button");
+        Assert.assertTrue(dermatologyVisitPage.clickSubmitForEvaluation(), "Failed to click submit for evaluation button");
+        visitId =  myVisitsPage.getVisitIdOfCreatedVisit();
+        Assert.assertTrue(myVisitsPage.clickFirstVisitSummary(visitId),"Failed to click first visit summary");
+        Assert.assertTrue(myVisitsPage.clickPhotosInVisitSummary(visitId),"Failed to click photos in visit summary");
+        softAssert.assertEquals(myVisitsPage.getVisitPhotosCount(),4,"Photo count mismatch in visit summary");
+
         ExtentReportManager.getTest().log(Status.INFO, "Visit payment completed");
         softAssert.assertAll();
     }
@@ -223,6 +223,7 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
     @Test(priority = 8, dependsOnMethods = "testVisitPayment")
     public void testVisitValidationInPatientPortal() {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
+        // Visit submission verification
         boolean isVisitSubmitted = dermatologyVisitPage.isVisitSubmitted();
         try {
             softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
@@ -230,7 +231,9 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         } catch (AssertionError e) {
             ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
         }
-        String expectedProvider = testDataForChild.getProviderName();
+
+        // Provider name verification
+        String expectedProvider = testDataForAccountHolder.getProviderName();
         String actualProvider = dermatologyVisitPage.getProviderNameInVisitSubmittedPage();
         try {
             softAssert.assertEquals(actualProvider, expectedProvider, "Provider name mismatch in submitted visit");
@@ -240,13 +243,9 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
             ExtentReportManager.getTest().log(Status.FAIL, "Provider name verification failed: " +
                     "Expected [" + expectedProvider + "] but found [" + actualProvider + "]");
         }
-        Assert.assertTrue(dermatologyVisitPage.clickGoToMyVisitsButton(), "Failed to click on Go To My Visits button");
-        try {
-            softAssert.assertAll();
-            ExtentReportManager.getTest().log(Status.PASS, "All visit validations passed successfully");
-        } catch (AssertionError e) {
-            ExtentReportManager.getTest().log(Status.FAIL, "Visit validation failed with the following errors: \n" + e.getMessage());
-        }
+
+        dermatologyVisitPage.clickGoToMyVisitsButton();
+        softAssert.assertAll();
     }
     @Test(priority = 9, description = "Print Account Holder and Visit Details in Extent Report")
     public void printVisitDetailsInReport() {
@@ -261,38 +260,34 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
 
                         "<b>Visit Type: Dermatology Visit</b><br>" +
                         "<b>Basic Details:</b><br>" +
-                        "Address Line 1: " + testDataForChild.getStreetAddressOne() + "<br>" +
-                        "Address Line 2: " + testDataForChild.getStreetAddressTwo() + "<br>" +
-                        "Date of Birth: " + testDataForChild.getDobForMinor() + "<br>" +
-                        "Height: " + testDataForChild.getFeet() + " feet " + testDataForChild.getInch() + " inches<br>" +
-                        "Weight: " + testDataForChild.getWeight() + "<br>" +
+                        "Address Line 1: " + testDataForAccountHolder.getStreetAddressOne() + "<br>" +
+                        "Address Line 2: " + testDataForAccountHolder.getStreetAddressTwo() + "<br>" +
+                        "Date of Birth: " + testDataForAccountHolder.getDobForMajor() + "<br>" +
+                        "Height: " + testDataForAccountHolder.getFeet() + " feet " + testDataForAccountHolder.getInch() + " inches<br>" +
+                        "Weight: " + testDataForAccountHolder.getWeight() + "<br>" +
                         "Gender: Male<br>" +
-
                         "<b>Visit Details:</b><br>" +
-                        "Dermatology Concern: " + testDataForChild.getConcern() + "<br>" +
-                        "Affected Body Parts: " + testDataForChild.getBodyParts() + "<br>" +
-                        "Current Status: " + testDataForChild.getStatus() + "<br>" +
-                        "Condition Duration: " + testDataForChild.getSufferingConditionDays() + " " + testDataForChild.getSelectDays() + "<br>" +
-                        "Severity Level: " + testDataForChild.getSeverity() + "<br>" +
-
+                        "Dermatology Concern: " + testDataForAccountHolder.getConcern() + "<br>" +
+                        "Affected Body Parts: " + testDataForAccountHolder.getBodyParts() + "<br>" +
+                        "Current Status: " + testDataForAccountHolder.getStatus() + "<br>" +
+                        "Condition Duration: " + testDataForAccountHolder.getSufferingConditionDays() + " " + testDataForAccountHolder.getSelectDays() + "<br>" +
+                        "Severity Level: " + testDataForAccountHolder.getSeverity() + "<br>" +
                         "<b>Symptoms:</b><br>" +
-                        "Selected Symptoms: " + testDataForChild.getSymptomOne() + "<br>" +
-                        "What Makes It Worse: " + testDataForChild.getWhatMakesWorse() + "<br>" +
-                        "What Makes It Better: " + testDataForChild.getWhatMakesBetter() + "<br>" +
-
+                        "Selected Symptoms: " + testDataForAccountHolder.getSymptomOne() + "<br>" +
+                        "What Makes It Worse: " + testDataForAccountHolder.getWhatMakesWorse() + "<br>" +
+                        "What Makes It Better: " + testDataForAccountHolder.getWhatMakesBetter() + "<br>" +
                         "<b>Medical History:</b><br>" +
-                        "Lifestyle Factors: " + testDataForChild.getLifeStyleItem() + "<br>" +
-                        "Allergies: " + testDataForChild.getAllergyOne() + " (Reaction: " +
-                        testDataForChild.getAllergyReactionOne() + ", Category: " +
-                        testDataForChild.getDrugAllergyCategory() + ")<br>" +
-                        "Current Medications: " + testDataForAccountHolder.getMedicationOne() + "<br>" +
+                        "Lifestyle Factors: " + testDataForAccountHolder.getLifeStyleItem() + "<br>" +
+                        "Allergies: " + testDataForAccountHolder.getAllergyOne() + " (Reaction: " +
+                        testDataForAccountHolder.getAllergyReactionOne() + ", Category: " +
+                        testDataForAccountHolder.getDrugAllergyCategory() + ")<br>" +
+                        "Current Medications: " + testDataForAccountHolder.getMedicationOne() +"<br>"+
                         "(Dosage: " + testDataForAccountHolder.getDosageOne() + ", " +
                         "Form: " + testDataForAccountHolder.getMedicationFormOne() + ", " +
                         "Frequency: " + testDataForAccountHolder.getMedicationFrequencyOne() + ", " +
-                        "Per: " + testDataForAccountHolder.getMedicationPerOne() + ")<br>" +
+                        "Per: " + testDataForAccountHolder.getMedicationPerOne() +")<br>"+
                         "Current Skin Care Products: test<br>" +
-                        "Additional Information: " + testDataForChild.getOptionalFieldText();
-
+                        "Additional Information: " + testDataForAccountHolder.getOptionalFieldText();
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
     }
 }

@@ -225,59 +225,6 @@ public class TC_IP015_AddWardWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Dermatology Visit validation for Ward completed successfully");
         softAssert.assertAll();
     }
-    //@Test(priority = 6)
-    public void testPrimaryCareVisitValidation() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        homePagePatPortal = new PatientPortalHomePage(driver);
-        homePagePatPortal.selectPrimaryCareVisit();
-
-        primaryCareVisitPage = new PrimaryCareVisitPage(driver);
-        primaryCareVisitPage.clickPatientAsWard();
-        primaryCareVisitPage.clickNextButton();
-
-        //primaryCareVisitPage.clickSelectPatient(testDataForWard.getFullName());
-        primaryCareVisitPage.clickNextButton();
-
-        primaryCareVisitPage.clickProceedByBookingButton();
-
-        primaryCareVisitPage.clickSelectFirstCondition();
-
-        primaryCareVisitPage.clickNextButton();
-
-        primaryCareVisitPage.clickSelectFirstDateForSlot();
-        primaryCareVisitPage.clickSelectFirstSlot();
-
-        primaryCareVisitPage.clickNextButton();
-
-        softAssert.assertEquals(testDataForWard.getFname(), primaryCareVisitPage.getFirstName(),
-                "First name does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getLname(), primaryCareVisitPage.getLastName(),
-                "Last name does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getDobForMajor(), primaryCareVisitPage.getDOB(),
-                "Date of birth does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getStreetAddressOne(), primaryCareVisitPage.getAddressOne(),
-                "Street Address One does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getStreetAddressTwo(), primaryCareVisitPage.getAddressTwo(),
-                "Street Address Two does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getZipCode(), primaryCareVisitPage.getZipcode(),
-                "Zip Code does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getFeet(), primaryCareVisitPage.getFeet(),
-                "Height (feet) does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getInch(), primaryCareVisitPage.getInch(),
-                "Height (inches) does not match for Ward on Primary Care Visit page.");
-
-        softAssert.assertEquals(testDataForWard.getWeight(), primaryCareVisitPage.getWeight(),
-                "Weight does not match for Ward on Primary Care Visit page.");
-        primaryCareVisitPage.clickBackArrowToHomePage();
-        softAssert.assertAll();
-    }
     @AfterClass()
     public void cleanUp() throws InterruptedException {
         //navigate to my profile

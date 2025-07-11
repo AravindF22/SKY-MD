@@ -32,13 +32,15 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
     public WebDriverWait wait;
     @BeforeClass
     public void setUp() throws IOException {
-        driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
+        driver.get(ConfigReader.getProperty("PatientPortalLoginUrlBhBranch"));
         testDataForAccountHolder = new TestData();
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }
     @BeforeMethod
     public void initializeAsset() throws IOException {
         softAssert = new SoftAssert();
+        signInPage = new SignInPage(driver);
+        patientPortalHomePage = new PatientPortalHomePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -51,7 +53,6 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         patientPortalLoginPage.clickSignUpLink();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked on Sign Up link");
 
-        signInPage = new SignInPage(driver);
         signInPage.enterEmail(testDataForAccountHolder.getEmail());
         signInPage.clickNextButton();
         ExtentReportManager.getTest().log(Status.INFO, "Entered email and clicked Next");
@@ -72,7 +73,6 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         signInPage.clickSignInButton();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked Sign In button");
 
-        patientPortalHomePage = new PatientPortalHomePage(driver);
         boolean isHome = patientPortalHomePage.isHomePage();
         ExtentReportManager.getTest().log(Status.INFO, "Verifying home page load");
 
@@ -84,7 +84,18 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         }
         softAssert.assertAll();
     }
-    @AfterClass
+    @Test(priority = 2)
+    public void logPatientDetails(){
+        String accountAndVisitDetailsHtml =
+                "<b>Entered Account Holder Details:</b><br>" +
+                        "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                        "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                        "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                        "Mobile Number: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                        "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br>" ;
+        ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
+    }
+   // @AfterClass
     public void patientAndProviderPortalLogout() {
         // Navigate to myProfile and logout
         patientPortalHomePage.clickMyProfile();

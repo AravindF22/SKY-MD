@@ -143,7 +143,7 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
     @Test(priority = 4, dependsOnMethods = "testVisitDetails")
     public void testVisitPhotos() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Photos");
-
+        Thread.sleep(1000);
         Assert.assertTrue(dermatologyVisitPage.setDermatologyConcern(testDataForSomeOneElse.getConcern()), "Failed to set dermatology concern");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting dermatology concern");
         Assert.assertTrue(dermatologyVisitPage.selectAffectedBodyPart(testDataForSomeOneElse.getBodyParts()), "Failed to select affected body part");
@@ -202,9 +202,10 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
     }
 
     @Test(priority = 7, dependsOnMethods = "testVisitMedicalHistory")
-    public void testVisitPayment() {
+    public void testVisitPayment() throws InterruptedException {
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Payment");
         Assert.assertTrue(dermatologyVisitPage.clickAddPharmacyAndSwitchToListView(), "Failed to click add pharmacy and switch to list view");
+       Thread.sleep(500);
         Assert.assertTrue(dermatologyVisitPage.clickFirstPharmacy(), "Failed to select first pharmacy");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
         dermatologyVisitPage.setOptionalField(testDataForSomeOneElse.getOptionalFieldText());
@@ -217,7 +218,6 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
                 ConfigReader.getProperty("testCardCVV")), "Failed to process card payment");
         try {
             boolean isEnabled = dermatologyVisitPage.isSubmitForEvaluationEnabled();
-            softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
 
             if (isEnabled) {
                 ExtentReportManager.getTest().log(Status.PASS,

@@ -33,14 +33,17 @@ public class PatientPortalHomePage extends BasePage {
         }
     }
 
-    public void selectPrimaryCareVisit() {
+    public boolean selectPrimaryCareVisit() {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(primaryCareVisit));
             element.click();
+            return true;
         } catch (TimeoutException e) {
             System.err.println("Timeout: Primary Care Visit option not clickable.");
+            return false;
         } catch (Exception e) {
             System.err.println("Error clicking Primary Care Visit: " + e.getMessage());
+            return false;
         }
     }
     public boolean isHomePage(){

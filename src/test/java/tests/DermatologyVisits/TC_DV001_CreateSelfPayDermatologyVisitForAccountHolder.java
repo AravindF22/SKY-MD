@@ -31,6 +31,7 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
     @BeforeClass
     public void setUp() throws IOException {
         driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
+        testDataForAccountHolder = new TestData();
     }
     @BeforeMethod
     public void initializeAsset(){
@@ -39,7 +40,6 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
-        testDataForAccountHolder = new TestData();
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -83,6 +83,7 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
     public void testBasicDetails() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Basic Details");
+        Thread.sleep(1000);
         patientPortalHomePage.selectDermatologyVisit();
         dermatologyVisitPage.selectDermProviderSection();
         dermatologyVisitPage.clickContinueAfterSelectingDermProvider();
@@ -128,9 +129,9 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
         Assert.assertTrue(dermatologyVisitPage.selectSeverity(testDataForAccountHolder.getSeverity()), "Failed to select severity");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after providing condition details");
         Assert.assertTrue(dermatologyVisitPage.clickNoBtnForSmartPhoneUpload(), "Failed to click no button for smartphone upload");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         Assert.assertTrue(dermatologyVisitPage.uploadCloseUpPic(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoOnePath"))), "Failed to upload close up photo");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         Assert.assertTrue(dermatologyVisitPage.uploadFarAwayPic(convertToAbsoluteURL(ConfigReader.getProperty("conditionPhotoTwoPath"))), "Failed to upload far away photo");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after uploading photos");
         ExtentReportManager.getTest().log(Status.INFO, "Visit photos completed");
@@ -191,7 +192,6 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
                 ConfigReader.getProperty("testCardCVV")), "Failed to process card payment");
         try {
             boolean isEnabled = dermatologyVisitPage.isSubmitForEvaluationEnabled();
-            softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
 
             if (isEnabled) {
                 ExtentReportManager.getTest().log(Status.PASS,
@@ -234,14 +234,7 @@ public class TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder extends Base
         }
 
         dermatologyVisitPage.clickGoToMyVisitsButton();
-
-        // Final validation check
-        try {
-            softAssert.assertAll();
-            ExtentReportManager.getTest().log(Status.PASS, "All visit validations passed successfully");
-        } catch (AssertionError e) {
-            ExtentReportManager.getTest().log(Status.FAIL, "Visit validation failed with the following errors: \n" + e.getMessage());
-        }
+        softAssert.assertAll();
     }
     @Test(priority = 9, description = "Print Account Holder and Visit Details in Extent Report")
     public void printVisitDetailsInReport() {

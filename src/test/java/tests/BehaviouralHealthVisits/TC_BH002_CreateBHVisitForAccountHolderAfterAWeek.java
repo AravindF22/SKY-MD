@@ -8,7 +8,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.*;
+import pages.PatientPortal.BehaviouralHealthVisitPage;
+import pages.PatientPortal.PatientPortalHomePage;
+import pages.PatientPortal.PatientPortalLoginPage;
+import pages.PatientPortal.SignInPage;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -16,7 +19,7 @@ import utils.TestData;
 import java.io.IOException;
 import java.time.Duration;
 
-public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
+public class TC_BH002_CreateBHVisitForAccountHolderAfterAWeek  extends BaseTest{
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public TestData testDataForAccountHolder;
@@ -89,7 +92,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         Thread.sleep(1000);
         //behaviouralHealthVisitPage.clickIndividualButton();
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
-        Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableDay(), "Failed to select first available day");
+        Assert.assertTrue(behaviouralHealthVisitPage.selectSeventhDay(), "Failed to select first available day");
         Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableTimeSlot(), "Failed to select first available time slot");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
 
@@ -229,7 +232,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Visit process completed");
         softAssert.assertAll();
     }
-    
+
     @Test(priority = 3)
     public void logVisitDetails() {
         String therapyReason = "";

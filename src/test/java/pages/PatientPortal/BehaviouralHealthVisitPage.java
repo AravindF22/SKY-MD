@@ -20,6 +20,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         private final By proceedWithBookingBtn = By.xpath("//button[text()='Proceed with Booking']");
         private final By individualBtn = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]");
         private final By firstAvailableDay = By.xpath("//div[@class=\"flex pb-10\"]/div[1]");
+        private final By SeventhDay = By.xpath("//div[@class=\"flex pb-10\"]/div[7]");
         private final By firstAvailableTSlot = By.xpath("//div[contains(@class,'grid grid-cols-2')]/div[1]");
         private final By firstNameField = By.cssSelector("input#first_name");
         private final By lastNameField =By.cssSelector("input#last_name");
@@ -120,6 +121,17 @@ public class BehaviouralHealthVisitPage extends BasePage {
                 return false;
             }
         }
+        public boolean selectSeventhDay(){
+            try
+            {
+                WebElement element = wait.until(ExpectedConditions.elementToBeClickable(SeventhDay));
+                element.click();
+                return true;
+            }catch (Exception e){
+                System.out.println("Error selecting seventh day: " + e.getMessage());
+                return false;
+            }
+        }
 
         public boolean selectFirstAvailableTimeSlot() {
             try {
@@ -174,7 +186,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             return null;
         }
     }
-        public boolean enterDOB(String dob) {
+        public boolean setDOB(String dob) {
             try {
                 String[] date = dob.split("/");
                 String day = date[0];
@@ -190,7 +202,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             }
         }
 
-        public boolean enterAddressLineOne(String address1) {
+        public boolean setAddressLineOne(String address1) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressOneField));
                 element.clear();
@@ -202,7 +214,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             }
         }
 
-        public boolean enterAddressLineTwo(String address2) {
+        public boolean setAddressLineTwo(String address2) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressTwoField));
                 element.clear();
@@ -214,7 +226,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             }
         }
 
-        public boolean enterHeightFeet(String feet) {
+        public boolean setHeightFeet(String feet) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(heightFeetField));
                 element.clear();
@@ -226,7 +238,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             }
         }
 
-        public boolean enterHeightInches(String inches) {
+        public boolean setHeightInches(String inches) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(heightInchesField));
                 element.clear();
@@ -238,7 +250,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             }
         }
 
-        public boolean enterWeight(String weight) {
+        public boolean setWeight(String weight) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(weightField));
                 element.clear();
@@ -590,8 +602,10 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean setHospitalizedHistory(String status){
             try {
-                wait.until(ExpectedConditions.elementToBeClickable(
+                WebElement element = wait.until(ExpectedConditions.elementToBeClickable(
                        By.xpath("//label[contains(text(),'hospitalized')]/following-sibling::div//p[text()='"+status+"']")));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element.click();
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting Hospitalized History: " + e.getMessage());
