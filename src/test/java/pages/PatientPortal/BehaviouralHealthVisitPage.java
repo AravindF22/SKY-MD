@@ -22,6 +22,8 @@ public class BehaviouralHealthVisitPage extends BasePage {
         private final By firstAvailableDay = By.xpath("//div[@class=\"flex pb-10\"]/div[1]");
         private final By SeventhDay = By.xpath("//div[@class=\"flex pb-10\"]/div[7]");
         private final By firstAvailableTSlot = By.xpath("//div[contains(@class,'grid grid-cols-2')]/div[1]");
+        private final By providerNameBelowSelectedSlot = By.xpath("//div[contains(@class,'relative p-6')]//h3");
+
         private final By firstNameField = By.cssSelector("input#first_name");
         private final By lastNameField =By.cssSelector("input#last_name");
         private final By dobField  = By.xpath("//div[@class=\"react-date-picker__inputGroup\"]/input[1]");
@@ -61,8 +63,8 @@ public class BehaviouralHealthVisitPage extends BasePage {
         private final By expiry = By.xpath("//input[@id=\"expiration\"]");
         private final By cvv = By.xpath("//input[@id='cvv']");
 
-         private final By submitForEvaluation = By.xpath("//button[text()='Submit Visit']");
-
+        private final By submitForEvaluation = By.xpath("//button[text()='Submit Visit']");
+        private final By providerNameInVisitSubmittedPage= By.xpath("//div[contains(@class,'p-5 rounded-4xl')]//h3");
         private final By visitSubmitted = By.xpath("//h2[text()='Visit Submitted']");
         private final By goToMyVisitsButton = By.xpath("//button[text()='Go to My Visits']");
 
@@ -143,7 +145,15 @@ public class BehaviouralHealthVisitPage extends BasePage {
                 return false;
             }
         }
-
+    public String getSelectedProviderName(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameBelowSelectedSlot));
+            return driver.findElement(providerNameBelowSelectedSlot).getText();
+        }catch (Exception e){
+            System.out.println("Error getting selected providers name : " + e.getMessage());
+            return null;
+        }
+    }
         public boolean enterFirstName(String firstName) {
             try {
                 WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameField));
@@ -902,6 +912,16 @@ public class BehaviouralHealthVisitPage extends BasePage {
                 System.out.println("Retry after refresh also failed: " + ex.getMessage());
                 return false;
             }
+        }
+    }
+    public String getProviderNameInTheVisitSubmittedPage(){
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInVisitSubmittedPage));
+            WebElement element = driver.findElement(providerNameInVisitSubmittedPage);
+            return element.getText();
+        }catch (Exception e){
+            System.out.println("Error getting provider name in Visit submitted page: "+e.getMessage());
+            return null;
         }
     }
     public boolean isVisitSubmitted() {

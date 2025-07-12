@@ -1,10 +1,7 @@
 package pages.PatientPortal;
 
 import base.BasePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class PrimaryCareVisitPage extends BasePage {
-    private WebDriverWait wait;
+    private final WebDriverWait wait;
     public PrimaryCareVisitPage(WebDriver driver) {
         super(driver);
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -24,21 +21,28 @@ public class PrimaryCareVisitPage extends BasePage {
     private final By patientAsMySelf = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]");
     private final By patientAsChild = By.xpath("//div[@class=\"radio_button_card_container\"]/div[2]");
     private final By patientAsWard = By.xpath("//div[@class=\"radio_button_card_container\"]/div[3]");
+    private final By patientAsSomeOnelse= By.xpath("//div[@class=\"radio_button_card_container\"]/div[4]");
+    private final By addChild = By.xpath("//button[text()='Add Child']");
+    private final By addWard = By.xpath("//button[text()='Add Ward']");
+    private final By addSomeOneElse = By.xpath("//button[text()='Add Patient']");
+    private final By saveBtn = By.xpath("//button[text()='Save']");
     private final By nextBtn = By.xpath("//button[text()='Next']");
-    private final By proceedByBookingbtn = By.xpath("//button[text()='Proceed with Booking']");
+    private final By proceedByBookingBtn = By.xpath("//button[text()='Proceed with Booking']");
     private final By firstAvailableDay = By.xpath("//div[@class=\"flex pb-10\"]/div[1]");
     private final By firstAvailableTSlot = By.xpath("//div[contains(@class,'grid grid-cols-2')]/div[1]");
-
+    private final By providerNameBelowSelectedSlot = By.xpath("//div[contains(@class,'relative p-6')]//h3");
     //demographics
     private final By firstName = By.xpath("//input[@name=\"first_name\"]");
     private final By lastName = By.xpath("//input[@name=\"last_name\"]");
     private final By dob = By.xpath("//div[@class=\"react-date-picker__inputGroup\"]/input[1]");
-    private final By addressOne = By.xpath("//input[@id='address_1']");
-    private final By addressTwo = By.xpath("//input[@id='address_2']");
-    private final By zipcode = By.xpath("//input[@id='zipcode']");
+    private final By addressOne = By.xpath("//input[contains(@id,'address_1')]");
+    private final By addressTwo = By.xpath("//input[contains(@id,'address_2')]");
+    private final By city = By.cssSelector("#city");
+    private final By zipcode = By.xpath("//input[contains(@id,'zip')]");
     private final By feet = By.xpath("//input[@id='heightFeet']");
     private final By inch = By.xpath("//input[@id=\"heightInches\"]");
     private final By weight = By.xpath("//input[@id='weight']");
+    private final By selectedGender = By.xpath("//img[contains(@src,'5Lg')]/following-sibling::p");
     private final By id = By.xpath("//input[@id=\"confirm_identity_image_picker\"]");
 
     //pharmacy
@@ -79,9 +83,16 @@ public class PrimaryCareVisitPage extends BasePage {
 
     private final By submitForEvaluation = By.xpath("//button[text()='Submit Visit']");
 
+    private final By visitSubmitted = By.xpath("//h2[text()='Visit Submitted']");
+    private final By goToMyVisitsButton = By.xpath("//button[text()='Go to My Visits']");
+    private final By providerNameInVisitSubmittedPage= By.xpath("//div[contains(@class,'p-5 rounded-4xl')]//h3");
+
     public boolean clickPatientAsMySelf() {
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(patientAsMySelf)).click();
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(patientAsMySelf));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            element.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking 'Patient as Myself': " + e.getMessage());
@@ -91,8 +102,10 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public boolean clickPatientAsChild() {
         try {
-            Thread.sleep(3000);
-            wait.until(ExpectedConditions.elementToBeClickable(patientAsChild)).click();
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(patientAsChild));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            element.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking 'Patient as Child': " + e.getMessage());
@@ -102,40 +115,126 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public boolean clickPatientAsWard() {
         try {
-            Thread.sleep(3000);
-            wait.until(ExpectedConditions.elementToBeClickable(patientAsWard)).click();
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(patientAsWard));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            element.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking 'Patient as Ward': " + e.getMessage());
             return false;
         }
     }
+    public boolean clickPatientAsSomeOneElse(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(patientAsSomeOnelse));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Patient as Someone else': " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean clickAddChild(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addChild));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Add Child': " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean clickAddWard(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addWard));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Add Ward': " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean clickAddSomeOneElse(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addSomeOneElse));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Add SomeOne Else': " + e.getMessage());
+            return false;
+        }
+    }
 
     public boolean clickNextButton() {
         try {
-           WebElement element= wait.until(ExpectedConditions.elementToBeClickable(nextBtn));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-            return true;
+            WebElement element= wait.until(ExpectedConditions.visibilityOfElementLocated(nextBtn));
+          if(element.isEnabled()){
+              ((JavascriptExecutor) driver).executeScript(
+                      "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+              return true;
+          }else {
+              System.out.println("Next button is disabled, waiting and retrying...");
+              WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+              shortWait.until(ExpectedConditions.elementToBeClickable(nextBtn));
+              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+              return true;
+          }
         } catch (Exception e) {
             System.out.println("Error clicking 'Next' button: " + e.getMessage());
             return false;
         }
     }
-
-    public void clickSelectPatient(String name) {
-        By selectPatient = By.xpath("//p[text()='" + name + "']/parent::div");
+    public boolean clickSaveButton() {
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(selectPatient)).click();
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(saveBtn));
+             ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Save' button: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean selectPatient(String name) {
+        By selectPatient = By.xpath("//p[text()='" + name + "']/parent::div/parent::div");
+        WebElement element= wait.until(ExpectedConditions.visibilityOfElementLocated(selectPatient));
+        try {
+          if(element.isEnabled()){
+              ((JavascriptExecutor) driver).executeScript(
+                      "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+              return true;
+          }else {
+              System.out.println("Patient is disabled, waiting and retrying...");
+              WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+              shortWait.until(ExpectedConditions.elementToBeClickable(selectPatient));
+              ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+              return true;
+          }
         } catch (Exception e) {
             System.out.println("Error clicking 'Select Patient': " + e.getMessage());
+            return false;
         }
     }
 
     public boolean clickProceedByBookingButton() {
         try {
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(proceedByBookingbtn));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(proceedByBookingBtn));
+             ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             return true;
         } catch (Exception e) {
@@ -145,22 +244,35 @@ public class PrimaryCareVisitPage extends BasePage {
     }
 
     public boolean clickSelectFirstCondition(String conditionName) {
-        try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
-                    "//div[contains(@class,'radio_button_card rounded-xl')]//p[text()='Allergies']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error clicking 'Select Condition': " + e.getMessage());
+            By condition = By.xpath(
+                    "//div[contains(@class,'radio_button_card rounded-xl')]//p[normalize-space(text())='"+conditionName+"']");
+            int attempts = 0;
+
+            while (attempts < 3) {
+                try {
+                    wait.until(ExpectedConditions.presenceOfElementLocated(condition));
+                    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(condition));
+                    ((JavascriptExecutor) driver).executeScript(
+                            "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                    return true;
+                } catch (StaleElementReferenceException e) {
+                    System.out.println("Stale element encountered, retrying... Attempt: " + (attempts + 1));
+                    attempts++;
+                } catch (Exception e) {
+                    System.out.println("Error clicking 'Select Condition': " + e.getMessage());
+                    return false;
+                }
+            }
+            System.out.println("Failed to click 'Select Condition' after retries.");
             return false;
-        }
     }
 
     public boolean selectFirstAvailableDay() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(firstAvailableDay));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstAvailableDay));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             return true;
         } catch (Exception e) {
@@ -171,8 +283,9 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public boolean selectFirstAvailableTimeSlot() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(firstAvailableTSlot));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstAvailableTSlot));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             return true;
         } catch (Exception e) {
@@ -180,10 +293,18 @@ public class PrimaryCareVisitPage extends BasePage {
             return false;
         }
     }
-
+    public String getSelectedProviderName(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameBelowSelectedSlot));
+            return driver.findElement(providerNameBelowSelectedSlot).getText();
+        }catch (Exception e){
+            System.out.println("Error getting selected providers name : " + e.getMessage());
+            return null;
+        }
+    }
     public String getFirstName() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(firstName));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstName));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting first name: " + e.getMessage());
@@ -193,7 +314,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getLastName() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(lastName));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(lastName));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting last name: " + e.getMessage());
@@ -203,7 +324,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getDOB() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(dob));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dob));
             String dob = element.getAttribute("value").trim();
             // Adjust the format here to match your actual input!
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -218,9 +339,28 @@ public class PrimaryCareVisitPage extends BasePage {
             return null;
         }
     }
+
+    public String getDOBInMMDD() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(dob));
+            String dob = element.getAttribute("value").trim();
+
+            // Adjust the format here to match your actual input!
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(dob);
+
+            // Format the date into the desired output format 
+            SimpleDateFormat targetFormat = new SimpleDateFormat("MM/dd/yyyy");
+            String formattedDate = targetFormat.format(date);
+            return formattedDate;
+        } catch (Exception e) {
+            System.out.println("Error getting DOB: " + e.getMessage());
+            return null;
+        }
+    }
     public String getAddressOne() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(addressOne));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressOne));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting address one: " + e.getMessage());
@@ -230,7 +370,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getAddressTwo() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(addressTwo));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressTwo));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting address two: " + e.getMessage());
@@ -240,7 +380,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getZipcode() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(zipcode));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(zipcode));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting zipcode: " + e.getMessage());
@@ -250,7 +390,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getFeet() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(feet));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(feet));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting feet: " + e.getMessage());
@@ -260,7 +400,7 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getInch() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(inch));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(inch));
             return element.getAttribute("value");
         } catch (Exception e) {
             System.out.println("Error getting inch: " + e.getMessage());
@@ -270,18 +410,47 @@ public class PrimaryCareVisitPage extends BasePage {
 
     public String getWeight() {
         try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(weight));
-            return element.getAttribute("value");
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(weight));
+            return element.getAttribute("value").replaceAll(".0","").trim();
         } catch (Exception e) {
             System.out.println("Error getting weight: " + e.getMessage());
             return null;
         }
     }
+    public String getGender() {
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(selectedGender));
+            return element.getText();
+        }catch (Exception e){
+            System.out.println("Error getting gender: " + e.getMessage());
+            return null;
+        }
+    }
+    public boolean setFirstName(String fName) {
+        try {
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(firstName));
+             element.sendKeys(fName);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error getting first name: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean setLastName(String lName) {
+        try {
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(lastName));
+            element.sendKeys(lName);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error getting last name: " + e.getMessage());
+            return false;
+        }
+    }
     public boolean setDOB(String dob) {
         try {
             String[] date = dob.split("/");
-            String day = date[0];
-            String month = date[1];
+            String day = date[1];
+            String month = date[0];
             String year = date[2];
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name=\"month\"]"))).sendKeys(month);
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name=\"day\"]"))).sendKeys(day);
@@ -295,6 +464,8 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean setAddressLineOne(String address1) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressOne));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.clear();
             element.sendKeys(address1);
             return true;
@@ -307,6 +478,8 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean setAddressLineTwo(String address2) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addressTwo));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.clear();
             element.sendKeys(address2);
             return true;
@@ -319,6 +492,8 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean setHeightFeet(String heightFeet) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(feet));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.clear();
             element.sendKeys(heightFeet);
             return true;
@@ -331,6 +506,8 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean setHeightInches(String inches) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(inch));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.clear();
             element.sendKeys(inches);
             return true;
@@ -343,6 +520,8 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean setWeight(String w) {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(weight));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.clear();
             element.sendKeys(w);
             return true;
@@ -363,6 +542,24 @@ public class PrimaryCareVisitPage extends BasePage {
             return false;
         }
     }
+    public boolean setCity(String cityValue) {
+        try{
+            wait.until(ExpectedConditions.elementToBeClickable(city)).sendKeys(cityValue);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting city: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean setZipcode(String zipcodeValue) {
+        try{
+            wait.until(ExpectedConditions.elementToBeClickable(zipcode)).sendKeys(zipcodeValue);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting zipcode: " + e.getMessage());
+            return false;
+        }
+    }
     public void clickBackArrowToHomePage() {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -375,9 +572,10 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean uploadId(String filePath) {
         try {
             // Wait for the file input to be present and interactable
-            WebElement input = wait.until(ExpectedConditions.presenceOfElementLocated(id));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input);
-            input.sendKeys(filePath);
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(id));
+             ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            element.sendKeys(filePath);
             return true;
         } catch (Exception e) {
             System.out.println("Error uploading picture: " + e.getMessage());
@@ -401,6 +599,7 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean clickFirstPharmacy() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstPharmacy));
+            Thread.sleep(1500);
             element.click();
             return true;
         } catch (Exception e) {
@@ -409,22 +608,112 @@ public class PrimaryCareVisitPage extends BasePage {
         }
     }
 
-    public boolean setGeneralSymptoms(String symptom){
-        try{
+    public boolean setGeneralSymptoms(String symptom) {
+        return clickSymptomByCategory("General", symptom);
+    }
+
+    public boolean setSkinSymptoms(String symptom) {
+        return clickSymptomByCategory("Skin", symptom);
+    }
+
+    public boolean setHeadSymptoms(String symptom) {
+        return clickSymptomByCategory("Head", symptom);
+    }
+
+    public boolean setEarSymptoms(String symptom) {
+        return clickSymptomByCategory("Ears", symptom);
+    }
+
+    public boolean setEyeSymptoms(String symptom) {
+        return clickSymptomByCategory("Eyes", symptom);
+    }
+
+    public boolean setVisionSymptoms(String symptom) {
+        return clickSymptomByCategory("Vision", symptom);
+    }
+
+    public boolean setNoseSymptoms(String symptom) {
+        return clickSymptomByCategory("Nose", symptom);
+    }
+
+    public boolean setMouthThroatSymptoms(String symptom) {
+        return clickSymptomByCategory("Mouth / Throat", symptom);
+    }
+
+    public boolean setNeckSymptoms(String symptom) {
+        return clickSymptomByCategory("Neck", symptom);
+    }
+
+    public boolean setBreastSymptoms(String symptom) {
+        return clickSymptomByCategory("Breasts", symptom);
+    }
+
+    public boolean setRespiratorySymptoms(String symptom) {
+        return clickSymptomByCategory("Respiratory", symptom);
+    }
+
+    public boolean setCardiovascularSymptoms(String symptom) {
+        return clickSymptomByCategory("Cardiovascular", symptom);
+    }
+
+    public boolean setGastrointestinalSymptoms(String symptom) {
+        return clickSymptomByCategory("Gastrointestinal", symptom);
+    }
+
+    public boolean setUrinarySymptoms(String symptom) {
+        return clickSymptomByCategory("Urinary", symptom);
+    }
+
+    public boolean setGenitalSymptoms(String symptom) {
+        return clickSymptomByCategory("Genital", symptom);
+    }
+
+    public boolean setFemaleSymptoms(String symptom) {
+        return clickSymptomByCategory("Female", symptom);
+    }
+
+    public boolean setVascularSymptoms(String symptom) {
+        return clickSymptomByCategory("Vascular", symptom);
+    }
+
+    public boolean setMusculoskeletalSymptoms(String symptom) {
+        return clickSymptomByCategory("Musculoskeletal", symptom);
+    }
+
+    public boolean setNeurologicSymptoms(String symptom) {
+        return clickSymptomByCategory("Neurologic", symptom);
+    }
+
+    public boolean setHematologicSymptoms(String symptom) {
+        return clickSymptomByCategory("Hematologic", symptom);
+    }
+
+    public boolean setEndocrineSymptoms(String symptom) {
+        return clickSymptomByCategory("Endocrine", symptom);
+    }
+
+    public boolean setPsychiatricSymptoms(String symptom) {
+        return clickSymptomByCategory("Psychiatric", symptom);
+    }
+
+    private boolean clickSymptomByCategory(String category, String symptom) {
+        try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                    "//p[text()='General']/following-sibling::div//p[text()='"+symptom+"']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                    "//p[text()='" + category + "']/following-sibling::div//p[normalize-space(text())='" + symptom + "']")));
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.click();
             return true;
-        }catch (Exception e){
-            System.out.println("Error setting general symptoms: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error setting " + category + " symptoms: " + e.getMessage());
             return false;
         }
     }
     public boolean clickNoneBtnInAllergy() {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(noneBtnInAllergy));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+             ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.click();
             return true;
         } catch (Exception e) {
@@ -457,7 +746,7 @@ public class PrimaryCareVisitPage extends BasePage {
                 Thread.sleep(500);
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createOption);
             }
-            // 4. Select reaction from dropdown
+            // 4. Select reaction from Dropdown
             WebElement reactionDropdown = wait.until(ExpectedConditions.elementToBeClickable(reaction));
             new Select(reactionDropdown).selectByVisibleText(reactionType);
             String cType = null;
@@ -526,8 +815,10 @@ public class PrimaryCareVisitPage extends BasePage {
             } catch (Exception e) {
                 System.out.println("Error entering/selecting medication name: " + e.getMessage());
                 try {
-                    WebElement createMedication = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                            By.xpath("//div[contains(@id,'option') and text()='Create \"" + medicationName + "\"']")));
+                   By medication= By.xpath("//div[contains(@id,'option') and text()='Create \"" + medicationName + "\"']");
+                   wait.until(ExpectedConditions.visibilityOfElementLocated(medication ));
+                    WebElement createMedication = driver.findElement(medication);
+                    Thread.sleep(2000);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createMedication);
                     ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createMedication);
                 } catch (Exception e1) {
@@ -586,11 +877,26 @@ public class PrimaryCareVisitPage extends BasePage {
     public boolean clickNoneBtnInMedication() {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(noneBtnInMedication));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+             ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
             element.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking 'None': " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean setAdditionalMedicalConditionsForFemale(String medicalCondition) {
+        try{
+            By conditionOption= By.xpath("//div[@class='check_box_card_container']//p[text()='"+medicalCondition+"']");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(conditionOption));
+            WebElement element = driver.findElement(conditionOption);
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center', inline: 'center'});", element);
+            element.click();
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting additional medical conditions for female: " + e.getMessage());
             return false;
         }
     }
@@ -709,6 +1015,37 @@ public class PrimaryCareVisitPage extends BasePage {
                 System.out.println("Retry after refresh also failed: " + ex.getMessage());
                 return false;
             }
+        }
+    }
+    public String getProviderNameInTheVisitSubmittedPage(){
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInVisitSubmittedPage));
+            WebElement element = driver.findElement(providerNameInVisitSubmittedPage);
+            return element.getText();
+        }catch (Exception e){
+            System.out.println("Error getting provider name in Visit submitted page: "+e.getMessage());
+            return null;
+        }
+    }
+    public boolean isVisitSubmitted() {
+        try {
+            WebElement visitSubmittedText = wait.until(ExpectedConditions.visibilityOfElementLocated(visitSubmitted));
+            return visitSubmittedText.isDisplayed();
+        } catch (TimeoutException e) {
+            System.out.println("Visit submitted text not found within wait time.");
+        } catch (Exception e) {
+            System.out.println("Error while checking 'Visit Submitted' text: " + e.getMessage());
+        }
+        return false;
+    }
+    public boolean clickGoToMyVisitsButton() {
+        try {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(goToMyVisitsButton));
+            button.click();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error clicking 'Go to My Visits' button: " + e.getMessage());
+            return false;
         }
     }
 }

@@ -64,6 +64,7 @@ public class TestData {
     private final int bodyPartsIndex;
     private final int lifeStyleItemsIndex;
     private final String optionalFieldText;
+    //BH
     private final int therapyReasonsIndex;
     private final int smokingItemsIndex;
     private final int symptomsListIndex;
@@ -86,6 +87,30 @@ public class TestData {
     private final int questionnaireEightIndex;
     private final int questionnaireNineIndex;
     private final int questionnaireTenIndex;
+    //Primary care
+    private final int conditionsIndex;
+    private final int generalSymptomsIndex;
+    private final int skinSymptomsIndex;
+    private final int headSymptomsIndex;
+    private final int earSymptomsIndex;
+    private final int eyeSymptomsIndex;
+    private final int visionSymptomsIndex;
+    private final int noseSymptomsIndex;
+    private final int mouthThroatSymptomsIndex;
+    private final int neckSymptomsIndex;
+    private final int breastSymptomsIndex;
+    private final int respiratorySymptomsIndex;
+    private final int cardiovascularSymptomsIndex;
+    private final int gastrointestinalSymptomsIndex;
+    private final int urinarySymptomsIndex;
+    private final int genitalSymptomsIndex;
+    private final int femaleSymptomsIndex;
+    private final int vascularSymptomsIndex;
+    private final int musculoskeletalSymptomsIndex;
+    private final int neurologicSymptomsIndex;
+    private final int hematologicSymptomsIndex;
+    private final int endocrineSymptomsIndex;
+    private final int psychiatricSymptomsIndex;
 
     private Random random;
     public TestData() {
@@ -164,6 +189,29 @@ public class TestData {
         this.medicationPerTwoIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
         this.dosageOneValue = faker.number().numberBetween(1, 501);
         this.dosageTwoValue = faker.number().numberBetween(1, 501);
+        this.conditionsIndex = faker.number().numberBetween(0, conditions.length);
+        this.generalSymptomsIndex = faker.number().numberBetween(0, generalSymptoms.length);
+        this.skinSymptomsIndex = faker.number().numberBetween(0, skinSymptoms.length);
+        this.headSymptomsIndex = faker.number().numberBetween(0, headSymptoms.length);
+        this.earSymptomsIndex = faker.number().numberBetween(0, earSymptoms.length);
+        this.eyeSymptomsIndex = faker.number().numberBetween(0, eyeSymptoms.length);
+        this.visionSymptomsIndex = faker.number().numberBetween(0, visionSymptoms.length);
+        this.noseSymptomsIndex = faker.number().numberBetween(0, noseSymptoms.length);
+        this.mouthThroatSymptomsIndex = faker.number().numberBetween(0, mouthThroatSymptoms.length);
+        this.neckSymptomsIndex = faker.number().numberBetween(0, neckSymptoms.length);
+        this.breastSymptomsIndex = faker.number().numberBetween(0, breastSymptoms.length);
+        this.respiratorySymptomsIndex = faker.number().numberBetween(0, respiratorySymptoms.length);
+        this.cardiovascularSymptomsIndex = faker.number().numberBetween(0, cardiovascularSymptoms.length);
+        this.gastrointestinalSymptomsIndex = faker.number().numberBetween(0, gastrointestinalSymptoms.length);
+        this.urinarySymptomsIndex = faker.number().numberBetween(0, urinarySymptoms.length);
+        this.genitalSymptomsIndex = faker.number().numberBetween(0, genitalSymptoms.length);
+        this.femaleSymptomsIndex = faker.number().numberBetween(0, femaleSymptoms.length);
+        this.vascularSymptomsIndex = faker.number().numberBetween(0, vascularSymptoms.length);
+        this.musculoskeletalSymptomsIndex = faker.number().numberBetween(0, musculoskeletalSymptoms.length);
+        this.neurologicSymptomsIndex = faker.number().numberBetween(0, neurologicSymptoms.length);
+        this.hematologicSymptomsIndex = faker.number().numberBetween(0, hematologicSymptoms.length);
+        this.endocrineSymptomsIndex = faker.number().numberBetween(0, endocrineSymptoms.length);
+        this.psychiatricSymptomsIndex = faker.number().numberBetween(0, psychiatricSymptoms.length);
     }
     String [] insurances = {"AETNA", "Blue Cross / Blue Shield of Texas", "MEDICARE","ANTHEM BLUE CROSS","Medical Mutual of Ohio (Zelis)"};
     String [] relationship = {"Self","Spouse","Parent","Other"};
@@ -272,10 +320,81 @@ public class TestData {
     String[] questionnaireTenOptions = {
             "Not difficult at all","Somewhat difficult", "Very difficult", "Extremely difficult"
     };
+    String[] conditions = {
+            "Cold & flu symptoms", "Allergies", "Covid-19 symptoms", "Sinus-related symptoms",
+            "Cough, breathing or asthma symptoms", "Sore throat / Infections", "Diabetes-related symptoms",
+            "Painful joints", "Headache, migraine, ear ache", "Back problems",
+            "Depression, fatigue, low energy, anxiety", "Stomach bug, abdominal pain, cramps",
+            "Sprains, strains, bruises and wounds", "Urinary / bladder symptoms", "I just don't feel good overall."
+    };
+    String[] generalSymptoms = {"Weight loss", "Fatigue", "Weakness", "Trouble sleeping"};
+
+    String[] skinSymptoms = {"Rash", "Itching", "Dryness", "Hair or Nail changes", "Color changes"};
+
+    String[] headSymptoms = {"Headache", "Head injury"};
+
+    String[] earSymptoms = {"Changes in hearing", "Ringing in ears (tinnitus)", "Earache", "Drainage"};
+
+    String[] eyeSymptoms = {"Vision problems", "Pain", "Redness", "Blurry or double"};
+
+    String[] visionSymptoms = {"Flashing lights", "Specks / floaters"};
+
+    String[] noseSymptoms = {"Stuffiness", "Discharge", "Itching", "Nose bleeds", "Sinus pain"};
+
+
+    String[] mouthThroatSymptoms = {"Sore throat", "Dry mouth", "Hoarseness", "Non-healing sores"};
+
+    String[] neckSymptoms = {"Lumps", "Swollen glands", "Pain", "Stiffness"};
+
+    String[] breastSymptoms = {"Lumps", "Pain", "Discharge"};
+
+    String[] respiratorySymptoms = {
+            "Cough", "Sputum", "Coughing up blood", "Shortness of breath", "Wheezing",
+            "Painful breathing", "Difficulty breathing lying down", "Snoring"
+    };
+
+    String[] cardiovascularSymptoms = {
+            "Chest pain or discomfort", "Chest tightness", "Palpitations", "Swelling (edema)",
+            "Sudden awakening from sleep with shortness of breath"
+    };
+
+    String[] gastrointestinalSymptoms = {
+            "Swallowing difficulties", "Heartburn", "Change in appetite", "Nausea",
+            "Change in bowel habits", "Rectal bleeding", "Constipation", "Diarrhea"
+    };
+
+    String[] urinarySymptoms = {
+            "Frequency", "Urgency", "Burning or pain with urination", "Blood in urine",
+            "Incontinence", "Change in urinary strength"
+    };
+
+    String[] genitalSymptoms = {
+            "Pain with sex", "STD's", "Hernia", "Mass / pain / sores", "Itch / rash"
+    };
+
+    String[] femaleSymptoms = {"Vaginal dryness", "Hot flashes", "Vaginal discharge"};
+
+    String[] vascularSymptoms = {"Calf pain with walking", "Leg cramps"};
+
+    String[] musculoskeletalSymptoms = {
+            "Muscle or joint pain", "Joint stiffness", "Back pain", "Redness of joints",
+            "Swelling of joints", "Trauma"
+    };
+
+    String[] neurologicSymptoms = {
+            "Dizziness", "Fainting", "Seizures", "Weakness", "Numbness", "Tingling", "Tremor"
+    };
+
+    String[] hematologicSymptoms = {"Ease of bruising", "Ease of bleeding"};
+
+    String[] endocrineSymptoms = {"Heat or cold intolerance", "Sweating", "Increased thirst"};
+
+    String[] psychiatricSymptoms = {
+            "Nervousness", "Depression", "Anxiety", "Memory loss / concerns", "Stress"
+    };
+
     // mandatory details
-    public String getFullName(){
-        return fname+" "+lname;
-    }
+    public String getFullName(){return fname+" "+lname;}
     public String getFname() {
         return fname;
     }
@@ -303,11 +422,22 @@ public class TestData {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMajor);
     }
+    public String getDobForMajorInMMDD() {
+        String format = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(dobForMajor);
+    }
     public String getDobForMinor(){
         String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMinor); // e.g., "03/15/1990"
     }
+    public String getDobForMinorInMMDD(){
+        String format = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(dobForMinor);
+    }
+
     public String getStreetAddressOne(){
         return streetAddressOne;
     }
@@ -528,5 +658,30 @@ public class TestData {
         String unit = units[faker.random().nextInt(units.length)];
         return dosageTwoValue + " " + unit;
     }
+    public String getCondition(){
+        return conditions[conditionsIndex];
+    }
+    public String getGeneralSymptom() { return generalSymptoms[generalSymptomsIndex]; }
+    public String getSkinSymptom() { return skinSymptoms[skinSymptomsIndex]; }
+    public String getHeadSymptom() { return headSymptoms[headSymptomsIndex]; }
+    public String getEarSymptom() { return earSymptoms[earSymptomsIndex]; }
+    public String getEyeSymptom() { return eyeSymptoms[eyeSymptomsIndex]; }
+    public String getVisionSymptom() { return visionSymptoms[visionSymptomsIndex]; }
+    public String getNoseSymptom() { return noseSymptoms[noseSymptomsIndex]; }
+    public String getMouthThroatSymptom() { return mouthThroatSymptoms[mouthThroatSymptomsIndex]; }
+    public String getNeckSymptom() { return neckSymptoms[neckSymptomsIndex]; }
+    public String getBreastSymptom() { return breastSymptoms[breastSymptomsIndex]; }
+    public String getRespiratorySymptom() { return respiratorySymptoms[respiratorySymptomsIndex]; }
+    public String getCardiovascularSymptom() { return cardiovascularSymptoms[cardiovascularSymptomsIndex]; }
+    public String getGastrointestinalSymptom() { return gastrointestinalSymptoms[gastrointestinalSymptomsIndex]; }
+    public String getUrinarySymptom() { return urinarySymptoms[urinarySymptomsIndex]; }
+    public String getGenitalSymptom() { return genitalSymptoms[genitalSymptomsIndex]; }
+    public String getFemaleSymptom() { return femaleSymptoms[femaleSymptomsIndex]; }
+    public String getVascularSymptom() { return vascularSymptoms[vascularSymptomsIndex]; }
+    public String getMusculoskeletalSymptom() { return musculoskeletalSymptoms[musculoskeletalSymptomsIndex]; }
+    public String getNeurologicSymptom() { return neurologicSymptoms[neurologicSymptomsIndex]; }
+    public String getHematologicSymptom() { return hematologicSymptoms[hematologicSymptomsIndex]; }
+    public String getEndocrineSymptom() { return endocrineSymptoms[endocrineSymptomsIndex]; }
+    public String getPsychiatricSymptom() { return psychiatricSymptoms[psychiatricSymptomsIndex]; }
 }
 

@@ -35,7 +35,7 @@ public class PatientPortalHomePage extends BasePage {
 
     public boolean selectPrimaryCareVisit() {
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(primaryCareVisit));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryCareVisit));
             element.click();
             return true;
         } catch (TimeoutException e) {
@@ -57,7 +57,7 @@ public class PatientPortalHomePage extends BasePage {
     }
     public boolean selectBehaviouralHealthVisit(){
         try {
-            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(behaviouralHealthVisit));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(behaviouralHealthVisit));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             return true;

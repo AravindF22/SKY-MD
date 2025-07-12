@@ -25,6 +25,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
     public SoftAssert softAssert;
     public WebDriverWait wait;
     public int score = 0;
+    public String selectedProviderName= null;
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -91,6 +92,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
         Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableDay(), "Failed to select first available day");
         Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableTimeSlot(), "Failed to select first available time slot");
+        selectedProviderName = behaviouralHealthVisitPage.getSelectedProviderName();
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
 
         softAssert.assertEquals(behaviouralHealthVisitPage.getFirstName(), testDataForAccountHolder.getFname(),
@@ -260,6 +262,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
                 "Height: " + testDataForAccountHolder.getFeet() + " feet " + testDataForAccountHolder.getInch() + " inches<br>" +
                 "Weight: " + testDataForAccountHolder.getWeight() + "<br>" +
                 "Gender: " + testDataForAccountHolder.getGender() + "<br>" +
+                "<b>Provider name: </b>"+selectedProviderName+"<br>"+
                 "<b>What led you to therapy today?</b><br>"+
                 "Therapy Reasons: " + testDataForAccountHolder.getTherapyReasons() + "<br>" +
                 "<b>List all symptoms from the past 2 weeks:</b><br>"+
@@ -306,6 +309,8 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         } catch (AssertionError e) {
             ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
         }
+        softAssert.assertEquals(selectedProviderName,behaviouralHealthVisitPage.getProviderNameInTheVisitSubmittedPage(),
+                "Provider name in the visit submitted page is not matching with the selected provider name");
         behaviouralHealthVisitPage.clickGoToMyVisitsButton();
         softAssert.assertAll();
     }

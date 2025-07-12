@@ -16,21 +16,20 @@ import utils.TestData;
 import java.io.IOException;
 import java.time.Duration;
 
-public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
+public class TC_PV001_CreateSelfPayPrimaryCareVisitForAccountHolder extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public PrimaryCareVisitPage primaryCareVisitPage;
-    public TestData testDataForAccountHolder;
-    public TestData testDataForWard;
-    public SoftAssert softAssert;
     public SignInPage signInPage;
+    public TestData testDataForAccountHolder;
+    public SoftAssert softAssert;
     public WebDriverWait wait;
+    public String selectedProviderName = null;
 
     @BeforeClass
     public void setUp() throws IOException {
         driver.get(ConfigReader.getProperty("PatientPortalLoginUrl"));
         testDataForAccountHolder = new TestData();
-        testDataForWard = new TestData();
     }
     @BeforeMethod
     public void initializeAsset(){
@@ -89,20 +88,24 @@ public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
         Thread.sleep(5000);
         Assert.assertTrue(primaryCareVisitPage.clickPatientAsMySelf(), "Failed to click Patient As MySelf option");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting Patient As MySelf option");
+        //Staying in Self pay
         Assert.assertTrue(primaryCareVisitPage.clickProceedByBookingButton(), "Failed to click Proceed By Booking button");
-
-        Assert.assertTrue(primaryCareVisitPage.clickSelectFirstCondition("Allergies"), "Failed to select Allergies condition");
+        Thread.sleep(2000);
+        //SELECT Condition
+        Assert.assertTrue(primaryCareVisitPage.clickSelectFirstCondition(testDataForAccountHolder.getCondition()),
+                "Failed to select Allergies condition");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting condition");
-
+        //Select First the Available Day and First slot
         Assert.assertTrue(primaryCareVisitPage.selectFirstAvailableDay(), "Failed to select first available day");
         Assert.assertTrue(primaryCareVisitPage.selectFirstAvailableTimeSlot(), "Failed to select first available time slot");
+        selectedProviderName = primaryCareVisitPage.getSelectedProviderName();
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting time slot");
 
         softAssert.assertEquals(primaryCareVisitPage.getFirstName(), testDataForAccountHolder.getFname(),
                 "First name is mismatching in demographics");
         softAssert.assertEquals(primaryCareVisitPage.getLastName(), testDataForAccountHolder.getLname(),
                 "Last name is mismatching in demographics");
-        Assert.assertTrue(primaryCareVisitPage.setDOB(testDataForAccountHolder.getDobForMajor()),
+        Assert.assertTrue(primaryCareVisitPage.setDOB(testDataForAccountHolder.getDobForMajorInMMDD()),
                 "Failed to enter date of birth in demographics");
         Assert.assertTrue(primaryCareVisitPage.setAddressLineOne(testDataForAccountHolder.getStreetAddressOne()),
                 "Failed to enter address line one in demographics");
@@ -127,7 +130,7 @@ public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
         Assert.assertTrue(primaryCareVisitPage.clickFirstPharmacy(), "Failed to select pharmacy");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after pharmacy selection");
 
-        Assert.assertTrue(primaryCareVisitPage.setGeneralSymptoms("Fatigue"), "Failed to set general symptoms");
+        Assert.assertTrue(primaryCareVisitPage.setGeneralSymptoms(testDataForAccountHolder.getGeneralSymptom()), "Failed to set general symptoms");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after symptoms");
 
         Assert.assertTrue(primaryCareVisitPage.addAllergy(testDataForAccountHolder.getAllergyOne(),
@@ -144,6 +147,12 @@ public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
                 testDataForAccountHolder.getMedicationPerOne()), "Failed to add medication");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after medication");
 
+        if(testDataForAccountHolder.getGender().equalsIgnoreCase("Female")){
+            Assert.assertTrue(primaryCareVisitPage.setAdditionalMedicalConditionsForFemale("Pregnant"),
+                    "Failed to set additional medical conditions for female");
+            Assert.assertTrue(primaryCareVisitPage.clickNextButton(),
+                    "Failed to move to next step after additional medical conditions for female");
+        }
         Assert.assertTrue(primaryCareVisitPage.setOptionalDetails(testDataForAccountHolder.getAdditionalText()), "Failed to set optional details");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after optional details");
 
@@ -155,8 +164,8 @@ public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
                 ConfigReader.getProperty("testCardExpiryDate"),
                 ConfigReader.getProperty("testCardCVV")
         ), "Failed to process card payment");
-        Thread.sleep(2000);
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to payment confirmation step");
+        Thread.sleep(1000);
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(),"Failed to move to next step after card payment");
         try {
             boolean isEnabled = primaryCareVisitPage.isSubmitForEvaluationEnabled();
             softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
@@ -173,6 +182,69 @@ public class TC_PV001_CreateSelfPayPrimaryCareVisit extends BaseTest {
             ExtentReportManager.getTest().log(Status.FAIL,
                     "Failed to verify Submit for Evaluation button state: " + e.getMessage());
         }
+        softAssert.assertAll();
+    }
+    @Test(priority = 3)
+    public void logPrimaryCareVisitDetails() {
+        String additionMedicalConditions = "";
+        if(testDataForAccountHolder.getGender().equalsIgnoreCase("Female")){
+            additionMedicalConditions = "Additional Medical Condition for Female : "+" Pregnant " + "<br>";
+        }
+        String visitDetailsHtml =
+                "<b>Account Holder Details:</b><br>" +
+                        "First Name: " + testDataForAccountHolder.getFname() + "<br>" +
+                        "Last Name: " + testDataForAccountHolder.getLname() + "<br>" +
+                        "Email: " + testDataForAccountHolder.getEmail() + "<br>" +
+                        "Mobile Number: " + testDataForAccountHolder.getMobileNumber() + "<br>" +
+                        "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br><br>" +
+
+                        "<b>Visit Details:</b><br>" +
+                        "Visit Type: Primary Care Visit<br>" +
+                        "Condition Selected: "+testDataForAccountHolder.getCondition()+"<br>" +
+                        "<b>Provider Name: " + selectedProviderName + "</b><br><br>" +
+
+                        "<b>Demographics:</b><br>" +
+                        "Date of Birth: " + testDataForAccountHolder.getDobForMajor() + "<br>" +
+                        "Height: " + testDataForAccountHolder.getFeet() + " feet " + testDataForAccountHolder.getInch() + " inches<br>" +
+                        "Weight: " + testDataForAccountHolder.getWeight() + "<br>" +
+                        "Gender: " + testDataForAccountHolder.getGender() + "<br>" +
+                        "Address Line 1: " + testDataForAccountHolder.getStreetAddressOne() + "<br>" +
+                        "Address Line 2: " + testDataForAccountHolder.getStreetAddressTwo() + "<br>" +
+                        "Zipcode: " + testDataForAccountHolder.getZipCode() + "<br><br>" +
+
+                        "<b>Symptoms & Medical Info:</b><br>" +
+                        "General Symptoms: "+testDataForAccountHolder.getGeneralSymptom()+"<br>" +
+                        "Allergy: " + testDataForAccountHolder.getAllergyOne() + "<br>" +
+                        "Reaction: " + testDataForAccountHolder.getAllergyReactionOne() + "<br>" +
+                        "Category: " + testDataForAccountHolder.getDrugAllergyCategory() + "<br><br>" +
+
+                        "<b>Medication Details:</b><br>" +
+                        "Medication: " + testDataForAccountHolder.getMedicationOne() + "<br>" +
+                        "Dosage: " + testDataForAccountHolder.getDosageOne() + "<br>" +
+                        "Form: " + testDataForAccountHolder.getMedicationFormOne() + "<br>" +
+                        "Frequency: " + testDataForAccountHolder.getMedicationFrequencyOne() + "<br>" +
+                        "Per: " + testDataForAccountHolder.getMedicationPerOne() + "<br><br>" +
+
+                        "<b>Other Information:</b><br>" +
+                        additionMedicalConditions +
+                        "Additional Details: " + testDataForAccountHolder.getAdditionalText();
+
+        ExtentReportManager.getTest().info(visitDetailsHtml);
+    }
+    @Test(priority = 4, dependsOnMethods = {"testPrimaryCareVisitValidation"} )
+    public void testVisitValidationInPatientPortal() {
+        ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
+        // Visit submission verification
+        boolean isVisitSubmitted = primaryCareVisitPage.isVisitSubmitted();
+        try {
+            softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
+            ExtentReportManager.getTest().log(Status.PASS, "Visit submission verification successful: Visit was submitted successfully");
+        } catch (AssertionError e) {
+            ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
+        }
+        softAssert.assertEquals(selectedProviderName,primaryCareVisitPage.getProviderNameInTheVisitSubmittedPage(),
+                "Provider name in the visit submitted page is not matching with the selected provider name");
+        primaryCareVisitPage.clickGoToMyVisitsButton();
         softAssert.assertAll();
     }
 }
