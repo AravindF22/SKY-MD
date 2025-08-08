@@ -16,32 +16,55 @@ public class PatientPortalHomePage extends BasePage {
     private final By myProfileLink = By.xpath("(//p[text()='My Profile'])[1]");
     private final By dermatologyVisit = By.xpath("//p[text()='Dermatology Visit']");
     private final By primaryCareVisit = By.xpath("//p[text()='Primary Care Visit']");
+    private final By pediatricVisit = By.xpath("//p[text()='Pediatric Visit']");
     private final By behaviouralHealthVisit = By.xpath("//p[contains(text(),'behavioral health')]/parent::div");
-
     public void clickMyProfile(){
         wait.until(ExpectedConditions.visibilityOfElementLocated(myProfileLink)).click();
     }
-    public void selectDermatologyVisit() {
+    public boolean selectDermatologyVisit() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(dermatologyVisit));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
+            return true;
         } catch (TimeoutException e) {
             System.err.println("Timeout: 'Dermatology Visit' option not clickable within the wait time.");
+            return false;
         } catch (Exception e) {
             System.err.println("Error clicking Dermatology Visit: " + e.getMessage());
+            return false;
         }
     }
 
     public boolean selectPrimaryCareVisit() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryCareVisit));
-            element.click();
+            scrollAndClick(element);
             return true;
         } catch (TimeoutException e) {
             System.err.println("Timeout: Primary Care Visit option not clickable.");
             return false;
-        } catch (Exception e) {
+        }
+        catch (StaleElementReferenceException e ){
+            System.err.println("Stale Element Reference Exception: Primary Care Visit option not clickable.");
+            return retryClick(primaryCareVisit);
+        }catch (Exception e) {
+            System.err.println("Error clicking Primary Care Visit: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean selectPediatricVisit() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(pediatricVisit));
+            scrollAndClick(element);
+            return true;
+        } catch (TimeoutException e) {
+            System.err.println("Timeout: Primary Care Visit option not clickable.");
+            return false;
+        }
+        catch (StaleElementReferenceException e ){
+            System.err.println("Stale Element Reference Exception: Primary Care Visit option not clickable.");
+            return retryClick(primaryCareVisit);
+        }catch (Exception e) {
             System.err.println("Error clicking Primary Care Visit: " + e.getMessage());
             return false;
         }
@@ -58,8 +81,7 @@ public class PatientPortalHomePage extends BasePage {
     public boolean selectBehaviouralHealthVisit(){
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(behaviouralHealthVisit));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return true;
         }catch (Exception e){
             System.out.println("Error clicking Behavioural Health Visit: " + e.getMessage());

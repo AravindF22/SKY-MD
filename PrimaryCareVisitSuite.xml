@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="PrimaryCareVisitSuite">
+    <listeners>
+        <listener class-name="utils.ExtentReportManager"/>
+    </listeners>
+    <parameter name="browser" value="chrome"/>
+    <test name="PrimaryCareTests">
+        <classes>
+            <class name="tests.PrimaryCareVisits.TC_PV001_CreateSelfPayPrimaryCareVisitForAccountHolder"/>
+            <class name="tests.PrimaryCareVisits.TC_PV002_CreateSelfPayPrimaryCareVisitWIthMedicalDetailsForAccountHolder"/>
+<!--            <class name="tests.PrimaryCareVisits.TC_PV003_CreateSelfPayPrimaryCareVisitForChild"/>-->
+<!--            <class name="tests.PrimaryCareVisits.TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse"/>-->
+<!--            <class name="tests.PrimaryCareVisits.TC_PV005_CreatePrimaryCareVisitForAccountHolderWithMaximumSymptoms"/>-->
+            <class name="tests.PrimaryCareVisits.TC_PV006_CreatePrimaryCareVisitWithMultipleMedications"/>
+<!--            <class name="tests.PrimaryCareVisits.TC_PV007_CreateSelfPayPrimaryCareVisitForWard"/>-->
+            <class name="tests.PrimaryCareVisits.TC_PV008_CreateSelfPayPrimaryCareVisitForEstablishedAccountHolder"/>
+            <class name="tests.PrimaryCareVisits.TC_PV009_CreateInsurancePayPrimaryCareVisitForAccountHolder"/>
+<!--            <class name="tests.PrimaryCareVisits.TC_PV010_CreateInsurancePayPrimaryCareVisitForChild"/>-->
+<!--            <class name="tests.PrimaryCareVisits.TC_PV011_CreateInsurancePayPrimaryCareVisitForWard"/>-->
+        </classes>
+    </test>
+</suite>

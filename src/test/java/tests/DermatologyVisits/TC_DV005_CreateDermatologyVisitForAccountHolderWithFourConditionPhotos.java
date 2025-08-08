@@ -4,6 +4,7 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -20,6 +21,7 @@ public class TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPho
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public DermatologyVisitPage dermatologyVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public SignInPage signInPage;
     public SoftAssert softAssert;
@@ -39,6 +41,7 @@ public class TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPho
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
         myVisitsPage = new MyVisitsPage(driver);
     }
     @Test(priority = 1)
@@ -103,7 +106,7 @@ public class TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPho
         Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForAccountHolder.getStreetAddressOne()));
         dermatologyVisitPage.setAddressLineTwo(testDataForAccountHolder.getStreetAddressTwo());
         dermatologyVisitPage.clickContinueButton();
-        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForAccountHolder.getDobForMajor()), "Failed to set DOB");
+        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForAccountHolder.getDobForMajorInMMDD()), "Failed to set DOB");
         Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForAccountHolder.getFeet()), "Failed to set Feet");
         Assert.assertTrue(dermatologyVisitPage.setInches(testDataForAccountHolder.getInch()), "Failed to set Inches");
         Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForAccountHolder.getWeight()), "Failed to set Weight");
@@ -289,5 +292,14 @@ public class TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPho
                         "Current Skin Care Products: test<br>" +
                         "Additional Information: " + testDataForAccountHolder.getOptionalFieldText();
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
+    }
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

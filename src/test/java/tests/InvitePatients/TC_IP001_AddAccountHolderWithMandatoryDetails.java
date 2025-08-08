@@ -135,7 +135,7 @@ public class TC_IP001_AddAccountHolderWithMandatoryDetails extends BaseTest {
         softAssert.assertAll();
     }
 
-    @AfterClass
+    //@AfterClass
     public void cleanUp() throws InterruptedException {
         Thread.sleep(3000);
         ExtentReportManager.getTest().log(Status.INFO, "Logging out from Patient and Provider Portals");

@@ -2,8 +2,10 @@ package tests.BehaviouralHealthVisits;
 
 import base.BaseTest;
 import com.aventstack.extentreports.Status;
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,6 +23,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
     public PatientPortalHomePage patientPortalHomePage;
     public TestData testDataForAccountHolder;
     public BehaviouralHealthVisitPage behaviouralHealthVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public SignInPage signInPage;
     public SoftAssert softAssert;
     public WebDriverWait wait;
@@ -39,6 +42,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         behaviouralHealthVisitPage = new BehaviouralHealthVisitPage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -79,7 +83,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         softAssert.assertAll();
     }
     @Test(priority = 2, dependsOnMethods = "testSignInAsNewValidPatient")
-    public void testVisitCreation() throws InterruptedException {
+    public void testSelectPatientAndTherapy() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Basic Details");
         Thread.sleep(1000);
@@ -90,11 +94,16 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         Thread.sleep(1000);
         //behaviouralHealthVisitPage.clickIndividualButton();
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
+    }
+    @Test(priority = 3, dependsOnMethods = "testSelectPatientAndTherapy")
+    public void testSelectDateAndTimeSlot() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableDay(), "Failed to select first available day");
         Assert.assertTrue(behaviouralHealthVisitPage.selectFirstAvailableTimeSlot(), "Failed to select first available time slot");
         selectedProviderName = behaviouralHealthVisitPage.getSelectedProviderName();
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button");
-
+    }
+    @Test(priority = 4, dependsOnMethods = "testSelectDateAndTimeSlot")
+    public void testEnterDemographics() throws InterruptedException {
         softAssert.assertEquals(behaviouralHealthVisitPage.getFirstName(), testDataForAccountHolder.getFname(),
                 "First name is mismatching in demographics");
         softAssert.assertEquals(behaviouralHealthVisitPage.getLastName(), testDataForAccountHolder.getLname(),
@@ -114,20 +123,29 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
                 "Failed to enter weight in demographics");
         Assert.assertTrue(behaviouralHealthVisitPage.selectGender(testDataForAccountHolder.getGender()),
                 "Failed to select gender in demographics");
-        softAssert.assertEquals(behaviouralHealthVisitPage.getZipcode(), testDataForAccountHolder.getZipCode(),"" +
+        softAssert.assertEquals(behaviouralHealthVisitPage.getZipcode(), testDataForAccountHolder.getZipCode(), "" +
                 "Zipcode is mismatching in demographics");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after completing previous section");
-
+        softAssert.assertAll();
+    }
+    @Test(priority = 5, dependsOnMethods = "testEnterDemographics")
+    public void testUploadId() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.uploadId(convertToAbsoluteURL(ConfigReader.getProperty("idPhotoPath"))), "Failed to upload ID photo");
         Thread.sleep(3000);
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after uploading ID");
-
+    }
+    @Test(priority = 6, dependsOnMethods = "testUploadId")
+    public void testEnterTherapyReason() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.setTherapyReason(testDataForAccountHolder.getTherapyReasons()), "Failed to set therapy reasons");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after setting therapy reasons");
-
+    }
+    @Test(priority = 7, dependsOnMethods = "testEnterTherapyReason")
+    public void testEnterSymptoms() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.setSymptoms(testDataForAccountHolder.getSymptoms()), "Failed to set symptoms");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after setting symptoms");
-
+    }
+    @Test(priority = 8, dependsOnMethods = "testEnterSymptoms")
+    public void testEnterSocialAndMedicalHistory() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.setExerciseRoutine(testDataForAccountHolder.getExerciseStatus()), "Failed to set exercise routine");
         Assert.assertTrue(behaviouralHealthVisitPage.setAlcoholConsumption(testDataForAccountHolder.getAlcoholStatus()), "Failed to set alcohol consumption");
         Assert.assertTrue(behaviouralHealthVisitPage.setSmokingStatus("Yes"), "Failed to set smoking status");
@@ -136,7 +154,9 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         Assert.assertTrue(behaviouralHealthVisitPage.searchMedicalCondition(testDataForAccountHolder.getMedicalCondition()), "Failed to search medical condition");
         Assert.assertTrue(behaviouralHealthVisitPage.clickDoneBtnAfterAddingMedicalCondition(), "Failed to click done button after adding medical condition");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after setting health information");
-
+    }
+    @Test(priority = 9, dependsOnMethods = "testEnterSocialAndMedicalHistory")
+    public void testEnterMedication() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.clickSearchMedicationButton(), "Failed to click search medication button");
         //medication One
         Assert.assertTrue(behaviouralHealthVisitPage.addMedicationOne(
@@ -148,6 +168,9 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         Assert.assertTrue(behaviouralHealthVisitPage.clickDoneBtnAfterAddingMedication(), "Failed to click done button after adding medications");
         Thread.sleep(500);
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after adding medications");
+    }
+    @Test(priority = 10, dependsOnMethods = "testEnterMedication")
+    public void testEnterBehaviourOrHealthHistory() throws InterruptedException {
         String therapistHistoryStatus = testDataForAccountHolder.getTherapistHistoryStatus();
         Assert.assertTrue(behaviouralHealthVisitPage.setTherapistHistoryStatus(therapistHistoryStatus), "Failed to set therapist history");
         if (therapistHistoryStatus.equals("Yes")) {
@@ -161,10 +184,14 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         }
         Assert.assertTrue(behaviouralHealthVisitPage.setSuicidalThoughts(testDataForAccountHolder.getSuicidalThoughtStatus()), "Failed to set suicidal thoughts");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after setting medical history");
-
+    }
+    @Test(priority = 11, dependsOnMethods = "testEnterBehaviourOrHealthHistory")
+    public void testEnterAdditionalDetails() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.setAdditionalDetails(testDataForAccountHolder.getAdditionalText()), "Failed to set additional details");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after setting additional details");
-
+    }
+    @Test(priority = 12, dependsOnMethods = "testEnterAdditionalDetails")
+    public void testEnterPatientHealthQuestionnaire() throws InterruptedException {
         int q1 = behaviouralHealthVisitPage.setQuestionnaireOne(testDataForAccountHolder.getQuestionnaireOne());
         if (q1 != -1) score += q1;
 
@@ -196,14 +223,18 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
 
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after completing questionnaire");
         ExtentReportManager.getTest().log(Status.INFO, "Total Questionnaire Score: " + score);
-
+    }
+    @Test(priority = 13, dependsOnMethods = "testEnterPatientHealthQuestionnaire")
+    public void testAcceptTerms() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.acceptTerms(), "Failed to accept terms and conditions");
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after accepting terms");
 
         Assert.assertTrue(behaviouralHealthVisitPage.acceptAllCodeOfConduct(), "Failed to accept code of conduct");
         Thread.sleep(500);
         Assert.assertTrue(behaviouralHealthVisitPage.clickNextButton(), "Failed to click next button after accepting code of conduct");
-
+    }
+    @Test(priority = 14, dependsOnMethods = "testAcceptTerms")
+    public void testAddPayment() throws InterruptedException {
         Assert.assertTrue(behaviouralHealthVisitPage.paymentByCard(
                 ConfigReader.getProperty("testCardNumber"),
                 ConfigReader.getProperty("testCardExpiryDate"),
@@ -215,9 +246,7 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
         try {
             boolean isEnabled = behaviouralHealthVisitPage.isSubmitForEvaluationEnabled();
             softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
-
             if (isEnabled) {
-                behaviouralHealthVisitPage.clickSubmitForEvaluation();
                 ExtentReportManager.getTest().log(Status.PASS,
                         "Submit for Evaluation button is enabled as expected");
             } else {
@@ -228,11 +257,27 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
             ExtentReportManager.getTest().log(Status.FAIL,
                     "Failed to verify Submit for Evaluation button state: " + e.getMessage());
         }
+        Assert.assertTrue(behaviouralHealthVisitPage.clickSubmitForEvaluation(),"Failed to click submit button");
         ExtentReportManager.getTest().log(Status.INFO, "Visit process completed");
         softAssert.assertAll();
     }
-    
-    @Test(priority = 3)
+    @Test(priority = 15, dependsOnMethods = "testAddPayment")
+    public void testVisitValidationInPatientPortal() {
+        ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
+        // Visit submission verification
+        boolean isVisitSubmitted = behaviouralHealthVisitPage.isVisitSubmitted();
+        try {
+            softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
+            ExtentReportManager.getTest().log(Status.PASS, "Visit submission verification successful: Visit was submitted successfully");
+        } catch (AssertionError e) {
+            ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
+        }
+        softAssert.assertEquals(selectedProviderName,behaviouralHealthVisitPage.getProviderNameInTheVisitSubmittedPage(),
+                "Provider name in the visit submitted page is not matching with the selected provider name");
+        behaviouralHealthVisitPage.clickGoToMyVisitsButton();
+        softAssert.assertAll();
+    }
+    @Test(priority = 16)
     public void logVisitDetails() {
         String therapyReason = "";
         if (testDataForAccountHolder.getTherapistHistoryStatus().equals("Yes")) {
@@ -297,21 +342,13 @@ public class TC_BH001_CreateBHVisitForAccountHolder extends BaseTest {
 
         ExtentReportManager.getTest().info(visitDetailsHtml);
     }
-
-    @Test(priority = 4, dependsOnMethods = "testVisitCreation")
-    public void testVisitValidationInPatientPortal() {
-        ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
-        // Visit submission verification
-        boolean isVisitSubmitted = behaviouralHealthVisitPage.isVisitSubmitted();
-        try {
-            softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
-            ExtentReportManager.getTest().log(Status.PASS, "Visit submission verification successful: Visit was submitted successfully");
-        } catch (AssertionError e) {
-            ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
-        }
-        softAssert.assertEquals(selectedProviderName,behaviouralHealthVisitPage.getProviderNameInTheVisitSubmittedPage(),
-                "Provider name in the visit submitted page is not matching with the selected provider name");
-        behaviouralHealthVisitPage.clickGoToMyVisitsButton();
-        softAssert.assertAll();
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

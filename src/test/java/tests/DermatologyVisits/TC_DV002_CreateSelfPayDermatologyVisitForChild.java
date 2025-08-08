@@ -4,14 +4,12 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.DermatologyVisitPage;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -23,6 +21,7 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public DermatologyVisitPage dermatologyVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public TestData testDataForChild;
     public SignInPage signInPage;
@@ -42,7 +41,7 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
-
+        myProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -115,14 +114,14 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
         Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForChild.getStreetAddressOne()), "Failed to set address line one");
         dermatologyVisitPage.setAddressLineTwo(testDataForChild.getStreetAddressTwo());
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
-        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForChild.getDobForMinor()), "Failed to set date of birth");
+        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForChild.getDobForMinorInMMDD()), "Failed to set date of birth");
         Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForChild.getFeet()), "Failed to set height in feet");
         Assert.assertTrue(dermatologyVisitPage.setInches(testDataForChild.getInch()), "Failed to set height in inches");
         Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForChild.getWeight()), "Failed to set weight");
         Assert.assertTrue(dermatologyVisitPage.setGender("Male"), "Failed to set gender");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after setting visit details");
         Assert.assertTrue(dermatologyVisitPage.uploadId(convertToAbsoluteURL(ConfigReader.getProperty("idPhotoPath"))), "Failed to upload ID photo");
-        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after uploading ID photo"); 
+        Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after uploading ID photo");
         ExtentReportManager.getTest().log(Status.INFO, "Visit details completed");
     }
 
@@ -171,6 +170,7 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
                 testDataForChild.getDrugAllergyCategory()), "Failed to add allergy details");
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button after adding allergy");
         Thread.sleep(3000);
+        //Medications
         Assert.assertTrue(dermatologyVisitPage.clickYesButtonInMedication(), "Failed to click Yes button in medication section");
         Thread.sleep(1000);
         Assert.assertTrue(dermatologyVisitPage.clickSearchMedicationButton(), "Failed to click search medication button");
@@ -294,5 +294,14 @@ public class TC_DV002_CreateSelfPayDermatologyVisitForChild extends BaseTest {
                         "Additional Information: " + testDataForChild.getOptionalFieldText();
 
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
+    }
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

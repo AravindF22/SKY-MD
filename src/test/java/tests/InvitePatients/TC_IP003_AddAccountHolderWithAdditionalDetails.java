@@ -201,7 +201,7 @@ public class TC_IP003_AddAccountHolderWithAdditionalDetails extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Patient portal profile and visit flow validated successfully");
         softAssert.assertAll();
     }
-    @AfterClass()
+    //@AfterClass()
     public void cleanUp() throws InterruptedException {
         //navigate to my profile
         homePagePatPortal.clickMyProfile();

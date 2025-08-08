@@ -22,7 +22,7 @@ public class DermatologyVisitPage extends BasePage {
     }
 
     private final By selectDermProvider = By.xpath("//div[contains(@class,\"bg-white rounded-xl p-6 flex flex-col\")]");
-    private final By continueAfterSelectingDermProviderOption = By.xpath("//button[text()='Continue']");
+    private final By continueBtn = By.xpath("//button[text()='Continue']");
     private final By proceedBtnForRecommededProvider = By.xpath("(//button[text()='Proceed with consultation'])[1]");
     private final By selectPatient = By.xpath("//div[@class=\"px-20 py-6 border-b border-borderColor\"]/div[1]");
     private final By selectPatientAsMySelf = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]");
@@ -92,6 +92,7 @@ public class DermatologyVisitPage extends BasePage {
     private final By worseText = By.xpath("//textarea[@id= 'worse']");
     private final By betterText = By.xpath("//textarea[@id= 'better']");
     //allergy
+    private final By noBtn = By.xpath("//p[text()='No']/parent::div");
     private final By yesBtnInAllergy = By.xpath("//p[text()='Yes']/parent::div");
     private final By searchAllergy = By.xpath("//p[text()='Search Allergy']/parent::div");
     private final By enterAllergy = By.xpath("//input[contains(@id,\"react-select\")]");
@@ -110,7 +111,7 @@ public class DermatologyVisitPage extends BasePage {
     private final By per = By.cssSelector("select#per");
 
     //skin care
-    private final By yesBtnInSkinCareProduct = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]");
+    private final By yesBtnInSkinCareProduct = By.xpath("//div[@class=\"radio_button_card_container\"]/div[1]/div");
     private final By skinCareTextArea = By.xpath("//textarea[@id='skin_care_products']");
 
     private final By noBtnInAllergy = By.xpath("//p[text()='No']");
@@ -134,23 +135,61 @@ public class DermatologyVisitPage extends BasePage {
     private final By providerNameInVisitSubmittedPage = By.xpath("//div[@class='flex opacity-100']//h3");
     private final By goToMyVisitsButton = By.xpath("//button[text()='Go to My Visits']");
 
-    public void selectDermProviderSection() {
+    //insurance
+    private final By primaryInsurancePopupSection = By.xpath("//div[@class=\"bg-white rounded-xl\"]");
+    private final By insuranceCarrier = By.xpath("//input[@id=\"react-select-2-input\"]");
+    private final By memberNameField = By.cssSelector("#member_name");
+    private final By memberIdField = By.cssSelector("#member_id");
+    private final By frontPageField = By.cssSelector("#insurance_front_photo-file-upload");
+    private final By backPageField = By.cssSelector("#insurance_back_photo-file-upload");
+    private final By addInsuranceBtn = By.xpath("//button[contains(text(),'Insurance')]");
+
+    private final By primaryInsuranceNameInPricingPage = By.xpath("//p[text()='Insurance']/following-sibling::p[1]");
+    private final By primaryInsuranceMemberIdInPricingPage = By.xpath("//p[text()='Member ID']/following-sibling::p[1]");
+    private final By primaryInsuranceMemberNameInPricingPage = By.xpath("//p[text()='Member Name']/following-sibling::p[1]");
+    private final By primaryInsuranceRelationshipInPricingPage = By.xpath("//p[contains(text(),'Relationship')]/following-sibling::p[1]");
+    private final By primaryInsuranceDOBInPricingPage = By.xpath("//p[contains(text(),'DOB')]/following-sibling::p[1]");
+
+    private final By secondaryInsuranceNameInPricingPage = By.xpath("//p[text()='Secondary Insurance']/following-sibling::p[1]");
+    private final By secondaryMemberIdInPricingPage = By.xpath("//p[text()='Secondary Member ID']/following-sibling::p[1]");
+
+    //pay type in checkout
+    private final By insurancePayInCheckOut = By.xpath("//div[@class=\"flex items-start space-x-4\"]");
+    private final By selfPayInCheckOut = By.xpath("//div[@class='flex items-start w-full space-x-4']");
+    private final By insurancePayType = By.xpath("//div[@class='flex items-start space-x-4']/parent::div[contains(@class,'orange')]");
+    private final By selfPayType = By.xpath("//div[@class='flex items-start w-full space-x-4']/parent::div[contains(@class,'orange')]");
+
+    public boolean selectDermProviderSection() {
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(selectDermProvider));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-            Thread.sleep(500);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
+            return true;
         } catch (TimeoutException e) {
             System.out.println("Select Dermatology Provider section not visible: " + e.getMessage());
+            return false;
         } catch (Exception e) {
             System.out.println("Error while checking Select Dermatology Provider section: " + e.getMessage());
+            return false;
         }
     }
 
-    public void clickContinueAfterSelectingDermProvider() {
+    public boolean clickContinueAfterSelectingDermProvider() {
         try {
-            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(continueAfterSelectingDermProviderOption));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(continueBtn));
+            scrollAndClick(button);
+            return true;
+        } catch (TimeoutException e) {
+            System.out.println("Continue button not clickable: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error clicking Continue button: " + e.getMessage());
+            return false;
+        }
+    }
+    public void clickContinueAfterSelectingUploadHealthInsurance() {
+        try {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(continueBtn));
+            scrollAndClick(button);
         } catch (TimeoutException e) {
             System.out.println("Continue button not clickable: " + e.getMessage());
         } catch (Exception e) {
@@ -158,22 +197,30 @@ public class DermatologyVisitPage extends BasePage {
         }
     }
 
-    public void proceedBasisOfProvider(String providerName) {
+    public boolean proceedBasisOfProvider(String providerName) throws InterruptedException {
         try {
             By proceedButton = By.xpath("//h2[text()='" + providerName + "']/ancestor::div[contains(@class,'justify-start')]/following-sibling::div//button");
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(proceedButton));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-
+            Thread.sleep(1500);
+            scrollAndClick(element);
+            return true;
         } catch (Exception e) {
             System.out.println("Error proceeding with " + providerName + " " + e.getMessage());
+           try{ Thread.sleep(1500);
+               By proceedButton = By.xpath("//h2[text()='" + providerName + "']/ancestor::div[contains(@class,'justify-start')]/following-sibling::div//button");
+               retryClick(proceedButton);
+               return true;
+           }catch (Exception E){
+               System.out.println("After Retry Error proceeding with " + providerName + " " + e.getMessage());
+               return false;
+           }
         }
     }
 
     public void clickProceedWithRecommendedProvider() {
         try {
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(proceedBtnForRecommededProvider));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+            scrollAndClick(button);
         } catch (TimeoutException e) {
             System.out.println("'Proceed with consultation' button not clickable: " + e.getMessage());
         } catch (Exception e) {
@@ -181,40 +228,43 @@ public class DermatologyVisitPage extends BasePage {
         }
     }
 
-    public void clickSelectPatient() {
+    public boolean clickSelectPatient() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(selectPatient)).click();
+            return true;
         } catch (Exception e) {
             System.err.println("Error clicking selectPatient: " + e.getMessage());
+            return false;
         }
     }
 
-    public void clickSelectPatientAsMySelf() {
+    public boolean clickSelectPatientAsMySelf() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(selectPatientAsMySelf)).click();
+            return true;
         } catch (Exception e) {
             System.err.println("Error clicking selectPatientAsMySelf: " + e.getMessage());
-        }
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(continueButtonAfterSelectPatient)).click();
-        } catch (Exception e) {
-            System.err.println("Error clicking continueButtonAfterSelectPatient: " + e.getMessage());
+            return false;
         }
     }
 
-    public void clickContinueButtonAfterSelectPatient() {
+    public boolean clickContinueButtonAfterSelectPatient() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(continueButtonAfterSelectPatient)).click();
+            return true;
         } catch (Exception e) {
             System.err.println("Error clicking continueButtonAfterSelectPatient: " + e.getMessage());
+            return false;
         }
     }
 
-    public void clickContinueButtonAfterInsurance() {
+    public boolean clickContinueButtonAfterInsurance() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(continueButtonAfterInsurance)).click();
+            return true;
         } catch (Exception e) {
             System.err.println("Error clicking continueButtonAfterInsurance: " + e.getMessage());
+            return false;
         }
     }
 
@@ -576,13 +626,15 @@ public class DermatologyVisitPage extends BasePage {
         }
     }
 
-    public void setAddressLineTwo(String address) {
+    public boolean setAddressLineTwo(String address) {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(addressLineTwo));
             element.clear();
             element.sendKeys(address);
+            return true;
         } catch (Exception e) {
             System.out.println("Error setting Address Line Two: " + e.getMessage());
+            return false;
         }
     }
 
@@ -599,8 +651,8 @@ public class DermatologyVisitPage extends BasePage {
     public boolean setDOB(String dobValue) {
         try {
             String[] date = dobValue.split("/");
-            String day = date[0];
-            String month = date[1];
+            String month = date[0];
+            String day = date[1];
             String year = date[2];
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name=\"month\"]"))).sendKeys(month);
             wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@name=\"day\"]"))).sendKeys(day);
@@ -677,7 +729,7 @@ public class DermatologyVisitPage extends BasePage {
         try {
             By cencernList = By.xpath("//div[@class=\"radio_button_card_container\"]/div//p[text()='" + dermConcern + "']");
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(cencernList));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            scrollAndClick(element);
             element.click();
             return true;
         } catch (Exception e) {
@@ -894,7 +946,18 @@ public class DermatologyVisitPage extends BasePage {
             return false;
         }
     }
-
+    public boolean setAdditionalMedicalConditionsForFemale(String medicalCondition) {
+        try{
+            By conditionOption= By.xpath("//div[@class='check_box_card_container']//p[text()='"+medicalCondition+"']");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(conditionOption));
+            WebElement element = driver.findElement(conditionOption);
+            scrollAndClick(element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting additional medical conditions for female: " + e.getMessage());
+            return false;
+        }
+    }
     public void clickNoBtnInAllergy() {
         try {
             WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(noBtnInAllergy));
@@ -932,9 +995,24 @@ public class DermatologyVisitPage extends BasePage {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(firstPharmacy));
             element.click();
             return true;
-        } catch (Exception e) {
+        } catch (StaleElementReferenceException exp){
+            System.out.println("StaleElementReferenceException caught while clicking 'First Pharmacy'. Retrying with JavaScriptExecutor...");
+            try {
+                retryClick(firstPharmacy);
+                return true;
+            } catch (Exception ex) {
+                System.out.println("Retry failed while clicking 'First Pharmacy' button using JavaScriptExecutor: " + ex.getMessage());
+                return false;
+            }
+        }catch (Exception e) {
             System.out.println("Error clicking 'First Pharmacy': " + e.getMessage());
-            return false;
+            try {
+                retryClick(firstPharmacy);
+                return true;
+            } catch (Exception ex) {
+                System.out.println("Retry failed while clicking 'First Pharmacy' button using JavaScriptExecutor: " + ex.getMessage());
+                return false;
+            }
         }
     }
 
@@ -979,7 +1057,16 @@ public class DermatologyVisitPage extends BasePage {
             return false;
         }
     }
-
+    public boolean clickNoButton() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(noBtn));
+            scrollAndClick(element);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error clicking 'None': " + e.getMessage());
+            return retryClick(noBtn);
+        }
+    }
     public boolean addAllergy(String allergyName, String reactionType, String categoryType) {
         try {
             // 1. Click "Yes" button
@@ -1000,8 +1087,7 @@ public class DermatologyVisitPage extends BasePage {
                 WebElement matchingOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//div[contains(@class,'option') and text()='" + allergyName + "']")));
                 // Step 5: Scroll to and click the option using JavaScript
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", matchingOption);
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", matchingOption);
+                scrollAndClick(matchingOption);
             } catch (Exception e) {
                 WebElement createOption = wait.until(ExpectedConditions.visibilityOfElementLocated(
                         By.xpath("//div[contains(@id,'option') and text()='Create \"" + allergyName + "\"']")));
@@ -1038,13 +1124,12 @@ public class DermatologyVisitPage extends BasePage {
     public boolean clickYesButtonInMedication() {
         try {
             WebElement yesBtn = wait.until(ExpectedConditions.elementToBeClickable(yesBtnInMedication));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", yesBtn);
+            scrollAndClick(yesBtn);
             return true;
         } catch (StaleElementReferenceException e) {
             System.out.println("StaleElementReferenceException caught while clicking 'Yes' button. Retrying with JavaScriptExecutor...");
             try {
-                WebElement yesBtn = wait.until(ExpectedConditions.presenceOfElementLocated(yesBtnInMedication));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", yesBtn);
+                retryClick(yesBtnInMedication);
                 return true;
             } catch (Exception ex) {
                 System.out.println("Retry failed while clicking 'Yes' button using JavaScriptExecutor: " + ex.getMessage());
@@ -1094,16 +1179,14 @@ public class DermatologyVisitPage extends BasePage {
                         By.xpath("//div[contains(@class,'option') and text()='" + medicationName + "']")));
 
                 // Step 5: Scroll to and click the option using JavaScript
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", matchingOption);
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", matchingOption);
+                scrollAndClick(matchingOption);
 
             } catch (Exception e) {
                 System.out.println("Error entering/selecting medication name: " + e.getMessage());
                 try {
                     WebElement createMedication = wait.until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//div[contains(@id,'option') and text()='Create \"" + medicationName + "\"']")));
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createMedication);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createMedication);
+                    scrollAndClick(createMedication);
                 } catch (Exception e1) {
                     System.out.println("Error creating medication: " + e1.getMessage());
                     return false;
@@ -1161,7 +1244,7 @@ public class DermatologyVisitPage extends BasePage {
     // Clicks the "Yes" button in the Skin Care Product section
     public boolean clickYesBtnInSkinCareProduct() {
         try {
-            WebElement yesBtn = wait.until(ExpectedConditions.presenceOfElementLocated(yesBtnInSkinCareProduct));
+            WebElement yesBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(yesBtnInSkinCareProduct));
             yesBtn.click();
             return true;
         } catch (Exception e) {
@@ -1171,13 +1254,15 @@ public class DermatologyVisitPage extends BasePage {
     }
 
     // Enters text into the Skin Care Product textarea
-    public void enterSkinCareProduct(String productText) {
+    public boolean enterSkinCareProduct(String productText) {
         try {
             WebElement textArea = wait.until(ExpectedConditions.visibilityOfElementLocated(skinCareTextArea));
             textArea.clear();
             textArea.sendKeys(productText);
+            return true;
         } catch (Exception e) {
             System.out.println("Error entering text in Skin Care Product textarea: " + e.getMessage());
+            return false;
         }
     }
 
@@ -1244,7 +1329,24 @@ public class DermatologyVisitPage extends BasePage {
             return false;
         }
     }
-
+    public boolean isSelfPaySelectedInTheCheckOutPage(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(selfPayType));
+            return element.isDisplayed();
+        }catch (Exception e){
+            System.out.println("Self pay isn't selected");
+            return false;
+        }
+    }
+    public boolean isInsurancePaySelectedInTheCheckOutPage(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(insurancePayType));
+            return element.isDisplayed();
+        }catch (Exception e){
+            System.out.println("insurance pay isn't selected");
+            return false;
+        }
+    }
     public boolean isSubmitForEvaluationEnabled() {
         try {
             WebElement submitBtn = wait.until(ExpectedConditions.elementToBeClickable(submitForEvaluation));
@@ -1458,6 +1560,151 @@ public class DermatologyVisitPage extends BasePage {
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking 'Save Someone Else' button: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean setInsuranceName(String insuranceName){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsurancePopupSection));
+            WebElement inputField = wait.until(ExpectedConditions.elementToBeClickable(insuranceCarrier));
+            scrollAndClick(inputField);
+            inputField.sendKeys(insuranceName);
+
+            By insuranceOption = By.xpath("//div[@class=\" css-11unzgr\"]");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(insuranceOption));
+
+            By matchingOption = By.xpath("//div[contains(@id,\"option\") and normalize-space()=\""+insuranceName+"\"]");
+            WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(matchingOption));
+            scrollAndClick(option);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error setting primary insurance: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean setMemberName(String memberName) {
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberNameField));
+            element.sendKeys(memberName);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting member name: " + e.getMessage());
+            return false;
+        }
+    }
+    public String getMemberName() {
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberNameField));
+            return element.getAttribute("value");
+        }catch (Exception e){
+            System.out.println("Error setting member name: " + e.getMessage());
+            return null;
+        }
+    }
+    public boolean setMemberId(String memberId) {
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(memberIdField));
+            element.sendKeys(memberId);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error setting member id: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean uploadFrontPage(String frontPagePath){
+        try{
+            WebElement frontPage = wait.until(ExpectedConditions.presenceOfElementLocated(frontPageField));
+            frontPage.sendKeys(frontPagePath);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error uploading front page: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean uploadBackPage(String backPagePath){
+        try{
+            WebElement backPage = wait.until(ExpectedConditions.presenceOfElementLocated(backPageField));
+            backPage.sendKeys(backPagePath);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error uploading back page: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean clickAddInsuranceButton(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(addInsuranceBtn));
+            scrollAndClick(element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Error clicking 'Add Insurance': " + e.getMessage());
+            return false;
+        }
+    }
+    public String getPrimaryInsuranceNameInPricingPage() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceNameInPricingPage));
+            return element.getText().trim();
+        } catch (Exception e) {
+            System.out.println("Error getting Primary Insurance Name: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getPrimaryInsuranceMemberIdInPricingPage() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberIdInPricingPage));
+            return element.getText().trim();
+        } catch (Exception e) {
+            System.out.println("Error getting Member ID: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String getPrimaryInsuranceMemberNameInPricingPage() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceMemberNameInPricingPage));
+            return element.getText().trim();
+        } catch (Exception e) {
+            System.out.println("Error getting Member ID: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getPrimaryInsuranceMemberDOBInPricingPage() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceDOBInPricingPage));
+            return element.getText().trim().replace('-','/');
+        } catch (Exception e) {
+            System.out.println("Error getting Member ID: " + e.getMessage());
+            return null;
+        }
+    }
+    public String getPrimaryInsuranceMemberRelationshipInPricingPage() {
+        try {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(primaryInsuranceRelationshipInPricingPage));
+            return element.getText().trim();
+        } catch (Exception e) {
+            System.out.println("Error getting Member ID: " + e.getMessage());
+            return null;
+        }
+    }
+    public boolean clickInsurancePayInCheckOutPage(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(insurancePayInCheckOut));
+            scrollAndClick(element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Failed to click insurance pay in checkout page");
+            return false;
+        }
+    }
+    public boolean clickSelfPayInCheckOutPage(){
+        try{
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(selfPayInCheckOut));
+            scrollAndClick(element);
+            return true;
+        }catch (Exception e){
+            System.out.println("Failed to click self pay in checkout page");
             return false;
         }
     }

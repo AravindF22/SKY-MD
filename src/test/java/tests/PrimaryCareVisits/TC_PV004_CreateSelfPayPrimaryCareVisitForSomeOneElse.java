@@ -4,14 +4,12 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.PrimaryCareVisitPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -23,6 +21,7 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public PrimaryCareVisitPage primaryCareVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public SignInPage signInPage;
     public TestData testDataForAccountHolder;
     public TestData testDataForSomeOneElse;
@@ -42,6 +41,7 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         primaryCareVisitPage = new PrimaryCareVisitPage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
         signInPage = new SignInPage(driver);
     }
     @Test(priority = 1)
@@ -86,16 +86,19 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
         }
         softAssert.assertAll();
     }
-    @Test(priority = 2)
-    public void testPrimaryCareVisitValidation() throws InterruptedException {
+    @Test(priority = 2, dependsOnMethods = {"testSignInAsNewValidPatient"})
+    public void testSelectPrimaryCareVisitForSomeoneElse() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         Thread.sleep(1000);
         Assert.assertTrue(patientPortalHomePage.selectPrimaryCareVisit(), "Failed to select Primary Care Visit");
         Thread.sleep(5000);
         Assert.assertTrue(primaryCareVisitPage.clickPatientAsSomeOneElse(), "Failed to click Patient As Someone else option");
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting Patient As SomeOneElse option");
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting Someone Else option");
+        ExtentReportManager.getTest().log(Status.PASS, "Selected Primary Care Visit and 'Someone Else' option");
+    }
 
-        //addSomeOneElse
+    @Test(priority = 3, dependsOnMethods = {"testSelectPrimaryCareVisitForSomeoneElse"})
+    public void testAddSomeoneElseDetails() throws InterruptedException {
         Assert.assertTrue(primaryCareVisitPage.clickAddSomeOneElse(), "Failed to click Add SomeOneElse Button");
         Thread.sleep(500);
         Assert.assertTrue(primaryCareVisitPage.setFirstName(testDataForSomeOneElse.getFname()), "Failed to set first name");
@@ -110,60 +113,93 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
         Assert.assertTrue(primaryCareVisitPage.setWeight(testDataForSomeOneElse.getWeight()), "Failed to set weight");
         Assert.assertTrue(primaryCareVisitPage.selectGender(testDataForSomeOneElse.getGender()), "Failed to select gender");
         Assert.assertTrue(primaryCareVisitPage.clickSaveButton(), "Failed to click Save SomeOneElse Button");
+        ExtentReportManager.getTest().log(Status.PASS, "Added Someone Else's details successfully");
+    }
+
+    @Test(priority = 4, dependsOnMethods = {"testAddSomeoneElseDetails"})
+    public void testSelectSavedSomeoneElsePatient() throws InterruptedException {
         Thread.sleep(2000);
-        Assert.assertTrue(primaryCareVisitPage.selectPatient(testDataForSomeOneElse.getFullName()),"Failed to select the patient");
+        Assert.assertTrue(primaryCareVisitPage.selectPatient(testDataForSomeOneElse.getFullName()), "Failed to select the patient");
         Thread.sleep(1000);
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after adding SomeOneElse");
-        //Staying in Self pay
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting Someone Else");
+        ExtentReportManager.getTest().log(Status.PASS, "Selected saved Someone Else patient and moved forward");
+    }
+
+    @Test(priority = 5, dependsOnMethods = {"testSelectSavedSomeoneElsePatient"})
+    public void testProceedWithSelfPayVisit() throws InterruptedException {
         Assert.assertTrue(primaryCareVisitPage.clickProceedByBookingButton(), "Failed to click Proceed By Booking button");
         Thread.sleep(3000);
-        //condition
-        Assert.assertTrue(primaryCareVisitPage.clickSelectFirstCondition("Allergies"), "Failed to select Allergies condition");
+        ExtentReportManager.getTest().log(Status.PASS, "Clicked Proceed By Booking in Self Pay flow");
+    }
+
+    @Test(priority = 6, dependsOnMethods = {"testProceedWithSelfPayVisit"})
+    public void testSelectVisitCondition() {
+        Assert.assertTrue(primaryCareVisitPage.selectCondition("Allergies"), "Failed to select Allergies condition");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting condition");
-        //Select the First Available Day and First slot
+        ExtentReportManager.getTest().log(Status.PASS, "Condition selected and continued");
+    }
+
+    @Test(priority = 7, dependsOnMethods = {"testSelectVisitCondition"})
+    public void testSelectTimeSlot() throws InterruptedException {
         Assert.assertTrue(primaryCareVisitPage.selectFirstAvailableDay(), "Failed to select first available day");
-        Assert.assertTrue(primaryCareVisitPage.selectFirstAvailableTimeSlot(), "Failed to select first available time slot");
-        //storing provider name
+        Assert.assertTrue(primaryCareVisitPage.selectFirstAvailableTimeSlot(), "Failed to select time slot");
         selectedProviderName = primaryCareVisitPage.getSelectedProviderName();
         Thread.sleep(500);
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to click Next button after selecting time slot");
-        softAssert.assertEquals(primaryCareVisitPage.getFirstName(), testDataForSomeOneElse.getFname(),
-                "First name is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getLastName(), testDataForSomeOneElse.getLname(),
-                "Last name is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getDOBInMMDD(), testDataForSomeOneElse.getDobForMajorInMMDD(),
-                "DOB is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getAddressOne(), testDataForSomeOneElse.getStreetAddressOne(),
-                "Address line one is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getAddressTwo(), testDataForSomeOneElse.getStreetAddressTwo(),
-                "Address line two is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getZipcode(), testDataForSomeOneElse.getZipCode(),
-                "Zipcode is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getFeet(), testDataForSomeOneElse.getFeet(),
-                "Height Feet is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getInch(), testDataForSomeOneElse.getInch(),
-                "Height Inches is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getWeight(), testDataForSomeOneElse.getWeight(),
-                "Weight is mismatching in demographics");
-        softAssert.assertEquals(primaryCareVisitPage.getGender(),testDataForSomeOneElse.getGender(),
-                "Gender is mismatching in demographics");
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after demographics");
+        ExtentReportManager.getTest().log(Status.PASS, "Slot and provider selected");
+    }
 
+    @Test(priority = 8, dependsOnMethods = {"testSelectTimeSlot"})
+    public void testValidateDemographicsForSomeoneElse() {
+        softAssert.assertEquals(primaryCareVisitPage.getFirstName(), testDataForSomeOneElse.getFname(), "First name mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getLastName(), testDataForSomeOneElse.getLname(), "Last name mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getDOBInMMDD(), testDataForSomeOneElse.getDobForMajorInMMDD(), "DOB mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getAddressOne(), testDataForSomeOneElse.getStreetAddressOne(), "Address 1 mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getAddressTwo(), testDataForSomeOneElse.getStreetAddressTwo(), "Address 2 mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getZipcode(), testDataForSomeOneElse.getZipCode(), "Zip mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getFeet(), testDataForSomeOneElse.getFeet(), "Feet mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getInch(), testDataForSomeOneElse.getInch(), "Inch mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getWeight(), testDataForSomeOneElse.getWeight(), "Weight mismatch");
+        softAssert.assertEquals(primaryCareVisitPage.getGender(), testDataForSomeOneElse.getGender(), "Gender mismatch");
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after demographics");
+        ExtentReportManager.getTest().log(Status.PASS, "Demographics validated successfully");
+        softAssert.assertAll();
+    }
+
+    @Test(priority = 9, dependsOnMethods = {"testValidateDemographicsForSomeoneElse"})
+    public void testUploadID() {
         Assert.assertTrue(primaryCareVisitPage.uploadId(convertToAbsoluteURL(ConfigReader.getProperty("idPhotoPath"))), "Failed to upload ID");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after ID upload");
+        ExtentReportManager.getTest().log(Status.PASS, "ID uploaded successfully");
+    }
 
+    @Test(priority = 10, dependsOnMethods = {"testUploadID"})
+    public void testSelectPharmacy() {
         Assert.assertTrue(primaryCareVisitPage.clickAddPharmacyAndSwitchToListView(), "Failed to switch to pharmacy list view");
         Assert.assertTrue(primaryCareVisitPage.clickFirstPharmacy(), "Failed to select pharmacy");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after pharmacy selection");
+        ExtentReportManager.getTest().log(Status.PASS, "Pharmacy selected successfully");
+    }
 
+    @Test(priority = 11, dependsOnMethods = {"testSelectPharmacy"})
+    public void testAddSymptoms() {
         Assert.assertTrue(primaryCareVisitPage.setGeneralSymptoms("Fatigue"), "Failed to set general symptoms");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after symptoms");
+        ExtentReportManager.getTest().log(Status.PASS, "Symptoms added successfully");
+    }
 
-        Assert.assertTrue(primaryCareVisitPage.addAllergy(testDataForSomeOneElse.getAllergyOne(),
+    @Test(priority = 12, dependsOnMethods = {"testAddSymptoms"})
+    public void testAddAllergy() {
+        Assert.assertTrue(primaryCareVisitPage.addAllergy(
+                testDataForSomeOneElse.getAllergyOne(),
                 testDataForSomeOneElse.getAllergyReactionOne(),
                 testDataForSomeOneElse.getDrugAllergyCategory()), "Failed to add allergy");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after allergy");
+        ExtentReportManager.getTest().log(Status.PASS, "Allergy added successfully");
+    }
 
+    @Test(priority = 13, dependsOnMethods = {"testAddAllergy"})
+    public void testAddMedication() {
         Assert.assertTrue(primaryCareVisitPage.clickSearchMedicationButton(), "Failed to click search medication");
         Assert.assertTrue(primaryCareVisitPage.addMedication(
                 testDataForSomeOneElse.getMedicationOne(),
@@ -171,46 +207,73 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
                 testDataForSomeOneElse.getMedicationFormOne(),
                 testDataForSomeOneElse.getMedicationFrequencyOne(),
                 testDataForSomeOneElse.getMedicationPerOne()), "Failed to add medication");
+        Assert.assertTrue(primaryCareVisitPage.clickDoneBtnInMedication(), "Failed to click Done btn in medication");
         Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after medication");
-        if(testDataForSomeOneElse.getGender().equalsIgnoreCase("Female")){
-            Assert.assertTrue(primaryCareVisitPage.setAdditionalMedicalConditionsForFemale("Pregnant"),
-                    "Failed to set additional medical conditions for female");
-            Assert.assertTrue(primaryCareVisitPage.clickNextButton(),
-                    "Failed to move to next step after additional medical conditions for female");
-        }
-        Assert.assertTrue(primaryCareVisitPage.setOptionalDetails(testDataForSomeOneElse.getAdditionalText()),
-                "Failed to set optional details");
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after optional details");
 
-        Assert.assertTrue(primaryCareVisitPage.acceptAllCodeOfConduct(), "Failed to accept code of conduct");
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after code of conduct");
+        if (testDataForSomeOneElse.getGender().equalsIgnoreCase("Female")) {
+            Assert.assertTrue(primaryCareVisitPage.setAdditionalMedicalConditionsForFemale("Pregnant"), "Failed to set additional medical condition");
+            Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after female condition");
+        }
+        ExtentReportManager.getTest().log(Status.PASS, "Medication added successfully");
+    }
+
+    @Test(priority = 14, dependsOnMethods = {"testAddMedication"})
+    public void testAddOptionalDetails() {
+        Assert.assertTrue(primaryCareVisitPage.setOptionalDetails(testDataForSomeOneElse.getAdditionalText()), "Failed to set optional details");
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to next step after optional details");
+        ExtentReportManager.getTest().log(Status.PASS, "Optional details added successfully");
+    }
+
+    @Test(priority = 15, dependsOnMethods = {"testAddOptionalDetails"})
+    public void testAcknowledgeAndPay() throws InterruptedException {
+        Assert.assertTrue(primaryCareVisitPage.acceptAllCodeOfConduct(), "Failed to accept Code of Conduct");
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to proceed after Code of Conduct");
 
         Assert.assertTrue(primaryCareVisitPage.paymentByCard(
                 ConfigReader.getProperty("testCardNumber"),
                 ConfigReader.getProperty("testCardExpiryDate"),
                 ConfigReader.getProperty("testCardCVV")
-        ), "Failed to process card payment");
+        ), "Failed to process payment");
         Thread.sleep(2000);
-        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to move to payment confirmation step");
+        Assert.assertTrue(primaryCareVisitPage.clickNextButton(), "Failed to proceed to confirmation");
+
+        ExtentReportManager.getTest().log(Status.PASS, "Code of Conduct accepted and payment processed");
+    }
+
+    @Test(priority = 16, dependsOnMethods = {"testAcknowledgeAndPay"})
+    public void testSubmitVisitForSomeoneElse() {
         try {
             boolean isEnabled = primaryCareVisitPage.isSubmitForEvaluationEnabled();
-            softAssert.assertTrue(isEnabled, "Submit for Evaluation button should be enabled");
+            softAssert.assertTrue(isEnabled, "Submit for Evaluation should be enabled");
 
             if (isEnabled) {
                 primaryCareVisitPage.clickSubmitForEvaluation();
-                ExtentReportManager.getTest().log(Status.PASS,
-                        "Submit for Evaluation button is enabled as expected");
+                ExtentReportManager.getTest().log(Status.PASS, "Submit for Evaluation successful");
             } else {
-                ExtentReportManager.getTest().log(Status.FAIL,
-                        "Submit for Evaluation button is disabled when it should be enabled");
+                ExtentReportManager.getTest().log(Status.FAIL, "Submit for Evaluation button was disabled");
             }
         } catch (Exception e) {
-            ExtentReportManager.getTest().log(Status.FAIL,
-                    "Failed to verify Submit for Evaluation button state: " + e.getMessage());
+            ExtentReportManager.getTest().log(Status.FAIL, "Error checking Submit for Evaluation: " + e.getMessage());
         }
         softAssert.assertAll();
     }
-    @Test(priority = 3)
+    @Test(priority = 17, dependsOnMethods = {"testSubmitVisitForSomeoneElse"})
+    public void testVisitValidationInPatientPortal() {
+        ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
+        // Visit submission verification
+        boolean isVisitSubmitted = primaryCareVisitPage.isVisitSubmitted();
+        try {
+            softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
+            ExtentReportManager.getTest().log(Status.PASS, "Visit submission verification successful: Visit was submitted successfully");
+        } catch (AssertionError e) {
+            ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
+        }
+        softAssert.assertEquals(selectedProviderName,primaryCareVisitPage.getProviderNameInTheVisitSubmittedPage(),
+                "Provider name in the visit submitted page is not matching with the selected provider name");
+        primaryCareVisitPage.clickGoToMyVisitsButton();
+        softAssert.assertAll();
+    }
+    @Test(priority = 18)
     public void logPrimaryCareVisitDetails() {
         String additionMedicalConditions = "";
         if(testDataForAccountHolder.getGender().equalsIgnoreCase("Female")){
@@ -256,20 +319,13 @@ public class TC_PV004_CreateSelfPayPrimaryCareVisitForSomeOneElse extends BaseTe
 
         ExtentReportManager.getTest().info(visitDetailsHtml);
     }
-    @Test(priority = 4, dependsOnMethods = {"testPrimaryCareVisitValidation"})
-    public void testVisitValidationInPatientPortal() {
-        ExtentReportManager.getTest().log(Status.INFO, "Test started: Visit Validation in Patient Portal");
-        // Visit submission verification
-        boolean isVisitSubmitted = primaryCareVisitPage.isVisitSubmitted();
-        try {
-            softAssert.assertTrue(isVisitSubmitted, "Visit submission verification failed");
-            ExtentReportManager.getTest().log(Status.PASS, "Visit submission verification successful: Visit was submitted successfully");
-        } catch (AssertionError e) {
-            ExtentReportManager.getTest().log(Status.FAIL, "Visit submission verification failed: Visit was not submitted as expected");
-        }
-        softAssert.assertEquals(selectedProviderName,primaryCareVisitPage.getProviderNameInTheVisitSubmittedPage(),
-                "Provider name in the visit submitted page is not matching with the selected provider name");
-        primaryCareVisitPage.clickGoToMyVisitsButton();
-        softAssert.assertAll();
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

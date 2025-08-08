@@ -43,18 +43,21 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         patientPortalHomePage = new PatientPortalHomePage(driver);
     }
     @Test(priority = 1)
-    public void testSignInAsNewValidPatient()  {
+    public void testSignInAsNewValidPatient() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         ExtentReportManager.getTest().log(Status.INFO, "Test started: Sign in as new valid patient");
 
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         ExtentReportManager.getTest().log(Status.INFO, "Navigated to Patient Portal Login Page");
 
+        Thread.sleep(2000); // allow sign-up page to load fully
         patientPortalLoginPage.clickSignUpLink();
         ExtentReportManager.getTest().log(Status.INFO, "Clicked on Sign Up link");
 
         signInPage.enterEmail(testDataForAccountHolder.getEmail());
         signInPage.clickNextButton();
+        Thread.sleep(2000); // wait for password page to render
+
         ExtentReportManager.getTest().log(Status.INFO, "Entered email and clicked Next");
 
         signInPage.enterPassword(ConfigReader.getProperty("PatientPortalPassword"));
@@ -63,6 +66,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         signInPage.clickAgeCheckIcon();
         signInPage.clickContinueButton();
         ExtentReportManager.getTest().log(Status.INFO, "Accepted age and clicked Continue");
+        Thread.sleep(2000); // wait for personal info form
 
         signInPage.enterFirstName(testDataForAccountHolder.getFname());
         signInPage.enterLastName(testDataForAccountHolder.getLname());
@@ -71,6 +75,7 @@ public class TC_SI001_SignInAsNewPatient extends BaseTest {
         ExtentReportManager.getTest().log(Status.INFO, "Filled personal details");
 
         signInPage.clickSignInButton();
+        Thread.sleep(3000); // allow backend to process account creation before homepage loads
         ExtentReportManager.getTest().log(Status.INFO, "Clicked Sign In button");
 
         boolean isHome = patientPortalHomePage.isHomePage();

@@ -47,14 +47,19 @@ public class TestData {
     private final int allergyCategoryThreeIndex;
     private final int medicationOneIndex;
     private final int medicationTwoIndex;
+    private final int medicationThreeIndex;
     private final int dosageOneValue;
     private final int dosageTwoValue;
+    private final int dosageThreeValue;
     private final int medicationFormOneIndex;
     private final int medicationFormTwoIndex;
+    private final int medicationFormThreeIndex;
     private final int medicationFrequencyOneIndex;
     private final int medicationFrequencyTwoIndex;
+    private final int medicationFrequencyThreeIndex;
     private final int medicationPerOneIndex;
     private final int medicationPerTwoIndex;
+    private final int medicationPerThreeIndex;
     private final int concernIndex;
     private final int symptomsOneIndex;
     private final int sufferingConditionDays;
@@ -63,6 +68,7 @@ public class TestData {
     private final int severityIndex;
     private final int bodyPartsIndex;
     private final int lifeStyleItemsIndex;
+    private final int femaleMedicalConditionIndex;
     private final String optionalFieldText;
     //BH
     private final int therapyReasonsIndex;
@@ -150,6 +156,7 @@ public class TestData {
         this.allergyCategoryThreeIndex = faker.number().numberBetween(0,allergyCategory.length);
         this.medicationOneIndex = faker.number().numberBetween(0, medications.length);
         this.medicationTwoIndex = faker.number().numberBetween(0, medications.length);
+        this.medicationThreeIndex = faker.number().numberBetween(0, medications.length);
         this.sufferingConditionDays = faker.number().numberBetween(1,100);
         this.concernIndex = faker.number().numberBetween(0, concerns.length);
         this.symptomsOneIndex = faker.number().numberBetween(0, symptoms.length);
@@ -158,6 +165,7 @@ public class TestData {
         this.severityIndex = faker.number().numberBetween(0, severity.length);
         this.bodyPartsIndex = faker.number().numberBetween(0, bodyParts.length);
         this.lifeStyleItemsIndex = faker.number().numberBetween(0,lifeStyleItems.length);
+        this.femaleMedicalConditionIndex = faker.number().numberBetween(0, femaleMedicalCondition.length);
         this.optionalFieldText = faker.lorem().word();
         this.therapyReasonsIndex = faker.number().numberBetween(0,therapyReasons.length);
         this.smokingItemsIndex = faker.number().numberBetween(0, SmokingItems.length);
@@ -183,12 +191,16 @@ public class TestData {
         this.questionnaireTenIndex = faker.number().numberBetween(0, questionnaireTenOptions.length);
         this.medicationFormOneIndex = faker.number().numberBetween(0, medicationForms.length);
         this.medicationFormTwoIndex = faker.number().numberBetween(0, medicationForms.length);
+        this.medicationFormThreeIndex = faker.number().numberBetween(0, medicationForms.length);
         this.medicationFrequencyOneIndex  = faker.number().numberBetween(0, medicationFrequencies.length);
         this.medicationFrequencyTwoIndex  = faker.number().numberBetween(0, medicationFrequencies.length);
+        this.medicationFrequencyThreeIndex  = faker.number().numberBetween(0, medicationFrequencies.length);
         this.medicationPerOneIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
         this.medicationPerTwoIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
+        this.medicationPerThreeIndex  = faker.number().numberBetween(0, medicationPerOptions.length);
         this.dosageOneValue = faker.number().numberBetween(1, 501);
         this.dosageTwoValue = faker.number().numberBetween(1, 501);
+        this.dosageThreeValue = faker.number().numberBetween(1, 501);
         this.conditionsIndex = faker.number().numberBetween(0, conditions.length);
         this.generalSymptomsIndex = faker.number().numberBetween(0, generalSymptoms.length);
         this.skinSymptomsIndex = faker.number().numberBetween(0, skinSymptoms.length);
@@ -238,7 +250,15 @@ public class TestData {
             "Excessive Sun Exposure",
             "High Carb Diet", "Indoor Tanning",
             "Smoker", "Stress", "Travel Abroad", "None"};
-
+    String[] femaleMedicalCondition = {
+            "Breastfeeding",
+            "Irregular Periods",
+            "Oral Contraception",
+            "Postmenopausal",
+            "Pregnant",
+            "Trying to Become Pregnant",
+            "None"
+    };
     String[] medications = {"Anu-Med", "Beta Med", "Perio Med", "Medi-Sleep", "Medi-Mucil", "Mediwash", "Medi-Tabs","Medi Pads", "Medi-Patch",
             "Medi-Phedryl", "Medi-Bismuth", "Solu-Medrol", "Solu-Medrol (PF)", "Mediproxen", "Medi-Seltzer", "Psoriasis Medicated", "Allergy Medication",
             "Allergy Medicine","Mediwash Eye Irrigant", "medroxyprogesterone", "Testim", "Testopel", "Testred", "First-Testosterone", "FIRST-Testosterone MC",
@@ -427,6 +447,11 @@ public class TestData {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMajor);
     }
+    public String getDobForMajorInYYYMMDD() {
+        String format = "yyyy/MM/dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(dobForMajor);
+    }
     public String getDobForMinor(){
         String format = Boolean.parseBoolean(ConfigReader.getProperty("gitHubActions")) ? "MM/dd/yyyy" : "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -465,6 +490,16 @@ public class TestData {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(dobForMajor);
     }
+    public String getMemberDobForPrimaryInsuranceInMMDD() {
+        String format = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(dobForMajor);
+    }
+    public String getMemberDobForSecondaryInsuranceInMMDD() {
+        String format = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(memberDobForSecondaryInsurance);
+    }
     public String getPrimaryInsurance(){
         return insurances[primaryInsuranceIndex];}
     //secondary insurance
@@ -488,11 +523,9 @@ public class TestData {
     public String getMedicationOne(){
         return medications[medicationOneIndex];
     }
-    public String getMedicationTwo(){
-        return medications[medicationTwoIndex];
-    }
-    public String getAllergyOne(){return allergies[allergyOneIndex];
-    }
+    public String getMedicationTwo(){return medications[medicationTwoIndex];}
+    public String getMedicationThree(){return medications[medicationThreeIndex];}
+    public String getAllergyOne(){return allergies[allergyOneIndex];}
     public String getAllergyTwo(){
         return allergies[allergyTwoIndex];
     }
@@ -539,6 +572,9 @@ public class TestData {
         return bodyParts[bodyPartsIndex];}
     public String getLifeStyleItem(){
         return lifeStyleItems[lifeStyleItemsIndex];}
+    public String getFemaleMedicalCondition(){
+        return femaleMedicalCondition[femaleMedicalConditionIndex];
+    }
     public String getWhatMakesWorse(){
         random = new Random();
         int count = 5 + random.nextInt(6); // Random number between 5 and 10
@@ -638,17 +674,26 @@ public class TestData {
     public String getMedicationFormTwo(){
         return medicationForms[medicationFormTwoIndex];
     }
+    public String getMedicationFormThree(){
+        return medicationForms[medicationFormThreeIndex];
+    }
     public String getMedicationFrequencyOne(){
         return medicationFrequencies[medicationFrequencyOneIndex];
     }
     public String getMedicationFrequencyTwo(){
         return medicationFrequencies[medicationFrequencyTwoIndex];
     }
+    public String getMedicationFrequencyThree(){
+        return medicationFrequencies[medicationFrequencyThreeIndex];
+    }
     public String getMedicationPerOne(){
         return medicationPerOptions[medicationPerOneIndex];
     }
     public String getMedicationPerTwo(){
         return medicationPerOptions[medicationPerTwoIndex];
+    }
+    public String getMedicationPerThree(){
+        return medicationPerOptions[medicationPerThreeIndex];
     }
     public String getDosageOne() {
         String unit = units[faker.random().nextInt(units.length)];
@@ -657,6 +702,10 @@ public class TestData {
     public String getDosageTwo(){
         String unit = units[faker.random().nextInt(units.length)];
         return dosageTwoValue + " " + unit;
+    }
+    public String getDosageThree(){
+        String unit = units[faker.random().nextInt(units.length)];
+        return dosageThreeValue + " " + unit;
     }
     public String getCondition(){
         return conditions[conditionsIndex];

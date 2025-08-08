@@ -4,14 +4,12 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.DermatologyVisitPage;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -23,6 +21,7 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public DermatologyVisitPage dermatologyVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public TestData testDataForSomeOneElse;
     public SignInPage signInPage;
@@ -42,7 +41,7 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
-
+        myProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -129,7 +128,7 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
         Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForSomeOneElse.getStreetAddressOne()), "Failed to set Address Line One");
         dermatologyVisitPage.setAddressLineTwo(testDataForSomeOneElse.getStreetAddressTwo());
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click continue button");
-        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForSomeOneElse.getDobForMajor()), "Failed to set Date of Birth");
+        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForSomeOneElse.getDobForMajorInMMDD()), "Failed to set Date of Birth");
         Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForSomeOneElse.getFeet()), "Failed to set feet value");
         Assert.assertTrue(dermatologyVisitPage.setInches(testDataForSomeOneElse.getInch()), "Failed to set inches value");
         Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForSomeOneElse.getWeight()), "Failed to set weight");
@@ -309,6 +308,14 @@ public class TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse extends BaseTe
                         "Additional Information: " + testDataForSomeOneElse.getOptionalFieldText();
 
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
-
+    }
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

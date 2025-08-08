@@ -48,8 +48,7 @@ public class MyVisitsPage extends BasePage {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                         "(//h3[contains(text(),'" + visitId + "')]/ancestor::div[contains(@class,'flex-col font-medium')]//div[@class=\"border-t\"]//div[@class=\"space-y-4\"]//button)[3]")));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking photos in visit summary: " + e.getMessage());
@@ -61,8 +60,7 @@ public class MyVisitsPage extends BasePage {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                         "//h3[contains(text(),'" + visitId + "')]/ancestor::div[contains(@class,'flex-col font-medium')]//h2[contains(text(),'Visit')]")));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking first visit summary: " + e.getMessage());

@@ -4,14 +4,12 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.DermatologyVisitPage;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -23,6 +21,7 @@ public class TC_DV003_CreateSelfPayDermatologyVisitForWard extends BaseTest {
     public PatientPortalLoginPage patientPortalLoginPage;
     public PatientPortalHomePage patientPortalHomePage;
     public DermatologyVisitPage dermatologyVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public TestData testDataForAccountHolder;
     public TestData testDataForWard;
     public SignInPage signInPage;
@@ -42,7 +41,7 @@ public class TC_DV003_CreateSelfPayDermatologyVisitForWard extends BaseTest {
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         dermatologyVisitPage = new DermatologyVisitPage(driver);
-
+        myProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -115,7 +114,7 @@ public class TC_DV003_CreateSelfPayDermatologyVisitForWard extends BaseTest {
         Assert.assertTrue(dermatologyVisitPage.setAddressLineOne(testDataForWard.getStreetAddressOne()), "Failed to set Address Line One");
         dermatologyVisitPage.setAddressLineTwo(testDataForWard.getStreetAddressTwo());
         Assert.assertTrue(dermatologyVisitPage.clickContinueButton(), "Failed to click Continue button");
-        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForWard.getDobForMajor()), "Failed to set DOB");
+        Assert.assertTrue(dermatologyVisitPage.setDOB(testDataForWard.getDobForMajorInMMDD()), "Failed to set DOB");
         Assert.assertTrue(dermatologyVisitPage.setFeet(testDataForWard.getFeet()), "Failed to set Feet");
         Assert.assertTrue(dermatologyVisitPage.setInches(testDataForWard.getInch()), "Failed to set Inches");
         Assert.assertTrue(dermatologyVisitPage.setWeight(testDataForWard.getWeight()), "Failed to set Weight");
@@ -294,5 +293,14 @@ public class TC_DV003_CreateSelfPayDermatologyVisitForWard extends BaseTest {
                         "Additional Information: " + testDataForWard.getOptionalFieldText();
 
         ExtentReportManager.getTest().info(accountAndVisitDetailsHtml);
+    }
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

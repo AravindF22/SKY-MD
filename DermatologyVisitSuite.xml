@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="DermatologyVisitSuite">
+    <listeners>
+        <listener class-name="utils.ExtentReportManager"/>
+    </listeners>
+    <parameter name="browser" value="chrome"/>
+    <test name="DermatologyTests">
+        <classes>
+            <class name="tests.DermatologyVisits.TC_DV001_CreateSelfPayDermatologyVisitForAccountHolder"/>
+<!--            <class name="tests.DermatologyVisits.TC_DV002_CreateSelfPayDermatologyVisitForChild"/>-->
+<!--            <class name="tests.DermatologyVisits.TC_DV003_CreateSelfPayDermatologyVisitForWard"/>-->
+<!--            <class name="tests.DermatologyVisits.TC_DV004_CreateSelfPayDermatologyVisitForSomeOneElse"/>-->
+<!--            <class name="tests.DermatologyVisits.TC_DV005_CreateDermatologyVisitForAccountHolderWithFourConditionPhotos"/>-->
+            <class name="tests.DermatologyVisits.TC_DV006_CreateDermatologyVisitForAccountHolderWithSixConditionPhotos"/>
+<!--            <class name="tests.DermatologyVisits.TC_DV007_CreateDermatologyVisitForExistingAccountHolder"/>-->
+            <class name="tests.DermatologyVisits.TC_DV008_CreateInsurancePayDermatologyVisitForAccountHolder"/>
+            <class name="tests.DermatologyVisits.TC_DV009_CreateSelfPayDermatologyVisitForAccountHolderWithAllMedicalHistory"/>
+        </classes>
+    </test>
+</suite>

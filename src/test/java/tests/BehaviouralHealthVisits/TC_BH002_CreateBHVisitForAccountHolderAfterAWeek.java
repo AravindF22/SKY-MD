@@ -4,14 +4,12 @@ import base.BaseTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pages.PatientPortal.BehaviouralHealthVisitPage;
-import pages.PatientPortal.PatientPortalHomePage;
-import pages.PatientPortal.PatientPortalLoginPage;
-import pages.PatientPortal.SignInPage;
+import pages.PatientPortal.*;
 import utils.ConfigReader;
 import utils.ExtentReportManager;
 import utils.TestData;
@@ -24,6 +22,7 @@ public class TC_BH002_CreateBHVisitForAccountHolderAfterAWeek  extends BaseTest{
     public PatientPortalHomePage patientPortalHomePage;
     public TestData testDataForAccountHolder;
     public BehaviouralHealthVisitPage behaviouralHealthVisitPage;
+    public PatientPortalMyProfilePage myProfilePage;
     public SignInPage signInPage;
     public SoftAssert softAssert;
     public WebDriverWait wait;
@@ -41,6 +40,7 @@ public class TC_BH002_CreateBHVisitForAccountHolderAfterAWeek  extends BaseTest{
         patientPortalLoginPage = new PatientPortalLoginPage(driver);
         patientPortalHomePage = new PatientPortalHomePage(driver);
         behaviouralHealthVisitPage = new BehaviouralHealthVisitPage(driver);
+        myProfilePage = new PatientPortalMyProfilePage(driver);
     }
     @Test(priority = 1)
     public void testSignInAsNewValidPatient()  {
@@ -311,5 +311,14 @@ public class TC_BH002_CreateBHVisitForAccountHolderAfterAWeek  extends BaseTest{
         }
         behaviouralHealthVisitPage.clickGoToMyVisitsButton();
         softAssert.assertAll();
+    }
+    @AfterClass
+    public void cleanUp() throws InterruptedException {
+        Thread.sleep(2000);
+        patientPortalHomePage.clickMyProfile();
+        myProfilePage.clickSettingsLink();
+        myProfilePage.clickLogoutButton();
+        myProfilePage.clickConfirmLogoutButton();
+        ExtentReportManager.getTest().log(Status.INFO, "Logged out from Patient Portal");
     }
 }

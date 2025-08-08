@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="PediatricVisitSuite">
+    <listeners>
+        <listener class-name="utils.ExtentReportManager"/>
+    </listeners>
+    <parameter name="browser" value="chrome"/>
+    <test name="PediatricVisitTests">
+        <classes>
+            <class name="tests.PediatricVisits.TC_PD001_CreateSelfPayPediatricVisit"/>
+            <class name="tests.PediatricVisits.TC_PD002_CreateInsurancePayPediatricVisit"/>
+<!--            <class name="tests.PediatricVisits.TC_PD003_CreateSelfPayPediatricVisitWithAllergiesAndMedication"/>-->
+        </classes>
+    </test>
+</suite>

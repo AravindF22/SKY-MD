@@ -22,7 +22,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         private final By firstAvailableDay = By.xpath("//div[@class=\"flex pb-10\"]/div[1]");
         private final By SeventhDay = By.xpath("//div[@class=\"flex pb-10\"]/div[7]");
         private final By firstAvailableTSlot = By.xpath("//div[contains(@class,'grid grid-cols-2')]/div[1]");
-        private final By providerNameBelowSelectedSlot = By.xpath("//div[contains(@class,'relative p-6')]//h3");
+        private final By providerNameBelowSelectedSlot = By.xpath("//div[contains(@class,'pl-6')]//h3");
 
         private final By firstNameField = By.cssSelector("input#first_name");
         private final By lastNameField =By.cssSelector("input#last_name");
@@ -71,7 +71,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
     public boolean clickPatientAsMySelf() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(patientAsMySelf));
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking 'Patient As Myself': " + e.getMessage());
@@ -82,8 +82,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean clickNextButton() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(nextBtn));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking 'Next' button: " + e.getMessage());
@@ -94,7 +93,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean clickProceedWithBookingButton() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(proceedWithBookingBtn));
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking 'Proceed with Booking' button: " + e.getMessage());
@@ -105,7 +104,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean clickIndividualButton() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(individualBtn));
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking 'Individual' button: " + e.getMessage());
@@ -116,7 +115,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean selectFirstAvailableDay() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(firstAvailableDay));
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error selecting first available day: " + e.getMessage());
@@ -127,7 +126,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             try
             {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(SeventhDay));
-                element.click();
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error selecting seventh day: " + e.getMessage());
@@ -138,7 +137,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean selectFirstAvailableTimeSlot() {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(firstAvailableTSlot));
-                element.click();
+                scrollAndClick(element);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error selecting first available time slot: " + e.getMessage());
@@ -319,7 +318,8 @@ public class BehaviouralHealthVisitPage extends BasePage {
         public boolean setSymptoms(String symp){
             try{
                 By Symptom = By.xpath("//p[@class=\"font-medium text-2xl\" and text()='"+symp+"']");
-                wait.until(ExpectedConditions.visibilityOfElementLocated(Symptom)).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(Symptom));
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting Symptom: " + e.getMessage());
@@ -328,8 +328,9 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean setExerciseRoutine(String exerciseRoutine){
             try{
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                        "//label[text()='Do you exercise regularly?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+exerciseRoutine+"']"))).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                        "//label[text()='Do you exercise regularly?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+exerciseRoutine+"']")));
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting exercise routine: " + e.getMessage());
@@ -338,8 +339,9 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean setAlcoholConsumption(String alcoholConsumption){
             try{
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                        "//label[text()='Do you drink alcohol?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+alcoholConsumption+"']"))).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                        "//label[text()='Do you drink alcohol?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+alcoholConsumption+"']")));
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting alcohol consumption: " + e.getMessage());
@@ -348,8 +350,9 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean setSmokingStatus(String smokingStatus){
             try{
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                        "//label[text()='Do you smoke?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+smokingStatus+"']"))).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                        "//label[text()='Do you smoke?']/following-sibling::div//p[@class=\"text-xl font-bold\" and text()='"+smokingStatus+"']")));
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting smoking: " + e.getMessage());
@@ -358,8 +361,9 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean setSmokingItems(String smokingItems){
             try{
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-                        "//p[contains(@class,'text-xl') and text()='"+smokingItems+"']"))).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                        "//p[contains(@class,'text-xl') and text()='"+smokingItems+"']")));
+                scrollAndClick(element);
                 return true;
             }
             catch (Exception e) {
@@ -369,7 +373,8 @@ public class BehaviouralHealthVisitPage extends BasePage {
         }
         public boolean clickAddMedicalCondition(){
             try{
-                wait.until(ExpectedConditions.visibilityOfElementLocated(medicalCondition)).click();
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(medicalCondition));
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error clicking Medical Condition: " + e.getMessage());
@@ -407,7 +412,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             try {
                 Thread.sleep(2000); // Optional wait for UI stability
                 WebElement searchBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(searchMedication));
-                searchBtn.click();
+                scrollAndClick(searchBtn);
                 return true;
             } catch (Exception e) {
                 System.out.println("Error clicking 'Search Medication' button: " + e.getMessage());
@@ -420,7 +425,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
                 try {
                     Thread.sleep(500);
                     WebElement medicationInput = wait.until(ExpectedConditions.visibilityOfElementLocated(enterMedication));
-                    medicationInput.click();
+                    scrollAndClick(medicationInput);
                 } catch (Exception e) {
                     System.out.println("Error clicking medication input: " + e.getMessage());
                     return false;
@@ -440,16 +445,14 @@ public class BehaviouralHealthVisitPage extends BasePage {
                             By.xpath("//div[contains(@class,'option') and text()='" + medicationName + "']")));
 
                     // Step 5: Scroll to and click the option using JavaScript
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", matchingOption);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", matchingOption);
+                    scrollAndClick(matchingOption);
 
                 } catch (Exception e) {
                     System.out.println("Error entering/selecting medication name: " + e.getMessage());
                     try {
                         WebElement createMedication = wait.until(ExpectedConditions.visibilityOfElementLocated(
                                 By.xpath("//div[contains(@id,'option') and text()='Create \"" + medicationName + "\"']")));
-                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createMedication);
-                        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createMedication);
+                        scrollAndClick(createMedication);
                     } catch (Exception e1) {
                         System.out.println("Error creating medication: " + e1.getMessage());
                         return false;
@@ -523,16 +526,14 @@ public class BehaviouralHealthVisitPage extends BasePage {
                         By.xpath("//div[contains(@class,'option') and text()='" + medicationName + "']")));
 
                 // Step 5: Scroll to and click the option using JavaScript
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", matchingOption);
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", matchingOption);
+                scrollAndClick(matchingOption);
 
             } catch (Exception e) {
                 System.out.println("Error entering/selecting medication name: " + e.getMessage());
                 try {
                     WebElement createMedication = wait.until(ExpectedConditions.visibilityOfElementLocated(
                             By.xpath("//div[contains(@id,'option') and text()='Create \"" + medicationName + "\"']")));
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createMedication);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createMedication);
+                    scrollAndClick(createMedication);
                 } catch (Exception e1) {
                     System.out.println("Error creating medication: " + e1.getMessage());
                     return false;
@@ -614,8 +615,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
             try {
                 WebElement element = wait.until(ExpectedConditions.elementToBeClickable(
                        By.xpath("//label[contains(text(),'hospitalized')]/following-sibling::div//p[text()='"+status+"']")));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-                element.click();
+                scrollAndClick(element);
                 return true;
             }catch (Exception e){
                 System.out.println("Error setting Hospitalized History: " + e.getMessage());
@@ -670,8 +670,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'1.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 1: " + e.getMessage());
@@ -683,8 +682,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'2.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 2: " + e.getMessage());
@@ -696,8 +694,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'3.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 3: " + e.getMessage());
@@ -709,8 +706,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'4.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 4: " + e.getMessage());
@@ -722,8 +718,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'5.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 5: " + e.getMessage());
@@ -735,8 +730,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'6.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 6: " + e.getMessage());
@@ -748,8 +742,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'7.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 7: " + e.getMessage());
@@ -761,8 +754,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'8.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 8: " + e.getMessage());
@@ -774,8 +766,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'9.')]/parent::div//p[text()='" + questionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return scoreOf(questionnaire);
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 9: " + e.getMessage());
@@ -787,8 +778,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
         try {
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                     "//label[contains(text(),'10.')]/parent::div//p[text()='" + TenthQuestionnaire + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            scrollAndClick(element);
             return true;
         } catch (Exception e) {
             System.out.println("Error setting Questionnaire 10: " + e.getMessage());
@@ -798,8 +788,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
     public boolean acceptTerms(){
         try{
             WebElement termsCheck = wait.until(ExpectedConditions.visibilityOfElementLocated(terms));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", termsCheck);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", termsCheck);
+            scrollAndClick(termsCheck);
             return true;
         }catch (Exception e){
             System.out.println("Error accepting Terms: " + e.getMessage());
@@ -916,8 +905,7 @@ public class BehaviouralHealthVisitPage extends BasePage {
     }
     public String getProviderNameInTheVisitSubmittedPage(){
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInVisitSubmittedPage));
-            WebElement element = driver.findElement(providerNameInVisitSubmittedPage);
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(providerNameInVisitSubmittedPage));
             return element.getText();
         }catch (Exception e){
             System.out.println("Error getting provider name in Visit submitted page: "+e.getMessage());
