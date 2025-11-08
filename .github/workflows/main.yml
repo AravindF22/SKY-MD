@@ -1,10 +1,6 @@
 name: Daily Morning Test Automation
 
 on:
-  schedule:
-    # Runs every day at 9:30 AM IST (4:00 AM UTC, IST is UTC+5:30)
-    - cron: '0 4 * * *'
-
   workflow_dispatch:
 
 jobs:
